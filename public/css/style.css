@@ -267,7 +267,7 @@ td small { display: block; color: var(--muted); }
 @media (max-width: 760px) {
   .container { width: min(100% - 24px, var(--container)); }
   .hero-content { width: min(calc(100% - 24px), 800px); margin-left: 12px; padding-bottom: 90px; }
-  .hero { min-height: 93svh; }
+  .hero { min-height: 62svh; }
   .scroll-cue { display: none; }
   .section { padding: 72px 0; }
   .split-heading, .admin-title, .settings-savebar, .footer-bottom { align-items: stretch; flex-direction: column; }
