@@ -2466,3 +2466,16 @@ td small {
   }
 }
 
+
+/* FINAL PHONE HERO TEXT POSITION FIX */
+@media screen and (max-width: 760px) {
+  .hero-content {
+    bottom: 0 !important;
+    padding-top: 120px !important;
+    padding-bottom: 28px !important;
+  }
+
+  .hero-eyebrow {
+    margin-top: 24px !important;
+  }
+}
