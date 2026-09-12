@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   --forest: #143a29;
   --forest-2: #1d5138;
   --moss: #58764c;
@@ -233,7 +233,7 @@ p {
   inset: 0;
   background-image: var(--hero-image), url('/images/farm-placeholder.svg');
   background-position: center center;
-  background-size: cover;
+  background-size: contain;
   background-repeat: no-repeat;
   transform: scale(1.01);
 }
@@ -1769,4 +1769,23 @@ td small {
   color: var(--forest);
   font-weight: 700;
   font-size: .85rem;
+}
+/* Final mobile hero image fix */
+@media (max-width: 760px) {
+  .hero {
+    min-height: 62svh;
+    max-height: 62svh;
+  }
+
+  .hero::before {
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+    transform: none;
+  }
+
+  .hero-content {
+    padding-top: 76px;
+    padding-bottom: 42px;
+  }
 }
