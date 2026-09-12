@@ -1,0 +1,15 @@
+<article class="card animal-card">
+  <a href="/animals/<%= animal.slug %>" class="card-media image-wrap" aria-label="View <%= animal.name %>">
+    <img src="<%= helpers.imageUrl(animal.image) %>" alt="<%= animal.name %>" loading="lazy" decoding="async">
+    <span class="status-badge <%= animal.availability === 'Available' ? 'status-available' : 'status-muted' %>"><%= animal.availability %></span>
+  </a>
+  <div class="card-body">
+    <p class="card-kicker"><%= animal.category %></p>
+    <h3><a href="/animals/<%= animal.slug %>"><%= animal.name %></a></h3>
+    <div class="meta-row">
+      <% if (animal.breed) { %><span><strong>Breed</strong> <%= animal.breed %></span><% } %>
+      <% if (animal.age) { %><span><strong>Age</strong> <%= animal.age %></span><% } %>
+    </div>
+    <a class="text-link" href="/animals/<%= animal.slug %>">View details <span>→</span></a>
+  </div>
+</article>

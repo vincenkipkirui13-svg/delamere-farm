@@ -1,0 +1,40 @@
+<%- include('../partials/head', { title, description: 'Manage Delamere Farm branding, website icon, photographs and contact details.' }) %>
+<body class="admin-body">
+<header class="admin-header"><div class="container admin-header-inner">
+  <a class="brand" href="/admin"><span class="brand-mark">DF</span><span class="brand-text">Delamere Farm <small>Staff</small></span></a>
+  <nav class="admin-top-nav"><a href="/">View website</a><a href="/admin">Dashboard</a><form method="post" action="/admin/logout"><button type="submit">Logout</button></form></nav>
+</div></header>
+<main class="admin-main"><div class="container narrow">
+  <div class="admin-title"><div><p class="eyebrow">Appearance & contact</p><h1>Website Settings</h1><p>Control the public-facing identity of Delamere Farm without editing code.</p></div></div>
+  <% if (error) { %><div class="form-errors" role="alert"><%= error %></div><% } %>
+  <% if (success) { %><div class="settings-success" role="status"><strong>Saved.</strong> <%= success %></div><% } %>
+  <form method="post" action="/admin/settings" enctype="multipart/form-data">
+    <section class="settings-panel"><div class="settings-panel-head"><div><p class="eyebrow">Brand identity</p><h2>Make Delamere Farm unmistakable.</h2></div><span class="settings-chip">Live on save</span></div>
+      <label>Website Name<input name="site_name" maxlength="100" value="<%= siteSettings.name %>" required><small>Shown in the header, browser tab title and footer.</small></label>
+      <div class="settings-upload-grid settings-upload-grid-brand">
+        <label><span>Website Logo</span><input type="file" name="logo_image" accept="image/jpeg,image/png,image/webp,image/avif"><small>Best for a transparent PNG/WEBP logo. It appears in the website header and footer.</small><% if (siteSettings.logo) { %><img class="settings-preview logo-preview" src="/uploads/<%= siteSettings.logo %>" alt="Current Delamere Farm logo"><% else { %><div class="preview-placeholder logo-placeholder">DF<br><small>No logo uploaded</small></div><% } %></label>
+        <label><span>Website Icon / Favicon</span><input type="file" name="favicon_image" accept="image/png,image/jpeg,image/webp,image/avif"><small>Use a square image. It appears in the browser tab and app shortcut.</small><% if (siteSettings.icon) { %><img class="settings-preview icon-preview" src="/uploads/<%= siteSettings.icon %>" alt="Current website icon"><% } else { %><div class="preview-placeholder icon-placeholder">DF</div><% } %></label>
+      </div>
+    </section>
+
+    <section class="settings-panel"><div class="settings-panel-head"><div><p class="eyebrow">Photography</p><h2>Use real farm imagery.</h2><p class="settings-intro">Replace every placeholder with your own high-quality photographs. Images are cropped responsively without stretching.</p></div></div>
+      <div class="settings-upload-grid">
+        <label><span>Homepage Hero Photograph</span><input type="file" name="hero_image" accept="image/jpeg,image/png,image/webp,image/avif"><small>Wide landscape photo with a clear subject and enough space for text.</small><% if (siteSettings.heroImage) { %><img class="settings-preview" src="/uploads/<%= siteSettings.heroImage %>" alt="Current hero photo"><% } else { %><div class="preview-placeholder photo-placeholder">Hero photograph</div><% } %></label>
+        <label><span>About Page Farm Photograph</span><input type="file" name="about_image" accept="image/jpeg,image/png,image/webp,image/avif"><small>Main farm photograph shown on the About page and homepage introduction.</small><% if (siteSettings.aboutImage) { %><img class="settings-preview" src="/uploads/<%= siteSettings.aboutImage %>" alt="Current About photo"><% } else { %><div class="preview-placeholder photo-placeholder">About photograph</div><% } %></label>
+        <label><span>Livestock Feature Photograph</span><input type="file" name="livestock_image" accept="image/jpeg,image/png,image/webp,image/avif"><small>Use an authentic, close and naturally lit livestock photograph.</small><% if (siteSettings.featureImages.livestock) { %><img class="settings-preview" src="/uploads/<%= siteSettings.featureImages.livestock %>" alt="Current livestock feature photo"><% } else { %><div class="preview-placeholder photo-placeholder">Livestock photograph</div><% } %></label>
+        <label><span>Dairy Products Feature Photograph</span><input type="file" name="dairy_image" accept="image/jpeg,image/png,image/webp,image/avif"><small>Use a realistic dairy/product photo with natural textures.</small><% if (siteSettings.featureImages.dairy) { %><img class="settings-preview" src="/uploads/<%= siteSettings.featureImages.dairy %>" alt="Current dairy feature photo"><% } else { %><div class="preview-placeholder photo-placeholder">Dairy photograph</div><% } %></label>
+        <label><span>Farm Experience Photograph</span><input type="file" name="experience_image" accept="image/jpeg,image/png,image/webp,image/avif"><small>Use a genuine farm environment or activity photograph.</small><% if (siteSettings.featureImages.experience) { %><img class="settings-preview" src="/uploads/<%= siteSettings.featureImages.experience %>" alt="Current farm experience feature photo"><% } else { %><div class="preview-placeholder photo-placeholder">Farm experience</div><% } %></label>
+      </div>
+      <label>About Photograph Caption <span class="optional">optional</span><input name="about_caption" maxlength="180" value="<%= siteSettings.aboutCaption %>" placeholder="Example: A view across the farm at sunrise."></label>
+    </section>
+
+    <section class="settings-panel"><div class="settings-panel-head"><div><p class="eyebrow">Contact details</p><h2>Keep customer information current.</h2></div></div>
+      <div class="form-grid-2"><label>Phone Number<input name="contact_phone" maxlength="40" value="<%= siteSettings.phone %>" placeholder="e.g. 07xx xxx xxx"></label><label>Email Address<input type="email" name="contact_email" maxlength="160" value="<%= siteSettings.email %>" placeholder="e.g. hello@example.com"></label><label>Location<input name="contact_location" maxlength="180" value="<%= siteSettings.location %>" placeholder="Farm location or service area"></label><label>WhatsApp Number<input name="whatsapp_number" maxlength="40" value="<%= siteSettings.whatsapp %>" placeholder="e.g. 2547xxxxxxxx"></label></div>
+      <div class="social-grid"><label>Facebook URL<input name="facebook_url" maxlength="300" value="<%= siteSettings.social.facebook %>" placeholder="https://facebook.com/..."></label><label>Instagram URL<input name="instagram_url" maxlength="300" value="<%= siteSettings.social.instagram %>" placeholder="https://instagram.com/..."></label><label>TikTok URL<input name="tiktok_url" maxlength="300" value="<%= siteSettings.social.tiktok %>" placeholder="https://tiktok.com/@..."></label></div>
+    </section>
+
+    <div class="settings-savebar"><div><strong>Ready to publish?</strong><small>Save once after choosing your photographs and settings.</small></div><div class="button-row"><a class="btn btn-secondary" href="/admin">Cancel</a><button class="btn btn-primary" type="submit">Save Website Settings</button></div></div>
+  </form>
+  <div class="admin-note"><strong>Photography tip</strong><p>Use original farm photographs wherever possible. A genuine cow in a real paddock, real dairy products and real farm surroundings will make the site feel far more trustworthy than decorative icon graphics.</p></div>
+</div></main>
+</body></html>

@@ -1,0 +1,22 @@
+<header class="site-header" id="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/" aria-label="<%= site.name %> home">
+      <% if (site.logo) { %>
+        <img class="brand-logo" src="/uploads/<%= site.logo %>" alt="<%= site.name %> logo">
+      <% } else { %>
+        <span class="brand-mark">DF</span>
+      <% } %>
+      <span class="brand-text"><%= site.name %></span>
+    </a>
+    <button class="menu-toggle" aria-label="Open menu" aria-controls="main-navigation" aria-expanded="false"><span></span><span></span><span></span></button>
+    <nav class="main-nav" id="main-navigation">
+      <a class="<%= currentPath === '/' ? 'active' : '' %>" href="/">Home</a>
+      <a class="<%= currentPath.startsWith('/about') ? 'active' : '' %>" href="/about">About</a>
+      <a class="<%= currentPath.startsWith('/animals') ? 'active' : '' %>" href="/animals">Animals</a>
+      <a class="<%= currentPath.startsWith('/dairy') ? 'active' : '' %>" href="/dairy">Dairy</a>
+      <a class="<%= currentPath.startsWith('/gallery') ? 'active' : '' %>" href="/gallery">Gallery</a>
+      <a class="<%= currentPath.startsWith('/faq') ? 'active' : '' %>" href="/faq">FAQ</a>
+      <a class="nav-cta <%= currentPath.startsWith('/contact') ? 'active' : '' %>" href="/contact">Contact</a>
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#143a29"><title><%= title %> | Delamere Farm</title><link rel="stylesheet" href="/css/style.css"></head>
+<body class="admin-body">
+<main class="admin-login"><div class="admin-login-card">
+  <a class="brand" href="/"><span class="brand-mark">DF</span><span class="brand-text">Delamere Farm</span></a>
+  <p class="eyebrow">Secure staff area</p><h1>Welcome back.</h1><p>Manage animals, dairy products, gallery photographs, FAQs, customer inquiries and the website's visual identity.</p>
+  <% if (error) { %><div class="form-errors" role="alert"><%= error %></div><% } %>
+  <form method="post" action="/admin/login"><label>Username<input name="username" autocomplete="username" required></label><label>Password<input type="password" name="password" autocomplete="current-password" required></label><button class="btn btn-primary btn-wide" type="submit">Sign In</button></form>
+  <a class="back-link" href="/">← Back to website</a>
+</div></main>
+</body></html>

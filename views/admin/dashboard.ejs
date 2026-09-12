@@ -1,0 +1,33 @@
+<%- include('../partials/head', { title, description: 'Delamere Farm staff management dashboard.' }) %>
+<body class="admin-body">
+<header class="admin-header"><div class="container admin-header-inner">
+  <a class="brand" href="/admin"><span class="brand-mark">DF</span><span class="brand-text">Delamere Farm <small>Staff</small></span></a>
+  <nav class="admin-top-nav"><a href="/">View website</a><form method="post" action="/admin/logout"><button type="submit">Logout</button></form></nav>
+</div></header>
+<main class="admin-main"><div class="container">
+  <div class="admin-title"><div><p class="eyebrow">Control centre</p><h1>Welcome back.</h1><p>Manage the public Delamere Farm experience from one place.</p></div><a class="btn btn-primary" href="/admin/settings">Website Settings</a></div>
+  <div class="stat-grid">
+    <a href="/admin/animals" class="stat-card"><span>Animals</span><strong><%= stats.animals %></strong><small>Manage listings</small></a>
+    <a href="/admin/dairy" class="stat-card"><span>Dairy</span><strong><%= stats.dairy %></strong><small>Manage products</small></a>
+    <a href="/admin/gallery" class="stat-card"><span>Gallery</span><strong><%= stats.gallery %></strong><small>Manage photographs</small></a>
+    <a href="/admin/faqs" class="stat-card"><span>FAQs</span><strong><%= stats.faqs %></strong><small>Manage answers</small></a>
+    <a href="/admin/inquiries" class="stat-card stat-accent"><span>Inquiries</span><strong><%= stats.inquiries %></strong><small><%= stats.newInquiries %> new</small></a>
+  </div>
+  <section class="admin-section-block"><div class="section-heading-row"><div><p class="eyebrow">Quick management</p><h2>Keep the website fresh.</h2></div></div>
+    <div class="admin-actions">
+      <a class="admin-action action-image" href="/admin/settings"><span>◈</span><b>Website Settings</b><small>Logo, favicon, hero, About and feature photos</small></a>
+      <a class="admin-action" href="/admin/animals/new"><span>+</span><b>Add Animal</b><small>Create a new livestock listing</small></a>
+      <a class="admin-action" href="/admin/dairy/new"><span>+</span><b>Add Dairy Product</b><small>Publish a dairy offering</small></a>
+      <a class="admin-action" href="/admin/gallery"><span>▧</span><b>Farm Gallery</b><small>Upload and organise real farm photos</small></a>
+      <a class="admin-action" href="/admin/faqs"><span>?</span><b>FAQs</b><small>Update customer answers</small></a>
+      <a class="admin-action" href="/admin/inquiries"><span>✦</span><b>Customer Inquiries</b><small>Review and track follow-ups</small></a>
+    </div>
+  </section>
+  <section class="admin-panel"><div class="panel-heading"><div><p class="eyebrow">Customer activity</p><h2>Latest inquiries</h2></div><a class="text-link" href="/admin/inquiries">View all →</a></div>
+    <div class="table-wrap"><table><thead><tr><th>Customer</th><th>Interest</th><th>Status</th><th>Date</th></tr></thead><tbody>
+    <% latestInquiries.forEach(item => { %><tr><td><strong><%= item.full_name %></strong><small><%= item.phone %></small></td><td><%= item.animal_name || item.product_name || item.inquiry_type %></td><td><span class="admin-status <%= item.status.toLowerCase() %>"><%= item.status %></span></td><td><%= item.created_at %></td></tr><% }) %>
+    <% if (!latestInquiries.length) { %><tr><td colspan="4"><div class="empty-state">No inquiries yet. They will appear here when customers use the contact form.</div></td></tr><% } %>
+    </tbody></table></div>
+  </section>
+</div></main>
+</body></html>

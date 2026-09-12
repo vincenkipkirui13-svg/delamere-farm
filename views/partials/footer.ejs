@@ -1,0 +1,18 @@
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <a class="brand footer-brand" href="/">
+        <% if (site.logo) { %><img class="brand-logo" src="/uploads/<%= site.logo %>" alt="<%= site.name %> logo"><% } else { %><span class="brand-mark">DF</span><% } %>
+        <span class="brand-text"><%= site.name %></span>
+      </a>
+      <p class="footer-copy">A welcoming destination for quality livestock and dairy products, built around clear information, genuine farm imagery, and direct customer communication.</p>
+    </div>
+    <div><h3>Explore</h3><a href="/about">About Us</a><a href="/animals">Our Animals</a><a href="/dairy">Dairy Products</a><a href="/gallery">Gallery</a></div>
+    <div><h3>Help</h3><a href="/faq">FAQ</a><a href="/contact">Contact</a><% if (site.phone) { %><a href="tel:<%= site.phone %>"><%= site.phone %></a><% } %><% if (site.email) { %><a href="mailto:<%= site.email %>"><%= site.email %></a><% } %></div>
+    <div><h3>Connect</h3><% if (site.location) { %><span><%= site.location %></span><% } %><% if (site.social.facebook) { %><a href="<%= site.social.facebook %>" target="_blank" rel="noopener">Facebook</a><% } %><% if (site.social.instagram) { %><a href="<%= site.social.instagram %>" target="_blank" rel="noopener">Instagram</a><% } %><% if (site.social.tiktok) { %><a href="<%= site.social.tiktok %>" target="_blank" rel="noopener">TikTok</a><% } %></div>
+  </div>
+  <div class="container footer-bottom"><span>© <%= new Date().getFullYear() %> <%= site.name %>. All rights reserved.</span><a href="/admin/login">Staff Login</a></div>
+</footer>
+<script src="/js/main.js" defer></script>
+</body>
+</html>

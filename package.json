@@ -1,0 +1,25 @@
+{
+  "name": "delamerefarm",
+  "version": "1.0.0",
+  "description": "Mobile-first livestock and dairy showcase website for Delamere Farm.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "setup": "node scripts/setup.js",
+    "seed": "node scripts/seed.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "bcryptjs": "3.0.3",
+    "better-sqlite3": "13.0.3",
+    "dotenv": "17.4.2",
+    "ejs": "6.0.1",
+    "express": "5.2.1",
+    "express-session": "1.19.0",
+    "multer": "2.3.0"
+  }
+}
