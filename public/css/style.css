@@ -2058,3 +2058,23 @@ td small {
     filter: brightness(1.25) contrast(1.06);
   }
 }
+
+/* FINAL CORRECTION: PHONE BRIGHTNESS ONLY */
+@media screen and (max-width: 760px) {
+  .hero-image {
+    filter: brightness(1.40) contrast(1.08) !important;
+  }
+
+  .hero-overlay {
+    background:
+      linear-gradient(90deg, rgba(5,20,12,.08) 0%, rgba(5,20,12,.04) 55%, rgba(5,20,12,0) 100%),
+      linear-gradient(180deg, rgba(5,20,12,0), rgba(5,20,12,.08)) !important;
+  }
+}
+
+/* PC: DO NOT BRIGHTEN THE PHOTO */
+@media screen and (min-width: 761px) {
+  .hero-image {
+    filter: none !important;
+  }
+}
