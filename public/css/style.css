@@ -2479,3 +2479,24 @@ td small {
     margin-top: 24px !important;
   }
 }
+
+/* =========================================================
+   FINAL MOBILE HERO CONTENT FIX
+   Keep "Welcome to Delamere Farm" visible below the header
+   ========================================================= */
+@media screen and (max-width: 760px) {
+  .hero-content {
+    top: 95px !important;
+    bottom: auto !important;
+    padding: 0 12px 30px !important;
+    left: 0 !important;
+    right: 0 !important;
+  }
+
+  .hero-eyebrow {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    margin: 0 0 10px !important;
+  }
+}
