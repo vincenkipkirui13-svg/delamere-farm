@@ -2500,3 +2500,44 @@ td small {
     margin: 0 0 10px !important;
   }
 }
+
+/* =========================================================
+   FINAL MOBILE HERO POSITION FIX — KEEP ALL CONTENT VISIBLE
+   ========================================================= */
+@media screen and (max-width: 760px) {
+  .hero-content {
+    top: auto !important;
+    bottom: 0 !important;
+    left: 12px !important;
+    right: 12px !important;
+    width: auto !important;
+    padding: 55px 0 18px !important;
+  }
+
+  .hero-eyebrow {
+    display: block !important;
+    visibility: visible !important;
+    margin: 0 0 6px !important;
+    font-size: .65rem !important;
+  }
+
+  .hero h1 {
+    font-size: clamp(2rem, 9vw, 2.8rem) !important;
+    margin-bottom: 8px !important;
+  }
+
+  .hero-lead {
+    font-size: .88rem !important;
+    line-height: 1.45 !important;
+    margin-bottom: 10px !important;
+  }
+
+  .hero .button-row {
+    gap: 7px !important;
+  }
+
+  .hero .btn {
+    min-height: 42px !important;
+    padding: 9px 13px !important;
+  }
+}
