@@ -1,32 +1,46 @@
-<%- include('../partials/head', { title, description }) %>
+﻿<%- include('../partials/head', { title, description }) %>
 <body>
 <%- include('../partials/header') %>
 <main>
-  <section class="hero" style="--hero-image: url('<%= helpers.mediaUrl(siteSettings.heroImage) %>')">
+  <section class="hero">
+    <img
+      class="hero-image"
+      src="<%= helpers.mediaUrl(siteSettings.heroImage) %>"
+      alt="Delamere Farm"
+      fetchpriority="high"
+      decoding="async"
+    >
     <div class="hero-overlay"></div>
+
     <div class="container hero-content reveal">
       <p class="eyebrow hero-eyebrow">Welcome to Delamere Farm</p>
       <h1>From the farm,<br><em>with purpose.</em></h1>
       <p class="hero-lead">Discover livestock, dairy products and real farm moments in one simple, welcoming place. Browse what is available and contact the farm directly.</p>
-      <div class="button-row"><a class="btn btn-light" href="/animals">Explore Our Animals <span>→</span></a><a class="btn btn-light-outline" href="/contact">Talk to Us</a></div>
+      <div class="button-row">
+        <a class="btn btn-light" href="/animals">Explore Our Animals <span>â†’</span></a>
+        <a class="btn btn-light-outline" href="/contact">Talk to Us</a>
+      </div>
     </div>
-    <a class="scroll-cue" href="#intro" aria-label="Scroll to explore">Scroll to explore <span>↓</span></a>
+
+    <a class="scroll-cue" href="#intro" aria-label="Scroll to explore">
+      Scroll to explore <span>â†“</span>
+    </a>
   </section>
 
   <section class="section section-light" id="intro">
     <div class="container split-section">
       <div class="split-visual image-wrap reveal"><img src="<%= helpers.mediaUrl(siteSettings.aboutImage) %>" alt="Delamere Farm" loading="lazy" decoding="async"><% if (siteSettings.aboutCaption) { %><span class="image-caption"><%= siteSettings.aboutCaption %></span><% } %></div>
-      <div class="split-copy reveal"><p class="eyebrow">A closer look at the farm</p><h2>A digital home designed around the real farm.</h2><p>See what is available, understand the details, and take the next step with confidence. Delamere Farm's online experience keeps the focus on real information, genuine imagery and direct communication.</p><p>The content can grow with the farm, from new livestock and dairy products to fresh photography and answers to common customer questions.</p><a class="text-link" href="/about">Discover our story <span>→</span></a></div>
+      <div class="split-copy reveal"><p class="eyebrow">A closer look at the farm</p><h2>A digital home designed around the real farm.</h2><p>See what is available, understand the details, and take the next step with confidence. Delamere Farm's online experience keeps the focus on real information, genuine imagery and direct communication.</p><p>The content can grow with the farm, from new livestock and dairy products to fresh photography and answers to common customer questions.</p><a class="text-link" href="/about">Discover our story <span>â†’</span></a></div>
     </div>
   </section>
 
   <section class="section section-cream">
     <div class="container">
-      <div class="section-heading centered reveal"><p class="eyebrow">Explore Delamere Farm</p><h2>From livestock to dairy, all in one place.</h2><p>Three simple ways to discover more—now built around large, natural photographs instead of decorative icon graphics.</p></div>
+      <div class="section-heading centered reveal"><p class="eyebrow">Explore Delamere Farm</p><h2>From livestock to dairy, all in one place.</h2><p>Three simple ways to discover moreâ€”now built around large, natural photographs instead of decorative icon graphics.</p></div>
       <div class="offer-grid">
-        <a class="offer-card reveal" href="/animals"><div class="offer-media"><img src="<%= helpers.mediaUrl(siteSettings.featureImages.livestock) %>" alt="Real livestock at Delamere Farm" loading="lazy" decoding="async"><span class="offer-badge">01</span></div><div class="offer-body"><h3>Livestock</h3><p>Explore available cattle and other livestock with useful details and direct inquiry options.</p><span class="text-link">Browse animals <b>→</b></span></div></a>
-        <a class="offer-card reveal" href="/dairy"><div class="offer-media"><img src="<%= helpers.mediaUrl(siteSettings.featureImages.dairy) %>" alt="Real dairy products from Delamere Farm" loading="lazy" decoding="async"><span class="offer-badge">02</span></div><div class="offer-body"><h3>Dairy Products</h3><p>Discover dairy offerings with a clear route to ask about availability and details.</p><span class="text-link">View dairy <b>→</b></span></div></a>
-        <a class="offer-card reveal" href="/gallery"><div class="offer-media"><img src="<%= helpers.mediaUrl(siteSettings.featureImages.experience) %>" alt="Real farm experience at Delamere Farm" loading="lazy" decoding="async"><span class="offer-badge">03</span></div><div class="offer-body"><h3>Farm Experience</h3><p>Take a closer visual look at the farm, animals, dairy work and surroundings.</p><span class="text-link">See the gallery <b>→</b></span></div></a>
+        <a class="offer-card reveal" href="/animals"><div class="offer-media"><img src="<%= helpers.mediaUrl(siteSettings.featureImages.livestock) %>" alt="Real livestock at Delamere Farm" loading="lazy" decoding="async"><span class="offer-badge">01</span></div><div class="offer-body"><h3>Livestock</h3><p>Explore available cattle and other livestock with useful details and direct inquiry options.</p><span class="text-link">Browse animals <b>â†’</b></span></div></a>
+        <a class="offer-card reveal" href="/dairy"><div class="offer-media"><img src="<%= helpers.mediaUrl(siteSettings.featureImages.dairy) %>" alt="Real dairy products from Delamere Farm" loading="lazy" decoding="async"><span class="offer-badge">02</span></div><div class="offer-body"><h3>Dairy Products</h3><p>Discover dairy offerings with a clear route to ask about availability and details.</p><span class="text-link">View dairy <b>â†’</b></span></div></a>
+        <a class="offer-card reveal" href="/gallery"><div class="offer-media"><img src="<%= helpers.mediaUrl(siteSettings.featureImages.experience) %>" alt="Real farm experience at Delamere Farm" loading="lazy" decoding="async"><span class="offer-badge">03</span></div><div class="offer-body"><h3>Farm Experience</h3><p>Take a closer visual look at the farm, animals, dairy work and surroundings.</p><span class="text-link">See the gallery <b>â†’</b></span></div></a>
       </div>
     </div>
   </section>
@@ -44,6 +58,7 @@
 
   <section class="section section-light"><div class="container"><div class="section-heading centered reveal"><p class="eyebrow">From the farm</p><h2>A glimpse into Delamere Farm.</h2><p>When the gallery is populated, your own photographs take centre stage here.</p></div><% if (gallery.length) { %><div class="gallery-grid compact"><% gallery.forEach(item => { %><a href="/gallery" class="gallery-tile image-wrap reveal"><img src="<%= helpers.imageUrl(item.image) %>" alt="<%= item.title %>" loading="lazy" decoding="async"><span><%= item.title %></span></a><% }) %></div><% } else { %><div class="gallery-placeholder">Farm photographs will appear here as the gallery is populated.</div><% } %></div></section>
 
-  <section class="cta-section"><div class="container cta-inner reveal"><p class="eyebrow eyebrow-light">Start a conversation</p><h2>Looking for livestock or dairy products?</h2><p>Tell us what you are looking for and the Delamere Farm team can guide you on the next step.</p><div class="button-row centered-buttons"><a class="btn btn-light" href="/contact">Send an Inquiry <span>→</span></a><a class="btn btn-light-outline" href="/animals">Browse Animals</a></div></div></section>
+  <section class="cta-section"><div class="container cta-inner reveal"><p class="eyebrow eyebrow-light">Start a conversation</p><h2>Looking for livestock or dairy products?</h2><p>Tell us what you are looking for and the Delamere Farm team can guide you on the next step.</p><div class="button-row centered-buttons"><a class="btn btn-light" href="/contact">Send an Inquiry <span>â†’</span></a><a class="btn btn-light-outline" href="/animals">Browse Animals</a></div></div></section>
 </main>
 <%- include('../partials/footer') %>
+
