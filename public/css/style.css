@@ -2243,3 +2243,170 @@ td small {
     padding: 19px 17px 19px 22px;
   }
 }
+
+/* =========================================================
+   EXPERIENCE SECTION — FINAL PROFESSIONAL DESIGN
+   ========================================================= */
+
+.dark-band {
+  background: #f7f5ef !important;
+  color: var(--ink) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.dark-band::before {
+  content: "";
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  right: -220px;
+  top: -220px;
+  border-radius: 50%;
+  background: rgba(20, 58, 41, .045);
+  pointer-events: none;
+}
+
+.dark-band .container {
+  position: relative;
+  z-index: 1;
+}
+
+.dark-band .eyebrow {
+  color: var(--moss) !important;
+}
+
+.dark-band p {
+  color: var(--muted) !important;
+}
+
+.dark-band .benefits-grid {
+  grid-template-columns: .9fr 1.1fr;
+  gap: 70px;
+  align-items: center;
+}
+
+.dark-band .benefit-intro h2 {
+  color: var(--ink) !important;
+  max-width: 540px;
+}
+
+.dark-band .benefit-intro > p:last-child {
+  max-width: 500px;
+  color: var(--muted) !important;
+}
+
+.dark-band .benefit-list {
+  display: grid;
+  gap: 16px;
+}
+
+.dark-band .benefit {
+  display: block;
+  position: relative;
+  padding: 25px 28px 25px 32px;
+  background: #ffffff !important;
+  border: 1px solid #e2e5df !important;
+  border-radius: 20px;
+  box-shadow: 0 8px 28px rgba(20, 58, 41, .07);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+
+.dark-band .benefit::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 20px;
+  bottom: 20px;
+  width: 4px;
+  background: var(--forest);
+  border-radius: 0 5px 5px 0;
+}
+
+.dark-band .benefit:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 38px rgba(20, 58, 41, .12);
+}
+
+.dark-band .benefit h3 {
+  color: var(--ink) !important;
+  font-size: 1.3rem;
+  margin-bottom: 7px;
+}
+
+.dark-band .benefit p {
+  color: var(--muted) !important;
+  margin: 0;
+  font-size: .94rem;
+  line-height: 1.65;
+}
+
+/* TABLET */
+@media (max-width: 1020px) {
+  .dark-band .benefits-grid {
+    grid-template-columns: 1fr;
+    gap: 38px;
+  }
+
+  .dark-band .benefit-intro {
+    max-width: 700px;
+  }
+}
+
+/* PHONE */
+@media (max-width: 760px) {
+  .dark-band {
+    padding: 68px 0 !important;
+  }
+
+  .dark-band .benefits-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .dark-band .benefit-intro h2 {
+    font-size: clamp(2rem, 9vw, 2.55rem);
+    line-height: 1.12;
+  }
+
+  .dark-band .benefit-intro > p:last-child {
+    font-size: .96rem;
+    line-height: 1.65;
+  }
+
+  .dark-band .benefit-list {
+    gap: 13px;
+  }
+
+  .dark-band .benefit {
+    padding: 21px 19px 21px 25px;
+    border-radius: 17px;
+  }
+
+  .dark-band .benefit::before {
+    top: 17px;
+    bottom: 17px;
+    width: 3px;
+  }
+
+  .dark-band .benefit h3 {
+    font-size: 1.18rem;
+  }
+
+  .dark-band .benefit p {
+    font-size: .92rem;
+    line-height: 1.6;
+  }
+}
+
+/* SMALL PHONES */
+@media (max-width: 380px) {
+  .dark-band {
+    padding: 58px 0 !important;
+  }
+
+  .dark-band .benefit {
+    padding: 19px 17px 19px 22px;
+  }
+}
+
