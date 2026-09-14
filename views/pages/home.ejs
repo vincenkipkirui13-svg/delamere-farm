@@ -1,7 +1,8 @@
-﻿<%- include('../partials/head', { title, description }) %>
+﻿<%- include('../partials/head', { title, description }) %> 
 <body>
 <%- include('../partials/header') %>
 <main>
+
   <section class="hero">
     <img
       class="hero-image"
@@ -23,9 +24,95 @@
     </div>
 
     <a class="scroll-cue" href="#intro" aria-label="Scroll to explore">
-      Scroll to explore 
+      Scroll to explore
     </a>
   </section>
+
+
+  <!-- NEW: WHAT WE OFFER -->
+  <section class="section section-light" id="what-we-offer">
+    <div class="container">
+
+      <div class="section-heading centered reveal">
+        <p class="eyebrow">What We Offer</p>
+        <h2>Livestock, dairy and farm services.</h2>
+        <p>
+          Discover the range of livestock, dairy products, animal feeds and
+          farm services available through Delamere Farm.
+        </p>
+      </div>
+
+      <div class="offer-list">
+
+        <div class="offer-item reveal">
+          <h3>Dairy Cattle</h3>
+          <p>
+            Friesian/Holstein, Jersey and other pedigree dairy breeds,
+            including calves, heifers and lactating cows.
+          </p>
+        </div>
+
+        <div class="offer-item reveal">
+          <h3>Dairy Goats</h3>
+          <p>
+            Saanen and other dairy goats are available for customers and
+            farmers looking for quality dairy breeds.
+          </p>
+        </div>
+
+        <div class="offer-item reveal">
+          <h3>Sheep & Other Livestock</h3>
+          <p>
+            Dorper sheep and breeding rams, together with Boer goats,
+            Kalahari Red goats, Sahiwal, Boran, Brahman and Jersey cattle.
+          </p>
+        </div>
+
+        <div class="offer-item reveal">
+          <h3>Animal Feeds</h3>
+          <p>
+            Boma Rhodes hay, Lucerne/alfalfa, Lucerne pellets and seeds,
+            and Rhodes seeds.
+          </p>
+        </div>
+
+        <div class="offer-item reveal">
+          <h3>Dairy Products</h3>
+          <p>
+            Fresh milk, yoghurt and artisan butter, together with milk
+            processing and packaging.
+          </p>
+        </div>
+
+        <div class="offer-item reveal">
+          <h3>Livestock Delivery</h3>
+          <p>
+            Livestock delivery is available to customers in different
+            parts of Kenya.
+          </p>
+        </div>
+
+        <div class="offer-item reveal">
+          <h3>Veterinary & Farm Support</h3>
+          <p>
+            Vaccination, herd-health advice, farm setup guidance and
+            farmer training.
+          </p>
+        </div>
+
+        <div class="offer-item reveal">
+          <h3>Farm Visits</h3>
+          <p>
+            Farm visits are available by appointment for customers who
+            would like to visit the farm.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
 
   <section class="section section-light" id="intro">
     <div class="container split-section">
@@ -39,7 +126,7 @@
       <div class="section-heading centered reveal"><p class="eyebrow">Explore Delamere Farm</p><h2>From livestock to dairy, all in one place.</h2><p>Three simple ways to discover moreâ€”now built around large, natural photographs instead of decorative icon graphics.</p></div>
       <div class="offer-grid">
         <a class="offer-card reveal" href="/animals"><div class="offer-media"><img src="<%= helpers.mediaUrl(siteSettings.featureImages.livestock) %>" alt="Real livestock at Delamere Farm" loading="lazy" decoding="async"><span class="offer-badge">01</span></div><div class="offer-body"><h3>Livestock</h3><p>Explore available cattle and other livestock with useful details and direct inquiry options.</p><span class="text-link">Browse animals <b>&#8594;’</b></span></div></a>
-        <a class="offer-card reveal" href="/dairy"><div class="offer-media"><img src="<%= helpers.mediaUrl(siteSettings.featureImages.dairy) %>" alt="Real dairy products from Delamere Farm" loading="lazy" decoding="async"><span class="offer-badge">02</span></div><div class="offer-body"><h3>Dairy Products</h3><p>Discover dairy offerings with a clear route to ask about availability and details.</p><span class="text-link">View dairy <b>&#8594;’</b></span></div></a>
+        <a class="offer-card reveal" href="/dairy"><div class="offer-media"><img src="<%= helpers.mediaUrl(siteSettings.featureImages.dairy) %>" alt="Real dairy products from Delamere Farm" loading="lazy" decoding="async"><span class="offer-badge">02</span></div><div class="offer-body"><h3>Dairy Products</h3><p>Discover dairy offerings with a clear route to ask about availability and details.</p><span class="text-link">View dairy <b>&#8594;’</b></span></div></a>      
         <a class="offer-card reveal" href="/gallery"><div class="offer-media"><img src="<%= helpers.mediaUrl(siteSettings.featureImages.experience) %>" alt="Real farm experience at Delamere Farm" loading="lazy" decoding="async"><span class="offer-badge">03</span></div><div class="offer-body"><h3>Farm Experience</h3><p>Take a closer visual look at the farm, animals, dairy work and surroundings.</p><span class="text-link">See the gallery <b>&#8594;’</b></span></div></a>
       </div>
     </div>
@@ -48,7 +135,8 @@
   <section class="section section-light">
     <div class="container">
       <div class="section-heading split-heading reveal"><div><p class="eyebrow">Featured livestock</p><h2>Selected animals to explore.</h2></div><a class="btn btn-secondary" href="/animals">View all animals</a></div>
-      <% if (featuredAnimals.length) { %><div class="card-grid"><% featuredAnimals.forEach(animal => { %><%- include('../partials/animal-card', { animal, helpers }) %><% }) %></div><% } else { %><div class="empty-state">Animal listings will appear here as the catalogue is populated.</div><% } %>
+      <% if (featuredAnimals.length) { %><div class="card-grid"><% featuredAnimals.forEach(animal => { %><%- include('../partials/animal-card', { animal, helpers }) %><% }) %></div><% } else { %><div class="empty-state">Animal listings 
+will appear here as the catalogue is populated.</div><% } %>
     </div>
   </section>
 
@@ -59,8 +147,6 @@
   <section class="section section-light"><div class="container"><div class="section-heading centered reveal"><p class="eyebrow">From the farm</p><h2>A glimpse into Delamere Farm.</h2><p>When the gallery is populated, your own photographs take centre stage here.</p></div><% if (gallery.length) { %><div class="gallery-grid compact"><% gallery.forEach(item => { %><a href="/gallery" class="gallery-tile image-wrap reveal"><img src="<%= helpers.imageUrl(item.image) %>" alt="<%= item.title %>" loading="lazy" decoding="async"></a><% }) %></div><% } else { %><div class="gallery-placeholder">Farm photographs will appear here as the gallery is populated.</div><% } %></div></section>
 
   <section class="cta-section"><div class="container cta-inner reveal"><p class="eyebrow eyebrow-light">Start a conversation</p><h2>Looking for livestock or dairy products?</h2><p>Tell us what you are looking for and the Delamere Farm team can guide you on the next step.</p><div class="button-row centered-buttons"><a class="btn btn-light" href="/contact">Send an Inquiry </a><a class="btn btn-light-outline" href="/animals">Browse Animals</a></div></div></section>
+
 </main>
 <%- include('../partials/footer') %>
-
-
-
