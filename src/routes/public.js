@@ -1,6 +1,6 @@
-const express = require('express');
+﻿const express = require('express');
 const db = require('../db/database');
-const { imageUrl, truncate, mediaUrl } = require('../utils/format');
+const { imageUrl, truncate, mediaUrl, whatsappUrl } = require('../utils/format');
 const slugify = require('../utils/slugify');
 
 const router = express.Router();
@@ -14,7 +14,7 @@ function getNavCounts() {
 }
 
 router.use((req, res, next) => {
-  res.locals.helpers = { imageUrl, truncate, mediaUrl };
+  res.locals.helpers = { imageUrl, truncate, mediaUrl, whatsappUrl };
   next();
 });
 
@@ -22,6 +22,8 @@ router.get('/', (req, res) => {
   const featuredAnimals = db.prepare("SELECT * FROM animals WHERE featured = 1 ORDER BY created_at DESC LIMIT 4").all();
   const featuredDairy = db.prepare("SELECT * FROM dairy_products WHERE featured = 1 ORDER BY created_at DESC LIMIT 4").all();
   const gallery = db.prepare("SELECT * FROM gallery_items ORDER BY featured DESC, created_at DESC LIMIT 6").all();
+  const reviews = db.prepare("SELECT * FROM reviews WHERE published = 1 ORDER BY created_at DESC, id DESC LIMIT 15").all();
+  const reviewCount = db.prepare("SELECT COUNT(*) AS count FROM reviews WHERE published = 1").get().count;
   const siteSettings = db.getSiteSettings();
   res.render('pages/home', {
     title: 'Quality Livestock & Dairy',
@@ -30,7 +32,9 @@ router.get('/', (req, res) => {
     featuredDairy,
     gallery,
     siteSettings,
-    counts: getNavCounts()
+      reviews,
+      reviewCount,
+      counts: getNavCounts()
   });
 });
 
@@ -84,7 +88,7 @@ router.get('/animals/:slug', (req, res) => {
   const related = db.prepare('SELECT * FROM animals WHERE category = ? AND id != ? ORDER BY featured DESC, created_at DESC LIMIT 3').all(animal.category, animal.id);
   res.render('pages/animal-detail', {
     title: animal.name,
-    description: `${animal.name} — ${animal.breed || animal.category} at Delamere Farm.`,
+    description: `${animal.name} â€” ${animal.breed || animal.category} at Delamere Farm.`,
     animal,
     related,
     inquiryType: 'Animal',
@@ -212,3 +216,5 @@ router.post('/contact', (req, res) => {
 });
 
 module.exports = router;
+
+

@@ -4,7 +4,7 @@
     <span class="status-badge <%= product.availability === 'Available' ? 'status-available' : 'status-muted' %>"><%= product.availability %></span>
   </a>
   <div class="card-body">
-    <p class="card-kicker">Dairy Product</p>
+    <p class="card-kicker">Product</p>
     <h3><a href="/dairy/<%= product.slug %>"><%= product.name %></a></h3>
     <p><%= helpers.truncate(product.description, 105) %></p>
     <a class="text-link" href="/dairy/<%= product.slug %>">View product <span>→</span></a>

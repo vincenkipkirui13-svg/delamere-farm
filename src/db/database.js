@@ -73,6 +73,18 @@ CREATE INDEX IF NOT EXISTS idx_animals_featured ON animals(featured);
 CREATE INDEX IF NOT EXISTS idx_dairy_featured ON dairy_products(featured);
 CREATE INDEX IF NOT EXISTS idx_inquiries_status ON inquiries(status);
 CREATE INDEX IF NOT EXISTS idx_inquiries_created ON inquiries(created_at);
+
+CREATE TABLE IF NOT EXISTS reviews (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  customer_name TEXT NOT NULL,
+  rating INTEGER NOT NULL DEFAULT 5,
+  review_text TEXT NOT NULL,
+  published INTEGER NOT NULL DEFAULT 1,
+  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_reviews_published ON reviews(published);
+CREATE INDEX IF NOT EXISTS idx_reviews_created ON reviews(created_at);
 `);
 
 const setSetting = db.prepare(`INSERT INTO site_settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value`);

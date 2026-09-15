@@ -1,2 +1,54 @@
-<%- include('../partials/head', { title, description }) %>
-<body><%- include('../partials/header') %><main><%- include('../partials/page-hero', { eyebrow: 'From the farm', heading: 'Dairy Products', lead: 'Discover our dairy range and contact Delamere Farm for information, availability, and next steps.' }) %><section class="section section-light"><div class="container"><form class="catalog-toolbar single-search" method="get" action="/dairy"><label class="search-field"><span>Search</span><input type="search" name="search" value="<%= search %>" placeholder="Search dairy products" aria-label="Search dairy products"></label><button class="btn btn-secondary" type="submit">Search</button></form><% if (products.length) { %><div class="card-grid"> <% products.forEach(product => { %><%- include('../partials/dairy-card', { product, helpers }) %><% }) %></div><% } else { %><div class="empty-state"><h3>No dairy products found</h3><p>Try a different search or check again later.</p></div><% } %></div></section></main><%- include('../partials/footer') %></body>
+<%- include('../partials/head', { title: 'Our Products', description: 'Explore products from Delamere Farm.' }) %>
+<body>
+  <%- include('../partials/header') %>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <p class="eyebrow">From Our Farm</p>
+        <h1>Our Products</h1>
+        <p>Explore the products available from Delamere Farm.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <% if (!products || products.length === 0) { %>
+          <div class="empty-state">
+            <h2>No products available</h2>
+            <p>Our product collection will be updated soon.</p>
+          </div>
+        <% } else { %>
+          <div class="products-list">
+            <% products.forEach((product) => { %>
+              <article class="product-showcase-card">
+                <div class="product-showcase-image">
+                  <% if (product.image) { %>
+                    <img src="<%= helpers.mediaUrl(product.image) %>" alt="<%= product.name %>" loading="lazy">
+                  <% } else { %>
+                    <div class="image-placeholder">No image available</div>
+                  <% } %>
+                </div>
+
+                <div class="product-showcase-content">
+                  <p class="eyebrow">Farm Product</p>
+                  <h2><%= product.name %></h2>
+
+                  <% if (product.description) { %>
+                    <p><%= product.description %></p>
+                  <% } %>
+
+                  <% if (product.price) { %>
+                    <p class="product-price"><strong>Price:</strong> <%= product.price %></p>
+                  <% } %>
+                </div>
+              </article>
+            <% }) %>
+          </div>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+</body>

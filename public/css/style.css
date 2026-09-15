@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   --forest: #143a29;
   --forest-2: #1d5138;
   --moss: #58764c;
@@ -563,7 +563,7 @@ p {
 .card-media img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   transition: transform .5s ease;
 }
 
@@ -674,7 +674,7 @@ p {
 .gallery-tile img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   transition: transform .55s ease;
 }
 
@@ -913,7 +913,7 @@ details p {
 .detail-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
 .detail-copy h1 {
@@ -2539,5 +2539,288 @@ td small {
   .hero .btn {
     min-height: 42px !important;
     padding: 9px 13px !important;
+  }
+}
+
+/* =========================================================
+   REVIEWS + DIRECT CONTACT
+   ========================================================= */
+
+.reviews-section {
+  position: relative;
+}
+
+.reviews-summary {
+  width: fit-content;
+  margin: 0 auto 2rem;
+  text-align: center;
+}
+
+.reviews-summary strong {
+  display: block;
+  font-size: clamp(2.4rem, 7vw, 4rem);
+  line-height: 1;
+}
+
+.reviews-summary span {
+  display: block;
+  margin-top: .45rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  font-size: .75rem;
+  opacity: .7;
+}
+
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.review-card {
+  padding: 1.35rem;
+  border-radius: 18px;
+  background: #fff;
+  border: 1px solid rgba(20, 30, 20, .08);
+  box-shadow: 0 10px 30px rgba(20, 30, 20, .06);
+}
+
+.review-stars {
+  color: #c9972b;
+  letter-spacing: .12em;
+  font-size: 1rem;
+  white-space: nowrap;
+}
+
+.review-text {
+  margin: 1rem 0 1.25rem;
+  line-height: 1.7;
+}
+
+.review-author {
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+}
+
+.review-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  background: #edf2e8;
+}
+
+.review-author strong,
+.review-author small {
+  display: block;
+}
+
+.review-author small {
+  margin-top: .15rem;
+  opacity: .6;
+  font-size: .78rem;
+}
+
+.direct-contact-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .75rem;
+  margin: 1.5rem 0;
+}
+
+.btn-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .55rem;
+  background: #25D366;
+  color: #fff !important;
+}
+
+.btn-whatsapp:hover {
+  background: #1ebe5d;
+  color: #fff !important;
+}
+
+.btn-email {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.whatsapp-icon {
+  display: inline-flex;
+  width: 1.35rem;
+  height: 1.35rem;
+  flex: 0 0 auto;
+}
+
+.whatsapp-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+.whatsapp-float {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  width: 60px;
+  height: 60px;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #25D366;
+  color: #fff;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, .2);
+  animation: whatsappFloat 2.2s ease-in-out infinite;
+}
+
+.whatsapp-float .whatsapp-icon {
+  width: 30px;
+  height: 30px;
+}
+
+.whatsapp-float:hover {
+  color: #fff;
+  animation-play-state: paused;
+  transform: scale(1.08);
+}
+
+@keyframes whatsappFloat {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+
+  50% {
+    transform: translateY(-6px) scale(1.05);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .whatsapp-float {
+    animation: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .reviews-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .reviews-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .direct-contact-actions {
+    flex-direction: column;
+  }
+
+  .direct-contact-actions .btn {
+    width: 100%;
+  }
+
+  .whatsapp-float {
+    width: 56px;
+    height: 56px;
+    right: 14px;
+    bottom: 14px;
+  }
+}
+/* Livestock + Products showcase layouts */
+.livestock-list,
+.products-list {
+  display: grid;
+  gap: 2rem;
+}
+
+.livestock-card,
+.product-showcase-card {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.1fr);
+  gap: 2rem;
+  align-items: stretch;
+  padding: 1.25rem;
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 1.25rem;
+  background: var(--surface, #fff);
+  box-shadow: 0 10px 30px rgba(0,0,0,.06);
+  overflow: hidden;
+}
+
+.livestock-card-image,
+.product-showcase-image {
+  min-height: 300px;
+  border-radius: 1rem;
+  overflow: hidden;
+  background: #f4f4f4;
+}
+
+.livestock-card-image img,
+.product-showcase-image img {
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+  object-fit: contain;
+  display: block;
+}
+
+.livestock-card-content,
+.product-showcase-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: .75rem;
+}
+
+.livestock-card-content h2,
+.product-showcase-content h2 {
+  margin-top: .25rem;
+  margin-bottom: .75rem;
+}
+
+.livestock-description {
+  line-height: 1.7;
+}
+
+.product-price {
+  margin-top: .75rem;
+  font-size: 1.05rem;
+}
+
+.livestock-card .btn,
+.product-showcase-card .btn {
+  align-self: flex-start;
+  margin-top: 1rem;
+}
+
+@media (max-width: 760px) {
+  .livestock-card,
+  .product-showcase-card {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: .9rem;
+  }
+
+  .livestock-card-image,
+  .product-showcase-image {
+    min-height: 240px;
+  }
+
+  .livestock-card-image img,
+  .product-showcase-image img {
+    min-height: 240px;
+  }
+
+  .livestock-card-content,
+  .product-showcase-content {
+    padding: .5rem;
   }
 }

@@ -85,6 +85,7 @@ router.get('/', (_req, res) => {
     dairy: db.prepare('SELECT COUNT(*) count FROM dairy_products').get().count,
     gallery: db.prepare('SELECT COUNT(*) count FROM gallery_items').get().count,
     faqs: db.prepare('SELECT COUNT(*) count FROM faqs').get().count,
+    reviews: db.prepare('SELECT COUNT(*) count FROM reviews').get().count,
     inquiries: db.prepare('SELECT COUNT(*) count FROM inquiries').get().count,
     newInquiries: db.prepare("SELECT COUNT(*) count FROM inquiries WHERE status = 'New'").get().count
   };
@@ -629,4 +630,42 @@ router.post('/inquiries/:id/status', (req, res) => {
   res.redirect('/admin/inquiries');
 });
 
+router.get('/reviews', (_req, res) => {
+  const reviews = db.prepare(
+    'SELECT * FROM reviews ORDER BY created_at DESC, id DESC'
+  ).all();
+
+  res.render('admin/reviews', {
+    title: 'Manage Reviews',
+    reviews
+  });
+});
+
+router.post('/reviews', (req, res) => {
+  const name = safeText(req.body.customer_name, 100);
+  const reviewText = safeText(req.body.review_text, 500);
+  const rating = Math.min(Math.max(Number.parseInt(req.body.rating, 10) || 5, 1), 5);
+  const published = bool(req.body.published);
+
+  if (name && reviewText) {
+    db.prepare(
+      'INSERT INTO reviews (customer_name, rating, review_text, published) VALUES (?, ?, ?, ?)'
+    ).run(name, rating, reviewText, published);
+  }
+
+  res.redirect('/admin/reviews');
+});
+
+router.post('/reviews/:id/publish', (req, res) => {
+  db.prepare(
+    'UPDATE reviews SET published=? WHERE id=?'
+  ).run(bool(req.body.published), req.params.id);
+
+  res.redirect('/admin/reviews');
+});
+
+router.post('/reviews/:id/delete', (req, res) => {
+  db.prepare('DELETE FROM reviews WHERE id=?').run(req.params.id);
+  res.redirect('/admin/reviews');
+});
 module.exports = router;

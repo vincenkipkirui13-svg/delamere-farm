@@ -21,3 +21,23 @@ function mediaUrl(image, fallback = '/images/farm-placeholder.svg') {
 }
 
 module.exports = { formatDate, truncate, imageUrl, mediaUrl };
+
+function whatsappUrl(number, text) {
+  let value = String(number || '').replace(/[^0-9]/g, '');
+
+  if (value.startsWith('00')) {
+    value = value.slice(2);
+  }
+
+  if (value.startsWith('0')) {
+    value = '254' + value.slice(1);
+  }
+
+  if (!text) {
+    text = 'Hello Delamere Farm, I would like to make an inquiry.';
+  }
+
+  return 'https://wa.me/' + value + '?text=' + encodeURIComponent(text);
+}
+
+module.exports.whatsappUrl = whatsappUrl;
