@@ -1,4 +1,4 @@
-<%- include('../partials/head', { title: 'Livestock', description: 'Explore the livestock at Delamere Farm.' }) %>
+<%- include('../partials/head', { title, description }) %>
 <body>
   <%- include('../partials/header') %>
 
@@ -24,7 +24,7 @@
               <article class="livestock-card">
                 <div class="livestock-card-image">
                   <% if (animal.image) { %>
-                    <img src="<%= helpers.mediaUrl(animal.image) %>" alt="<%= animal.name %>" loading="lazy">
+                    <img src="<%= helpers.mediaUrl(animal.image) %>" alt="<%= animal.name %> — <%= animal.category || 'Livestock' %> at <%= site.name %>" loading="lazy">
                   <% } else { %>
                     <div class="image-placeholder">No image available</div>
                   <% } %>
