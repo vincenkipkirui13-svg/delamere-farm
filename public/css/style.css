@@ -3514,3 +3514,87 @@ td small {
     font-size: .82rem;
   }
 }
+
+
+/* What We Offer: compact text-first presentation */
+#what-we-offer .offer-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  max-width: 1040px;
+  margin: 0 auto;
+  border-top: 1px solid rgba(20, 58, 41, .14);
+}
+
+#what-we-offer .offer-list-item {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+  padding: 24px 24px 24px 0;
+  border-bottom: 1px solid rgba(20, 58, 41, .14);
+}
+
+#what-we-offer .offer-list-item:nth-child(odd) {
+  border-right: 1px solid rgba(20, 58, 41, .14);
+  padding-right: 28px;
+}
+
+#what-we-offer .offer-list-item:nth-child(even) {
+  padding-left: 28px;
+}
+
+#what-we-offer .offer-list-number {
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  opacity: .6;
+  padding-top: 4px;
+}
+
+#what-we-offer .offer-list-copy h3 {
+  margin: 0 0 7px;
+  font-size: 1.05rem;
+  line-height: 1.2;
+}
+
+#what-we-offer .offer-list-copy p {
+  margin: 0;
+  line-height: 1.55;
+  font-size: .92rem;
+}
+
+@media (max-width: 760px) {
+  #what-we-offer {
+    padding-top: 42px;
+    padding-bottom: 42px;
+  }
+
+  #what-we-offer .offer-list {
+    grid-template-columns: 1fr;
+    max-width: none;
+  }
+
+  #what-we-offer .offer-list-item,
+  #what-we-offer .offer-list-item:nth-child(odd),
+  #what-we-offer .offer-list-item:nth-child(even) {
+    grid-template-columns: 30px minmax(0, 1fr);
+    gap: 10px;
+    padding: 16px 0;
+    border-right: 0;
+  }
+
+  #what-we-offer .offer-list-number {
+    font-size: .7rem;
+  }
+
+  #what-we-offer .offer-list-copy h3 {
+    font-size: .98rem;
+    margin-bottom: 5px;
+  }
+
+  #what-we-offer .offer-list-copy p {
+    font-size: .8rem;
+    line-height: 1.48;
+  }
+}
