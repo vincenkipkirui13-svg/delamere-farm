@@ -36,6 +36,7 @@ router.get('/sitemap.xml', (_req, res) => {
 
   const siteBase = base.replace(/\/$/, '');
   const urls = ['/', '/about', '/livestock', '/animals', '/dairy', '/gallery', '/faq', '/contact'];
+  const now = new Date().toISOString();
   const typeRows = livestock.getTypes();
   for (const type of typeRows) {
     urls.push(`/livestock/${type.slug}`);
@@ -49,7 +50,7 @@ router.get('/sitemap.xml', (_req, res) => {
 
   const escapeXml = value => String(value).replace(/[<>&'"]/g, char => ({ '<':'&lt;', '>':'&gt;', '&':'&amp;', "'":'&apos;', '"':'&quot;' }[char]));
   const uniqueUrls = [...new Set(urls)];
-  const xml = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${uniqueUrls.map(url=>`<url><loc>${escapeXml(siteBase + url)}</loc></url>`).join('')}</urlset>`;
+  const xml = `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${uniqueUrls.map((url,index)=>`<url><loc>${escapeXml(siteBase + url)}</loc><lastmod>${now}</lastmod>${index===0?'<changefreq>weekly</changefreq><priority>1.0</priority>':'<changefreq>weekly</changefreq><priority>0.7</priority>'}</url>`).join('')}</urlset>`;
   res.type('application/xml').send(xml);
 });
 
