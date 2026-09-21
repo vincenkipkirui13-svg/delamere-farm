@@ -1,0 +1,37 @@
+<%- include('../partials/head', { title, description: 'Manage Delamere Farm administrator accounts.' }) %>
+<body class="admin-body admin-shell">
+  <%- include('nav') %>
+  <main class="admin-main"><div class="container">
+    <div class="admin-title"><div><p class="eyebrow">Administration</p><h1>Admin Users</h1><p>Create and manage authorized administrator accounts and roles.</p></div></div>
+    <% if(error){ %><div class="form-errors" role="alert"><%= error %></div><% } %>
+
+    <section class="admin-panel"><div class="panel-heading"><div><h2>Add administrator</h2><p>Use an existing username or an email-style login. Temporary passwords must be at least 10 characters.</p></div></div>
+      <div class="form-card"><form method="post" action="/admin/users"><%- include('csrf') %><div class="form-grid"><label>Username or email<input name="username" required maxlength="120" autocomplete="username"></label><label>Temporary password<input type="password" name="password" required minlength="10" autocomplete="new-password"></label><label>Role<select name="role"><% ['Super Admin','Content Manager','Livestock Manager','Inquiry Manager'].forEach(role => { %><option><%= role %></option><% }) %></select></label></div><button class="btn btn-primary">Add Administrator</button></form></div>
+    </section>
+
+    <section class="admin-panel"><div class="panel-heading"><div><h2>Accounts</h2><p>Role access is enforced on the server. A session is revoked when a role or password changes.</p></div></div>
+      <div class="table-wrap"><table><thead><tr><th>Username</th><th>Role</th><th>Status</th><th>Last login</th><th>Manage role</th><th>Actions</th></tr></thead><tbody>
+        <% users.forEach(user => { %>
+          <tr>
+            <td><strong><%= user.username %></strong><small>Created: <%= user.created_at %></small></td>
+            <td><span class="admin-status <%= user.role==='Super Admin' ? 'resolved' : 'read' %>"><%= user.role %></span></td>
+            <td><%= user.active ? 'Active' : 'Disabled' %></td>
+            <td><%= user.last_login_at || 'Never' %></td>
+            <td>
+              <% if(user.id !== adminUser.id){ %>
+                <form class="stacked-inline-form" method="post" action="/admin/users/<%= user.id %>/role"><%- include('csrf') %><select name="role"><% ['Super Admin','Content Manager','Livestock Manager','Inquiry Manager'].forEach(role => { %><option value="<%= role %>" <%= user.role===role?'selected':'' %>><%= role %></option><% }) %></select><button class="table-link">Save Role</button></form>
+              <% } else { %><span>Current account</span><% } %>
+            </td>
+            <td>
+              <% if(user.id !== adminUser.id){ %>
+                <form class="stacked-inline-form" method="post" action="/admin/users/<%= user.id %>/reset-password"><%- include('csrf') %><input type="password" name="password" minlength="10" placeholder="New password" autocomplete="new-password" required><button class="table-link">Reset Password</button></form>
+                <form class="inline-form" method="post" action="/admin/users/<%= user.id %>/toggle"><%- include('csrf') %><button class="table-link"><%= user.active?'Disable':'Enable' %></button></form>
+                <form class="inline-form" method="post" action="/admin/users/<%= user.id %>/delete" onsubmit="return confirm('Delete this administrator permanently?')"><%- include('csrf') %><button class="danger-link">Delete</button></form>
+              <% } else { %><span>Use Security to change your password.</span><% } %>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody></table></div>
+    </section>
+  </div></main>
+</body></html>

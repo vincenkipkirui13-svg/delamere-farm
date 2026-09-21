@@ -1,0 +1,124 @@
+<%- include('../partials/head', { title, description }) %>
+<body>
+  <%- include('../partials/header') %>
+  <main>
+    <section class="hero">
+      <img class="hero-image" src="<%= helpers.mediaUrl(siteSettings.heroImage) || '/images/farm-placeholder.svg' %>" alt="<%= siteSettings.name %>" decoding="async" fetchpriority="high">
+      <div class="hero-overlay"></div>
+      <div class="container hero-content reveal">
+        <p class="eyebrow hero-eyebrow"><%= siteSettings.heroSubtitle %></p>
+        <h1><%= siteSettings.heroTitle %></h1>
+        <p class="hero-lead"><%= siteSettings.heroDescription %></p>
+        <div class="button-row">
+          <a class="btn btn-light" href="<%= siteSettings.heroCtaLink %>"><%= siteSettings.heroCtaText %> <span>&#8594;</span></a>
+          <a class="btn btn-light-outline" href="<%= siteSettings.heroSecondaryLink %>"><%= siteSettings.heroSecondaryText %></a>
+        </div>
+      </div>
+      <a class="scroll-cue" href="#intro" aria-label="Scroll to explore">Scroll to explore <span>&#8595;</span></a>
+    </section>
+
+    <section class="section section-light" id="what-we-offer">
+      <div class="container">
+        <div class="section-heading centered reveal">
+          <p class="eyebrow"><%= siteSettings.homepage_offer_eyebrow %></p>
+          <h2><%= siteSettings.homepage_offer_title %></h2>
+          <p><%= siteSettings.homepage_offer_description %></p>
+        </div>
+        <div class="card-grid">
+          <% for(let i=1;i<=8;i++){ %>
+            <article class="info-card reveal"><div class="offer-body"><h3><%= siteSettings['homepage_offer_'+i+'_title'] %></h3><p><%= siteSettings['homepage_offer_'+i+'_description'] %></p></div></article>
+          <% } %>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-light" id="intro">
+      <div class="container split-section">
+        <div class="split-visual image-wrap reveal">
+          <img src="<%= helpers.mediaUrl(siteSettings.aboutImage) || '/images/farm-placeholder.svg' %>" alt="<%= siteSettings.name %>" loading="lazy" decoding="async">
+          <% if(siteSettings.aboutCaption){ %><span class="image-caption"><%= siteSettings.aboutCaption %></span><% } %>
+        </div>
+        <div class="split-copy reveal">
+          <p class="eyebrow"><%= siteSettings.homepage_intro_eyebrow %></p>
+          <h2><%= siteSettings.homepage_intro_title %></h2>
+          <p><%= siteSettings.homepage_intro_description_1 %></p>
+          <p><%= siteSettings.homepage_intro_description_2 %></p>
+          <a class="text-link" href="/about"><%= siteSettings.homepage_intro_link_text %> <span>&#8594;</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-cream">
+      <div class="container">
+        <div class="section-heading centered reveal"><p class="eyebrow"><%= siteSettings.homepage_explore_eyebrow %></p><h2><%= siteSettings.homepage_explore_title %></h2><p><%= siteSettings.homepage_explore_description %></p></div>
+        <div class="offer-grid">
+          <a class="offer-card reveal" href="/livestock"><div class="offer-media"><img src="<%= helpers.mediaUrl(siteSettings.featureImages.livestock) || '/images/farm-placeholder.svg' %>" alt="Livestock at <%= siteSettings.name %>" loading="lazy" decoding="async"><span class="offer-badge">01</span></div><div class="offer-body"><p class="card-kicker">Livestock Library</p><h3><%= siteSettings.homepage_explore_1_title %></h3><p><%= siteSettings.homepage_explore_1_description %></p><% if(livestockSummary?.length){ %><div class="livestock-mini-list"><% livestockSummary.slice(0,3).forEach(type=>{ %><span><%= type.name %>: <%= type.classifications.join(', ') || 'General' %></span><% }) %></div><% } %><span class="text-link"><%= siteSettings.homepage_explore_1_cta %> <b>&#8594;</b></span></div></a>
+          <a class="offer-card reveal" href="/dairy"><div class="offer-media"><img src="<%= helpers.mediaUrl(siteSettings.featureImages.dairy) || '/images/farm-placeholder.svg' %>" alt="Dairy products from <%= siteSettings.name %>" loading="lazy" decoding="async"><span class="offer-badge">02</span></div><div class="offer-body"><h3><%= siteSettings.homepage_explore_2_title %></h3><p><%= siteSettings.homepage_explore_2_description %></p><span class="text-link"><%= siteSettings.homepage_explore_2_cta %> <b>&#8594;</b></span></div></a>
+          <a class="offer-card reveal" href="/gallery"><div class="offer-media"><img src="<%= helpers.mediaUrl(siteSettings.featureImages.experience) || '/images/farm-placeholder.svg' %>" alt="Farm experience at <%= siteSettings.name %>" loading="lazy" decoding="async"><span class="offer-badge">03</span></div><div class="offer-body"><h3><%= siteSettings.homepage_explore_3_title %></h3><p><%= siteSettings.homepage_explore_3_description %></p><span class="text-link"><%= siteSettings.homepage_explore_3_cta %> <b>&#8594;</b></span></div></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-light">
+      <div class="container">
+        <div class="section-heading split-heading reveal"><div><p class="eyebrow"><%= siteSettings.homepage_livestock_eyebrow %></p><h2><%= siteSettings.homepage_livestock_title %></h2></div><a class="btn btn-secondary" href="/livestock"><%= siteSettings.homepage_livestock_cta_text %></a></div>
+        <% if(featuredAnimals.length){ %><div class="card-grid"><% featuredAnimals.forEach(animal => { %><%- include('../partials/animal-card', { animal, helpers }) %><% }) %></div><% } else { %><div class="empty-state">Livestock listings will appear here as the catalogue is populated.</div><% } %>
+      </div>
+    </section>
+
+    <section class="section dark-band">
+      <div class="container benefits-grid">
+        <div class="benefit-intro reveal"><p class="eyebrow eyebrow-light"><%= siteSettings.homepage_benefit_eyebrow %></p><h2><%= siteSettings.homepage_benefit_title %></h2><p><%= siteSettings.homepage_benefit_description %></p></div>
+        <div class="benefit-list">
+          <% for(let i=1;i<=3;i++){ %><div class="benefit reveal"><span><%= String(i).padStart(2,'0') %></span><div><h3><%= siteSettings['homepage_benefit_'+i+'_title'] %></h3><p><%= siteSettings['homepage_benefit_'+i+'_description'] %></p></div></div><% } %>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-cream">
+      <div class="container">
+        <div class="section-heading split-heading reveal"><div><p class="eyebrow"><%= siteSettings.homepage_dairy_eyebrow %></p><h2><%= siteSettings.homepage_dairy_title %></h2></div><a class="btn btn-secondary" href="/dairy"><%= siteSettings.homepage_dairy_cta_text %></a></div>
+        <% if(featuredDairy.length){ %><div class="card-grid"><% featuredDairy.forEach(product => { %><%- include('../partials/dairy-card', { product, helpers }) %><% }) %></div><% } else { %><div class="empty-state">Dairy products will appear here as the catalogue is populated.</div><% } %>
+      </div>
+    </section>
+
+    <section class="section section-light">
+      <div class="container">
+        <div class="section-heading centered reveal"><p class="eyebrow"><%= siteSettings.homepage_gallery_eyebrow %></p><h2><%= siteSettings.homepage_gallery_title %></h2><p><%= siteSettings.homepage_gallery_description %></p></div>
+        <% if(gallery.length){ %><div class="gallery-grid compact"><% gallery.forEach(item => { %><a href="/gallery" class="gallery-tile image-wrap reveal"><img src="<%= helpers.imageUrl(item.image) %>" alt="<%= item.title %>" loading="lazy" decoding="async"><span><%= item.title %></span></a><% }) %></div><% } else { %><div class="gallery-placeholder">Farm photographs will appear here as the gallery is populated.</div><% } %>
+      </div>
+    </section>
+
+    <% if (reviews && reviews.length) { %>
+    <section class="section section-cream reviews-section" id="reviews">
+      <div class="container">
+        <div class="section-heading centered reveal">
+          <p class="eyebrow">Customer feedback</p>
+          <h2>What our customers say.</h2>
+          <p>Read customer feedback from people who have connected with Delamere Farm.</p>
+        </div>
+        <div class="reviews-summary reveal">
+          <strong><%= Number(reviewCount || 0).toLocaleString() %></strong>
+          <span>Reviews</span>
+        </div>
+        <div class="reviews-grid">
+          <% reviews.slice(0, 7).forEach(review => { %>
+            <article class="review-card reveal">
+              <div class="review-stars" aria-label="<%= review.rating %> out of 5 stars"><%= '★'.repeat(Number(review.rating || 0)) %><%= '☆'.repeat(5 - Number(review.rating || 0)) %></div>
+              <p class="review-text">“<%= review.review_text %>”</p>
+              <div class="review-author">
+                <span class="review-avatar" aria-hidden="true"><%= String(review.customer_name || '?').trim().charAt(0).toUpperCase() %></span>
+                <div><strong><%= review.customer_name %></strong><small>Verified customer feedback</small></div>
+              </div>
+            </article>
+          <% }) %>
+        </div>
+      </div>
+    </section>
+    <% } %>
+
+    <section class="cta-section">
+      <div class="container cta-inner reveal"><p class="eyebrow eyebrow-light"><%= siteSettings.homepage_cta_eyebrow %></p><h2><%= siteSettings.homepage_cta_title %></h2><p><%= siteSettings.homepage_cta_description %></p><div class="button-row centered-buttons"><a class="btn btn-light" href="/contact"><%= siteSettings.homepage_cta_primary_text %> <span>&#8594;</span></a><a class="btn btn-light-outline" href="/livestock"><%= siteSettings.homepage_cta_secondary_text %></a></div></div>
+    </section>
+  </main>
+  <%- include('../partials/footer') %>

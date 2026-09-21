@@ -1,0 +1,12 @@
+<article class="card product-card">
+  <a href="/dairy/<%= product.slug %>" class="card-media image-wrap" aria-label="View <%= product.name %>">
+    <img src="<%= helpers.imageUrl(product.image) %>" alt="<%= product.name %>" loading="lazy" decoding="async">
+    <span class="status-badge <%= product.availability === 'Available' ? 'status-available' : 'status-muted' %>"><%= product.availability %></span>
+  </a>
+  <div class="card-body">
+    <p class="card-kicker">Product</p>
+    <h3><a href="/dairy/<%= product.slug %>"><%= product.name %></a></h3>
+    <p><%= helpers.truncate(product.description, 105) %></p>
+    <a class="text-link" href="/dairy/<%= product.slug %>">View product <span>→</span></a>
+  </div>
+</article>

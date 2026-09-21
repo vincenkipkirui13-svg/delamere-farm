@@ -1,0 +1,51 @@
+﻿<article class="card animal-card">
+  <a href="/animals/<%= animal.slug %>" class="card-media image-wrap" aria-label="View <%= animal.name %>">
+    <img
+      src="<%= helpers.imageUrl(animal.image) %>"
+      alt="<%= animal.name %>"
+      loading="lazy"
+      decoding="async"
+    >
+
+    <span class="status-badge <%= animal.availability === 'Available' ? 'status-available' : 'status-muted' %>">
+      <%= animal.availability %>
+    </span>
+
+    <% if (animal.price !== null && animal.price !== undefined && animal.price !== '') { %>
+      <span class="price-badge">
+        KSh <%= Number(animal.price).toLocaleString('en-KE') %>
+      </span>
+    <% } %>
+  </a>
+
+  <div class="card-body">
+    <p class="card-kicker">
+      <%= animal.livestock_classification || animal.category %>
+    </p>
+
+    <h3>
+      <a href="/animals/<%= animal.slug %>"><%= animal.name %></a>
+    </h3>
+
+    <div class="meta-row">
+      <% if (animal.breed) { %>
+        <span><strong>Breed</strong> <%= animal.breed %></span>
+      <% } %>
+
+      <% if (animal.age) { %>
+        <span><strong>Age</strong> <%= animal.age %></span>
+      <% } %>
+    </div>
+
+    <% if (animal.price !== null && animal.price !== undefined && animal.price !== '') { %>
+      <p class="animal-price">
+        <strong>Price:</strong>
+        KSh <%= Number(animal.price).toLocaleString('en-KE') %>
+      </p>
+    <% } %>
+
+    <a class="text-link" href="/animals/<%= animal.slug %>">
+      View details <span aria-hidden="true">&#8594;</span>
+    </a>
+  </div>
+</article>

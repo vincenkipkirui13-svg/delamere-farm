@@ -1,0 +1,239 @@
+<%- include('../partials/head', { title, description: 'Manage all editable Delamere Farm website content and settings.' }) %>
+<body class="admin-body admin-shell">
+  <%- include('nav') %>
+  <main class="admin-main">
+    <div class="container settings-container">
+      <div class="admin-title">
+        <div><p class="eyebrow">Website control centre</p><h1>Website Settings</h1><p>Everything below can be changed by authorized staff without editing source code.</p></div>
+      </div>
+      <% if(error){ %><div class="form-errors" role="alert"><%= error %></div><% } %>
+      <% if(success){ %><div class="settings-success" role="status"><%= success %></div><% } %>
+
+      <form method="post" action="/admin/settings" enctype="multipart/form-data">
+        <%- include('csrf') %>
+
+        <section class="settings-panel" id="business">
+          <div class="settings-panel-head"><div><p class="eyebrow">Business information</p><h2>Identity & contact</h2><p>The public business identity and primary contact details.</p></div></div>
+          <div class="form-grid-2">
+            <label>Farm name<input name="site_name" value="<%= siteSettings.name %>" required maxlength="100"></label>
+            <label>Site description<input name="site_description" value="<%= siteSettings.description %>" maxlength="500"></label>
+            <label>Phone<input name="contact_phone" value="<%= siteSettings.phone %>" maxlength="40"></label>
+            <label>Email<input type="email" name="contact_email" value="<%= siteSettings.email %>" maxlength="160"></label>
+            <label>Location<input name="contact_location" value="<%= siteSettings.location %>" maxlength="180"></label>
+            <label>Physical address<input name="contact_address" value="<%= siteSettings.address %>" maxlength="300"></label>
+            <label>Google Maps link<input name="contact_maps_url" value="<%= siteSettings.mapsUrl %>" maxlength="500" placeholder="https://maps.google.com/..."></label>
+            <label>Business hours<input name="business_hours" value="<%= siteSettings.businessHours %>" maxlength="300"></label>
+          </div>
+        </section>
+
+        <section class="settings-panel" id="branding">
+          <div class="settings-panel-head"><div><p class="eyebrow">Appearance & branding</p><h2>Logo, colours and visual identity</h2><p>Keep branding controlled with approved colour and button choices.</p></div></div>
+          <div class="form-grid-2">
+            <label>Primary colour<input type="text" name="primary_color" value="<%= siteSettings.branding.primary %>" maxlength="20" placeholder="#143a29"></label>
+            <label>Secondary colour<input type="text" name="secondary_color" value="<%= siteSettings.branding.secondary %>" maxlength="20"></label>
+            <label>Accent colour<input type="text" name="accent_color" value="<%= siteSettings.branding.accent %>" maxlength="20"></label>
+            <label>Button style<select name="button_style"><option value="rounded" <%= siteSettings.branding.buttonStyle==='rounded'?'selected':'' %>>Rounded</option><option value="soft" <%= siteSettings.branding.buttonStyle==='soft'?'selected':'' %>>Soft</option><option value="square" <%= siteSettings.branding.buttonStyle==='square'?'selected':'' %>>Square</option></select></label>
+          </div>
+          <div class="settings-upload-grid settings-upload-grid-brand">
+            <label>Logo<input type="file" name="logo_image" accept=".jpg,.jpeg,.png,.webp,.avif,image/jpeg,image/png,image/webp,image/avif"><% if(siteSettings.logo){ %><img class="settings-preview logo-preview" src="/uploads/<%= siteSettings.logo %>" alt="Current logo"><label class="checkbox settings-clear"><input type="checkbox" name="clear_logo_image"> Remove current logo</label><% } %></label>
+            <label>Favicon<input type="file" name="favicon_image" accept="image/png,image/jpeg,image/webp,image/avif"><% if(siteSettings.icon){ %><img class="settings-preview icon-preview" src="/uploads/<%= siteSettings.icon %>" alt="Current favicon"><label class="checkbox settings-clear"><input type="checkbox" name="clear_favicon_image"> Remove current favicon</label><% } %></label>
+          </div>
+        </section>
+
+        <section class="settings-panel" id="homepage">
+          <div class="settings-panel-head"><div><p class="eyebrow">Homepage</p><h2>Hero, sections, featured content and CTAs</h2><p>The main homepage copy, limits and imagery are controlled here.</p></div></div>
+          <h3>Hero</h3>
+          <div class="form-grid-2">
+            <label>Hero eyebrow<input name="hero_subtitle" value="<%= siteSettings.heroSubtitle %>" maxlength="150"></label>
+            <label>Hero title<input name="hero_title" value="<%= siteSettings.heroTitle %>" maxlength="200"></label>
+            <label class="full-field">Hero description<textarea name="hero_description" rows="4" maxlength="1000"><%= siteSettings.heroDescription %></textarea></label>
+            <label>Hero button text<input name="hero_cta_text" value="<%= siteSettings.heroCtaText %>" maxlength="80"></label>
+            <label>Hero button link<input name="hero_cta_link" value="<%= siteSettings.heroCtaLink %>" maxlength="300"></label>
+            <label>Secondary button text<input name="hero_secondary_text" value="<%= siteSettings.heroSecondaryText %>" maxlength="80"></label>
+            <label>Secondary button link<input name="hero_secondary_link" value="<%= siteSettings.heroSecondaryLink %>" maxlength="300"></label>
+          </div>
+          <label class="full-field">Homepage hero image<input type="file" name="hero_image" accept=".jpg,.jpeg,.png,.webp,.avif,image/jpeg,image/png,image/webp,image/avif"><% if(siteSettings.heroImage){ %><img class="settings-preview wide-preview" src="/uploads/<%= siteSettings.heroImage %>" alt="Current homepage hero"><label class="checkbox settings-clear"><input type="checkbox" name="clear_hero_image"> Remove current hero image</label><% } %></label>
+
+          <h3>What We Offer</h3>
+          <div class="form-grid-2">
+            <label>Section eyebrow<input name="homepage_offer_eyebrow" value="<%= siteSettings.homepage_offer_eyebrow %>" maxlength="150"></label>
+            <label>Section heading<input name="homepage_offer_title" value="<%= siteSettings.homepage_offer_title %>" maxlength="200"></label>
+            <label>Section description<input name="homepage_offer_description" value="<%= siteSettings.homepage_offer_description %>" maxlength="1000"></label>
+          </div>
+          <div class="form-grid">
+            <% for(let i=1;i<=8;i++){ %>
+              <label>Offer <%= i %> title<input name="homepage_offer_<%= i %>_title" value="<%= siteSettings['homepage_offer_'+i+'_title'] %>" maxlength="120"></label>
+              <label>Offer <%= i %> description<textarea name="homepage_offer_<%= i %>_description" rows="3" maxlength="500"><%= siteSettings['homepage_offer_'+i+'_description'] %></textarea></label>
+            <% } %>
+          </div>
+
+          <h3>Intro section</h3>
+          <div class="form-grid-2">
+            <label>Eyebrow<input name="homepage_intro_eyebrow" value="<%= siteSettings.homepage_intro_eyebrow %>" maxlength="150"></label>
+            <label>Heading<input name="homepage_intro_title" value="<%= siteSettings.homepage_intro_title %>" maxlength="200"></label>
+            <label class="full-field">Paragraph 1<textarea name="homepage_intro_description_1" rows="4" maxlength="1000"><%= siteSettings.homepage_intro_description_1 %></textarea></label>
+            <label class="full-field">Paragraph 2<textarea name="homepage_intro_description_2" rows="4" maxlength="1000"><%= siteSettings.homepage_intro_description_2 %></textarea></label>
+            <label>Story link text<input name="homepage_intro_link_text" value="<%= siteSettings.homepage_intro_link_text %>" maxlength="120"></label>
+          </div>
+
+          <h3>Explore section</h3>
+          <div class="form-grid-2">
+            <label>Eyebrow<input name="homepage_explore_eyebrow" value="<%= siteSettings.homepage_explore_eyebrow %>" maxlength="150"></label>
+            <label>Heading<input name="homepage_explore_title" value="<%= siteSettings.homepage_explore_title %>" maxlength="200"></label>
+            <label class="full-field">Description<textarea name="homepage_explore_description" rows="3" maxlength="1000"><%= siteSettings.homepage_explore_description %></textarea></label>
+            <% for(let i=1;i<=3;i++){ %>
+              <label>Explore card <%= i %> title<input name="homepage_explore_<%= i %>_title" value="<%= siteSettings['homepage_explore_'+i+'_title'] %>" maxlength="120"></label>
+              <label>Explore card <%= i %> CTA<input name="homepage_explore_<%= i %>_cta" value="<%= siteSettings['homepage_explore_'+i+'_cta'] %>" maxlength="120"></label>
+              <label class="full-field">Explore card <%= i %> description<textarea name="homepage_explore_<%= i %>_description" rows="3" maxlength="500"><%= siteSettings['homepage_explore_'+i+'_description'] %></textarea></label>
+            <% } %>
+          </div>
+
+          <h3>Featured catalogue sections</h3>
+          <div class="form-grid-2">
+            <label>Featured livestock eyebrow<input name="homepage_livestock_eyebrow" value="<%= siteSettings.homepage_livestock_eyebrow %>" maxlength="150"></label>
+            <label>Featured animals to show<input type="number" name="homepage_featured_animals_limit" value="<%= siteSettings.homepage_featured_animals_limit %>" min="1" max="12"></label>
+            <label>Featured dairy products to show<input type="number" name="homepage_featured_dairy_limit" value="<%= siteSettings.homepage_featured_dairy_limit %>" min="1" max="12"></label>
+            <label>Gallery photos to show<input type="number" name="homepage_gallery_limit" value="<%= siteSettings.homepage_gallery_limit %>" min="1" max="12"></label>
+            <label>Dairy section eyebrow<input name="homepage_dairy_eyebrow" value="<%= siteSettings.homepage_dairy_eyebrow %>" maxlength="150"></label>
+            <label>Featured livestock heading<input name="homepage_livestock_title" value="<%= siteSettings.homepage_livestock_title %>" maxlength="200"></label>
+            <label>Featured livestock button<input name="homepage_livestock_cta_text" value="<%= siteSettings.homepage_livestock_cta_text %>" maxlength="120"></label>
+            <label>Dairy section heading<input name="homepage_dairy_title" value="<%= siteSettings.homepage_dairy_title %>" maxlength="200"></label>
+            <label>Dairy button<input name="homepage_dairy_cta_text" value="<%= siteSettings.homepage_dairy_cta_text %>" maxlength="120"></label>
+            <label>Gallery section eyebrow<input name="homepage_gallery_eyebrow" value="<%= siteSettings.homepage_gallery_eyebrow %>" maxlength="150"></label>
+            <label>Gallery section heading<input name="homepage_gallery_title" value="<%= siteSettings.homepage_gallery_title %>" maxlength="200"></label>
+            <label>Gallery section description<textarea name="homepage_gallery_description" rows="3" maxlength="700"><%= siteSettings.homepage_gallery_description %></textarea></label>
+          </div>
+
+          <h3>Experience benefits</h3>
+          <div class="form-grid-2">
+            <label>Eyebrow<input name="homepage_benefit_eyebrow" value="<%= siteSettings.homepage_benefit_eyebrow %>" maxlength="150"></label>
+            <label>Heading<input name="homepage_benefit_title" value="<%= siteSettings.homepage_benefit_title %>" maxlength="250"></label>
+            <label class="full-field">Intro description<textarea name="homepage_benefit_description" rows="3" maxlength="700"><%= siteSettings.homepage_benefit_description %></textarea></label>
+          </div>
+          <div class="form-grid">
+            <% for(let i=1;i<=3;i++){ %>
+              <label>Benefit <%= i %> title<input name="homepage_benefit_<%= i %>_title" value="<%= siteSettings['homepage_benefit_'+i+'_title'] %>" maxlength="120"></label>
+              <label>Benefit <%= i %> description<textarea name="homepage_benefit_<%= i %>_description" rows="3" maxlength="500"><%= siteSettings['homepage_benefit_'+i+'_description'] %></textarea></label>
+            <% } %>
+          </div>
+
+          <h3>Final call to action</h3>
+          <div class="form-grid-2">
+            <label>Eyebrow<input name="homepage_cta_eyebrow" value="<%= siteSettings.homepage_cta_eyebrow %>" maxlength="150"></label><label>Heading<input name="homepage_cta_title" value="<%= siteSettings.homepage_cta_title %>" maxlength="200"></label>
+            <label>Primary button text<input name="homepage_cta_primary_text" value="<%= siteSettings.homepage_cta_primary_text %>" maxlength="120"></label>
+            <label>Secondary button text<input name="homepage_cta_secondary_text" value="<%= siteSettings.homepage_cta_secondary_text %>" maxlength="120"></label>
+            <label class="full-field">Description<textarea name="homepage_cta_description" rows="3" maxlength="700"><%= siteSettings.homepage_cta_description %></textarea></label>
+          </div>
+        </section>
+
+        <section class="settings-panel" id="about">
+          <div class="settings-panel-head"><div><p class="eyebrow">About page</p><h2>Farm story and identity</h2><p>Keep the public About content current without touching code.</p></div></div>
+          <div class="form-grid-2">
+            <label>About eyebrow<input name="about_eyebrow" value="<%= siteSettings.about_eyebrow %>" maxlength="150"></label><label>About title<input name="about_title" value="<%= siteSettings.about_title %>" maxlength="200"></label>
+            <label>About lead<input name="about_lead" value="<%= siteSettings.about_lead %>" maxlength="700"></label>
+            <label>Introduction eyebrow<input name="about_intro_eyebrow" value="<%= siteSettings.about_intro_eyebrow %>" maxlength="150"></label><label>Introduction heading<input name="about_intro_title" value="<%= siteSettings.about_intro_title %>" maxlength="200"></label>
+            <label>About image caption<input name="about_caption" value="<%= siteSettings.aboutCaption %>" maxlength="180"></label>
+            <label class="full-field">Introduction<textarea name="about_intro" rows="5" maxlength="2500"><%= siteSettings.about_intro %></textarea></label>
+            <label class="full-field">Farm story<textarea name="about_story" rows="5" maxlength="2500"><%= siteSettings.about_story %></textarea></label>
+            <label class="full-field">Mission<textarea name="about_mission" rows="4" maxlength="1500"><%= siteSettings.about_mission %></textarea></label>
+            <label class="full-field">Vision<textarea name="about_vision" rows="4" maxlength="1500"><%= siteSettings.about_vision %></textarea></label>
+            <label class="full-field">Values<textarea name="about_values" rows="4" maxlength="1500"><%= siteSettings.about_values %></textarea></label>
+          </div>
+          <div class="settings-upload-grid">
+            <label>About page main image<input type="file" name="about_image" accept=".jpg,.jpeg,.png,.webp,.avif,image/jpeg,image/png,image/webp,image/avif"><% if(siteSettings.aboutImage){ %><img class="settings-preview wide-preview" src="/uploads/<%= siteSettings.aboutImage %>" alt="Current About image"><label class="checkbox settings-clear"><input type="checkbox" name="clear_about_image"> Remove current About image</label><% } %></label>
+            <label>About additional image 1<input type="file" name="about_image_2" accept=".jpg,.jpeg,.png,.webp,.avif,image/jpeg,image/png,image/webp,image/avif"><% if(siteSettings.aboutImage2){ %><img class="settings-preview wide-preview" src="/uploads/<%= siteSettings.aboutImage2 %>" alt="Current additional About image 1"><label class="checkbox settings-clear"><input type="checkbox" name="clear_about_image_2"> Remove current additional image</label><% } %></label>
+            <label>About additional image 2<input type="file" name="about_image_3" accept=".jpg,.jpeg,.png,.webp,.avif,image/jpeg,image/png,image/webp,image/avif"><% if(siteSettings.aboutImage3){ %><img class="settings-preview wide-preview" src="/uploads/<%= siteSettings.aboutImage3 %>" alt="Current additional About image 2"><label class="checkbox settings-clear"><input type="checkbox" name="clear_about_image_3"> Remove current additional image</label><% } %></label>
+          </div>
+        </section>
+
+        <section class="settings-panel" id="pages">
+          <div class="settings-panel-head"><div><p class="eyebrow">Public page content</p><h2>Page headings and calls to action</h2><p>Change the customer-facing page heroes and supporting copy without editing code.</p></div></div>
+          <h3>About page CTA</h3>
+          <div class="form-grid-2">
+            <label>Eyebrow<input name="about_cta_eyebrow" value="<%= siteSettings.about_cta_eyebrow %>" maxlength="150"></label><label>Heading<input name="about_cta_title" value="<%= siteSettings.about_cta_title %>" maxlength="200"></label>
+            <label class="full-field">Description<textarea name="about_cta_description" rows="3" maxlength="500"><%= siteSettings.about_cta_description %></textarea></label>
+            <label>Primary button<input name="about_cta_primary_text" value="<%= siteSettings.about_cta_primary_text %>" maxlength="120"></label><label>Secondary button<input name="about_cta_secondary_text" value="<%= siteSettings.about_cta_secondary_text %>" maxlength="120"></label>
+          </div>
+          <% const pageEditors=[['Livestock','livestock_page_eyebrow','livestock_page_title','livestock_page_lead'],['Animals','animals_page_eyebrow','animals_page_title','animals_page_lead'],['Dairy','dairy_page_eyebrow','dairy_page_title','dairy_page_lead'],['Gallery','gallery_page_eyebrow','gallery_page_title','gallery_page_lead'],['FAQs','faq_page_eyebrow','faq_page_title','faq_page_lead'],['Contact','contact_page_eyebrow','contact_page_title','contact_page_lead']]; %>
+          <% pageEditors.forEach(item=>{ const prefix=item[1].replace('_eyebrow',''); %>
+            <h3><%= item[0] %> page</h3>
+            <div class="form-grid-2">
+              <label>Eyebrow<input name="<%= item[1] %>" value="<%= siteSettings[item[1]] %>" maxlength="150"></label><label>Heading<input name="<%= item[2] %>" value="<%= siteSettings[item[2]] %>" maxlength="200"></label>
+              <label class="full-field">Lead / intro<textarea name="<%= item[3] %>" rows="3" maxlength="500"><%= siteSettings[item[3]] %></textarea></label>
+            </div>
+          <% }) %>
+          <h3>Livestock catalogue intro</h3>
+          <div class="form-grid-2"><label>Eyebrow<input name="livestock_page_catalog_eyebrow" value="<%= siteSettings.livestock_page_catalog_eyebrow %>" maxlength="150"></label><label>Heading<input name="livestock_page_catalog_title" value="<%= siteSettings.livestock_page_catalog_title %>" maxlength="200"></label><label class="full-field">Description<textarea name="livestock_page_catalog_description" rows="3" maxlength="500"><%= siteSettings.livestock_page_catalog_description %></textarea></label></div>
+          <h3>FAQ CTA</h3>
+          <div class="form-grid-2"><label>Eyebrow<input name="faq_cta_eyebrow" value="<%= siteSettings.faq_cta_eyebrow %>" maxlength="150"></label><label>Heading<input name="faq_cta_title" value="<%= siteSettings.faq_cta_title %>" maxlength="200"></label><label class="full-field">Description<textarea name="faq_cta_description" rows="3" maxlength="500"><%= siteSettings.faq_cta_description %></textarea></label><label>Button text<input name="faq_cta_button_text" value="<%= siteSettings.faq_cta_button_text %>" maxlength="120"></label></div>
+          <h3>Contact section</h3>
+          <div class="form-grid-2"><label>Eyebrow<input name="contact_section_eyebrow" value="<%= siteSettings.contact_section_eyebrow %>" maxlength="150"></label><label>Heading<input name="contact_section_title" value="<%= siteSettings.contact_section_title %>" maxlength="200"></label><label class="full-field">Description<textarea name="contact_section_description" rows="3" maxlength="700"><%= siteSettings.contact_section_description %></textarea></label><label class="full-field">Helper note<textarea name="contact_section_note" rows="2" maxlength="500"><%= siteSettings.contact_section_note %></textarea></label></div>
+        </section>
+
+        <section class="settings-panel" id="feature-images">
+          <div class="settings-panel-head"><div><p class="eyebrow">Homepage feature images</p><h2>Catalogue feature photography</h2><p>These images power the visual cards linking into livestock, dairy and the farm experience.</p></div></div>
+          <div class="settings-upload-grid">
+            <label>Livestock feature<input type="file" name="livestock_image" accept=".jpg,.jpeg,.png,.webp,.avif,image/jpeg,image/png,image/webp,image/avif"><% if(siteSettings.featureImages.livestock){ %><img class="settings-preview" src="/uploads/<%= siteSettings.featureImages.livestock %>" alt="Current livestock feature"><label class="checkbox settings-clear"><input type="checkbox" name="clear_livestock_image"> Remove current livestock image</label><% } %></label>
+            <label>Dairy feature<input type="file" name="dairy_image" accept=".jpg,.jpeg,.png,.webp,.avif,image/jpeg,image/png,image/webp,image/avif"><% if(siteSettings.featureImages.dairy){ %><img class="settings-preview" src="/uploads/<%= siteSettings.featureImages.dairy %>" alt="Current dairy feature"><label class="checkbox settings-clear"><input type="checkbox" name="clear_dairy_image"> Remove current dairy image</label><% } %></label>
+            <label>Farm experience<input type="file" name="experience_image" accept=".jpg,.jpeg,.png,.webp,.avif,image/jpeg,image/png,image/webp,image/avif"><% if(siteSettings.featureImages.experience){ %><img class="settings-preview" src="/uploads/<%= siteSettings.featureImages.experience %>" alt="Current farm experience feature"><label class="checkbox settings-clear"><input type="checkbox" name="clear_experience_image"> Remove current experience image</label><% } %></label>
+          </div>
+        </section>
+
+        <section class="settings-panel" id="contact">
+          <div class="settings-panel-head"><div><p class="eyebrow">Contact & social</p><h2>Customer communication</h2><p>Manage WhatsApp, social links and floating contact controls.</p></div></div>
+          <div class="form-grid-2">
+            <label>WhatsApp number<input name="whatsapp_number" value="<%= siteSettings.whatsapp %>" maxlength="40"></label>
+            <label>WhatsApp default message<input name="whatsapp_message" value="<%= siteSettings.whatsappMessage %>" maxlength="300"></label>
+            <label>Facebook URL<input name="facebook_url" value="<%= siteSettings.social.facebook %>" maxlength="300"></label>
+            <label>Instagram URL<input name="instagram_url" value="<%= siteSettings.social.instagram %>" maxlength="300"></label>
+            <label>TikTok URL<input name="tiktok_url" value="<%= siteSettings.social.tiktok %>" maxlength="300"></label>
+            <label>YouTube URL<input name="youtube_url" value="<%= siteSettings.social.youtube %>" maxlength="300"></label>
+            <label>Other social URL<input name="other_social_url" value="<%= siteSettings.social.other %>" maxlength="300"></label>
+          </div>
+          <div class="checkbox-grid"><label class="checkbox"><input type="checkbox" name="show_whatsapp" <%= siteSettings.showWhatsapp?'checked':'' %>> Show floating WhatsApp button</label><label class="checkbox"><input type="checkbox" name="show_social_icons" <%= siteSettings.showSocialIcons?'checked':'' %>> Show social links/icons</label></div>
+        </section>
+
+        <section class="settings-panel" id="navigation">
+          <div class="settings-panel-head"><div><p class="eyebrow">Navigation</p><h2>Main menu</h2><p>Change menu labels, destinations, visibility and order.</p></div></div>
+          <div class="repeatable-settings">
+            <% const nav=siteSettings.navItems||[]; for(let i=0;i<Math.max(nav.length,7);i++){ const item=nav[i]||{label:'',path:'',visible:false}; %>
+              <div class="repeatable-row"><input name="nav_label[]" value="<%= item.label %>" placeholder="Menu label"><input name="nav_path[]" value="<%= item.path %>" placeholder="/path"><label class="checkbox"><input type="checkbox" name="nav_visible[]" value="<%= i %>" <%= item.visible?'checked':'' %>> Show</label><input class="order-input" type="number" name="nav_order[]" min="0" value="<%= i %>" aria-label="Order"></div>
+            <% } %>
+          </div>
+        </section>
+
+        <section class="settings-panel" id="footer">
+          <div class="settings-panel-head"><div><p class="eyebrow">Footer</p><h2>Footer content and links</h2><p>Manage the description, quick links, copyright and footer logo.</p></div></div>
+          <label>Footer description<textarea name="footer_text" rows="4" maxlength="1500"><%= siteSettings.footerText %></textarea></label>
+          <div class="settings-upload-grid footer-logo-setting">
+            <label>Footer logo<input type="file" name="footer_logo_image" accept=".jpg,.jpeg,.png,.webp,.avif,image/jpeg,image/png,image/webp,image/avif"><% if(siteSettings.footerLogo){ %><img class="settings-preview logo-preview" src="/uploads/<%= siteSettings.footerLogo %>" alt="Current footer logo"><label class="checkbox settings-clear"><input type="checkbox" name="clear_footer_logo_image"> Remove current footer logo</label><% } %></label>
+          </div>
+          <label>Copyright text<input name="copyright_text" value="<%= siteSettings.copyrightText %>" maxlength="300" placeholder="Leave blank to use the current year and farm name."></label>
+          <div class="repeatable-settings">
+            <% const links=siteSettings.footerLinks||[]; for(let i=0;i<Math.max(links.length,6);i++){ const item=links[i]||{label:'',path:''}; %>
+              <div class="repeatable-row"><input name="footer_label[]" value="<%= item.label %>" placeholder="Link label"><input name="footer_path[]" value="<%= item.path %>" placeholder="/path"></div>
+            <% } %>
+          </div>
+        </section>
+
+        <section class="settings-panel" id="seo">
+          <div class="settings-panel-head"><div><p class="eyebrow">SEO</p><h2>Search and social sharing</h2><p>Control the primary search metadata and indexing behaviour.</p></div></div>
+          <div class="form-grid-2">
+            <label>Homepage SEO title<input name="seo_home_title" value="<%= siteSettings.seo_home_title %>" maxlength="160"></label>
+            <label class="full-field">Homepage meta description<textarea name="seo_home_description" rows="3" maxlength="320"><%= siteSettings.seo_home_description %></textarea></label>
+            <label>Livestock SEO title<input name="seo_livestock_title" value="<%= siteSettings.seo_livestock_title %>" maxlength="160"></label>
+            <label class="full-field">Livestock meta description<textarea name="seo_livestock_description" rows="3" maxlength="320"><%= siteSettings.seo_livestock_description %></textarea></label>
+            <label>About SEO title<input name="seo_about_title" value="<%= siteSettings.seo_about_title %>" maxlength="160"></label>
+            <label>Gallery SEO title<input name="seo_gallery_title" value="<%= siteSettings.seo_gallery_title %>" maxlength="160"></label>
+            <label>Contact SEO title<input name="seo_contact_title" value="<%= siteSettings.seo_contact_title %>" maxlength="160"></label>
+            <label>SEO keywords/phrases<input name="seo_keywords" value="<%= siteSettings.seo_keywords %>" maxlength="500"></label>
+            <label>Robots setting<select name="seo_robots"><option value="index,follow" <%= siteSettings.seo_robots==='index,follow'?'selected':'' %>>Index, follow</option><option value="index,nofollow" <%= siteSettings.seo_robots==='index,nofollow'?'selected':'' %>>Index, nofollow</option><option value="noindex,follow" <%= siteSettings.seo_robots==='noindex,follow'?'selected':'' %>>No index, follow</option><option value="noindex,nofollow" <%= siteSettings.seo_robots==='noindex,nofollow'?'selected':'' %>>No index, nofollow</option></select></label>
+            <label>Social sharing image<input type="file" name="seo_social_image" accept=".jpg,.jpeg,.png,.webp,.avif,image/jpeg,image/png,image/webp,image/avif"><% if(siteSettings.seo.socialImage){ %><img class="settings-preview wide-preview" src="/uploads/<%= siteSettings.seo.socialImage %>" alt="Current social sharing image"><label class="checkbox settings-clear"><input type="checkbox" name="clear_seo_social_image"> Remove current social sharing image</label><% } %></label>
+          </div>
+        </section>
+
+        <div class="settings-savebar"><strong>Save all website settings</strong><button class="btn btn-primary" type="submit">Save Changes</button></div>
+      </form>
+    </div>
+  </main>
+</body></html>

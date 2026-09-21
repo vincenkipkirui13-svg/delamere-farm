@@ -1,0 +1,59 @@
+<aside class="admin-sidebar">
+  <a class="admin-side-brand" href="/admin">
+    <span class="brand-mark">DF</span>
+    <span><strong>Delamere Farm</strong><small>Admin</small></span>
+  </a>
+
+  <nav class="admin-side-nav" aria-label="Admin navigation">
+    <a href="/admin" class="<%= currentPath === '/admin' ? 'active' : '' %>">📊 <span>Dashboard</span></a>
+
+    <div class="admin-nav-label">Livestock</div>
+    <% if (adminUser?.role === 'Super Admin' || adminUser?.role === 'Livestock Manager') { %>
+      <a href="/admin/animals" class="<%= currentPath.startsWith('/admin/animals') && !currentPath.startsWith('/admin/animals/new') ? 'active' : '' %>">🐄 <span>All Animals</span></a>
+      <a href="/admin/animals/new">➕ <span>Add Animal</span></a>
+      <a href="/admin/breeds" class="<%= currentPath.startsWith('/admin/breeds') ? 'active' : '' %>">🧬 <span>Breed Library</span></a>
+      <a href="/admin/breeds/new">➕ <span>Add Breed</span></a>
+      <a href="/admin/taxonomy" class="<%= currentPath.startsWith('/admin/taxonomy') ? 'active' : '' %>">🗂️ <span>Categories & Classifications</span></a>
+      <a href="/admin/livestock-catalog" class="<%= currentPath.startsWith('/admin/livestock-catalog') ? 'active' : '' %>">📷 <span>Collection Photos</span></a>
+    <% } %>
+
+    <div class="admin-nav-label">Content</div>
+    <% if (adminUser?.role === 'Super Admin' || adminUser?.role === 'Content Manager') { %>
+      <a href="/admin/dairy" class="<%= currentPath.startsWith('/admin/dairy') ? 'active' : '' %>">🥛 <span>Dairy Products</span></a>
+      <a href="/admin/gallery" class="<%= currentPath.startsWith('/admin/gallery') ? 'active' : '' %>">🖼️ <span>Gallery</span></a>
+      <a href="/admin/faqs" class="<%= currentPath.startsWith('/admin/faqs') ? 'active' : '' %>">❓ <span>FAQs</span></a>
+      <a href="/admin/reviews" class="<%= currentPath.startsWith('/admin/reviews') ? 'active' : '' %>">⭐ <span>Reviews</span></a>
+    <% } %>
+    <% if (adminUser?.role === 'Super Admin' || adminUser?.role === 'Inquiry Manager') { %>
+      <a href="/admin/inquiries" class="<%= currentPath.startsWith('/admin/inquiries') ? 'active' : '' %>">📩 <span>Inquiries</span></a>
+    <% } %>
+
+    <div class="admin-nav-label">Website</div>
+    <% if (adminUser?.role === 'Super Admin' || adminUser?.role === 'Content Manager') { %>
+      <a href="/admin/settings" class="<%= currentPath === '/admin/settings' ? 'active' : '' %>">🌐 <span>Website Settings</span></a>
+      <div class="admin-nav-sub" aria-label="Website settings sections">
+        <a href="/admin/settings#business">Business Information</a>
+        <a href="/admin/settings#homepage">Homepage</a>
+        <a href="/admin/settings#about">About Page</a>
+        <a href="/admin/settings#pages">Public Page Content</a>
+        <a href="/admin/settings#branding">Appearance & Branding</a>
+        <a href="/admin/settings#contact">Contact & Social</a>
+        <a href="/admin/settings#navigation">Navigation</a>
+        <a href="/admin/settings#footer">Footer</a>
+        <a href="/admin/settings#seo">SEO</a>
+      </div>
+    <% } %>
+
+    <div class="admin-nav-label">Administration</div>
+    <% if (adminUser?.role === 'Super Admin') { %>
+      <a href="/admin/users" class="<%= currentPath.startsWith('/admin/users') ? 'active' : '' %>">👤 <span>Admin Users</span></a>
+    <% } %>
+    <a href="/admin/security" class="<%= currentPath.startsWith('/admin/security') ? 'active' : '' %>">🔐 <span>Security & Activity</span></a>
+    <a href="/" target="_blank" rel="noopener">🌍 <span>View Website</span></a>
+  </nav>
+
+  <form method="post" action="/admin/logout" class="admin-side-logout">
+    <%- include('csrf') %>
+    <button type="submit">Log out</button>
+  </form>
+</aside>

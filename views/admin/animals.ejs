@@ -1,0 +1,28 @@
+<%- include('../partials/head', { title, description: 'Manage individual Delamere Farm livestock listings.' }) %>
+<body class="admin-body admin-shell">
+  <%- include('nav') %>
+  <main class="admin-main"><div class="container">
+    <div class="admin-title">
+      <div><p class="eyebrow">Livestock</p><h1>Individual Animals</h1><p>Manage the actual animals currently advertised by the farm. Breed information is maintained separately in the Breed Library.</p></div>
+      <div class="button-row"><a class="btn btn-secondary" href="/admin/breeds">Breed Library</a><a class="btn btn-primary" href="/admin/animals/new">+ Add Animal</a></div>
+    </div>
+    <section class="admin-panel">
+      <div class="panel-heading"><div><p class="eyebrow">Current listings</p><h2>Animals</h2></div><a class="text-link" href="/admin/breeds">Manage breeds →</a></div>
+      <div class="table-wrap"><table><thead><tr><th>Animal</th><th>ID</th><th>Species</th><th>Classification</th><th>Breed</th><th>Status</th><th>Featured</th><th>Actions</th></tr></thead><tbody>
+      <% animals.forEach(animal=>{ %>
+        <tr>
+          <td><div class="admin-media"><img src="<%= helpers.imageUrl(animal.image) %>" alt=""><div><strong><%= animal.name %></strong><small><%= animal.age||'' %></small></div></div></td>
+          <td><%= animal.animal_id||'-' %></td>
+          <td><%= animal.livestock_type_name||animal.livestock_type||'-' %></td>
+          <td><%= animal.livestock_classification_name||animal.livestock_classification||animal.category||'-' %></td>
+          <td><%= animal.breed_name||animal.breed||'-' %></td>
+          <td><%= animal.availability %></td>
+          <td><%= animal.featured?'Yes':'No' %></td>
+          <td><a class="table-link" href="/admin/animals/<%= animal.id %>/edit">Edit</a><form class="inline-form" method="post" action="/admin/animals/<%= animal.id %>/delete" onsubmit="return confirm('Delete this animal?')"><%- include('csrf') %><button class="danger-link">Delete</button></form></td>
+        </tr>
+      <% }) %>
+      <% if(!animals.length){ %><tr><td colspan="8">No animals added yet.</td></tr><% } %>
+      </tbody></table></div>
+    </section>
+  </div></main>
+</body></html>

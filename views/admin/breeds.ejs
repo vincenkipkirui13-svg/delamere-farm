@@ -1,0 +1,26 @@
+<%- include('../partials/head', { title, description: 'Manage the Delamere Farm livestock breed library.' }) %>
+<body class="admin-body admin-shell">
+  <%- include('nav') %>
+  <main class="admin-main"><div class="container">
+    <div class="admin-title">
+      <div><p class="eyebrow">Livestock</p><h1>Breed Library</h1><p>Maintain general breed information separately from individual animal listings.</p></div>
+      <div class="button-row"><a class="btn btn-secondary" href="/admin/taxonomy">Categories & Classifications</a><a class="btn btn-primary" href="/admin/breeds/new">+ Add Breed</a></div>
+    </div>
+    <section class="admin-panel">
+      <div class="panel-heading"><div><p class="eyebrow">General breed information</p><h2>All breeds</h2></div><a class="text-link" href="/admin/animals">Individual animals →</a></div>
+      <div class="table-wrap"><table><thead><tr><th>Breed</th><th>Species</th><th>Classification(s)</th><th>Featured</th><th>Order</th><th>Actions</th></tr></thead><tbody>
+        <% breeds.forEach(breed=>{ %>
+          <tr>
+            <td><strong><%= breed.name %></strong><small><%= breed.description||'' %></small></td>
+            <td><%= breed.livestock_type_name %></td>
+            <td><%= breed.classifications||'-' %></td>
+            <td><%= breed.featured?'Yes':'No' %></td>
+            <td><%= breed.display_order||0 %></td>
+            <td><a class="table-link" href="/admin/breeds/<%= breed.id %>/edit">Edit</a><form class="inline-form" method="post" action="/admin/breeds/<%= breed.id %>/delete" onsubmit="return confirm('Delete this breed? Animals using it will keep their listing but lose the breed link.')"><%- include('csrf') %><button class="danger-link">Delete</button></form></td>
+          </tr>
+        <% }) %>
+        <% if(!breeds.length){ %><tr><td colspan="6">No breeds added yet.</td></tr><% } %>
+      </tbody></table></div>
+    </section>
+  </div></main>
+</body></html>

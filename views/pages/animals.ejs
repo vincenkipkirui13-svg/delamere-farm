@@ -1,0 +1,53 @@
+<%- include('../partials/head', { title: 'Livestock', description: 'Explore the livestock at Delamere Farm.' }) %>
+<body>
+  <%- include('../partials/header') %>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <p class="eyebrow"><%= site.pageContent.animals.eyebrow %></p>
+        <h1><%= site.pageContent.animals.title %></h1>
+        <p><%= site.pageContent.animals.lead %></p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <% if (!animals || animals.length === 0) { %>
+          <div class="empty-state">
+            <h2>No livestock available</h2>
+            <p>Our livestock collection will be updated soon.</p>
+          </div>
+        <% } else { %>
+          <div class="livestock-list">
+            <% animals.forEach((animal) => { %>
+              <article class="livestock-card">
+                <div class="livestock-card-image">
+                  <% if (animal.image) { %>
+                    <img src="<%= helpers.mediaUrl(animal.image) %>" alt="<%= animal.name %>" loading="lazy">
+                  <% } else { %>
+                    <div class="image-placeholder">No image available</div>
+                  <% } %>
+                </div>
+
+                <div class="livestock-card-content">
+                  <p class="eyebrow"><%= animal.category || 'Livestock' %></p>
+
+                  <% if (animal.breed) { %>
+                    <p><strong>Breed:</strong> <%= animal.breed %></p>
+                  <% } %>
+
+                  <% if (animal.description) { %>
+                    <p class="livestock-description"><%= animal.description %></p>
+                  <% } %>
+                </div>
+              </article>
+            <% }) %>
+          </div>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+</body>

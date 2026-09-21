@@ -1,0 +1,66 @@
+<%- include('../partials/head', { title, description: 'Manage livestock types and classifications.' }) %>
+<body class="admin-body admin-shell">
+  <%- include('nav') %>
+  <main class="admin-main">
+    <div class="container">
+      <div class="admin-title"><div><p class="eyebrow">Livestock</p><h1>Breed Library & Taxonomy</h1><p>Maintain livestock types, classifications and the structure used by the public catalogue.</p></div></div>
+
+      <section class="admin-panel">
+        <div class="panel-heading"><div><h2>Livestock Types</h2><p>Add Cattle, Sheep, Goats or future livestock groups.</p></div></div>
+        <div class="form-card">
+          <form method="post" action="/admin/livestock-types">
+            <%- include('csrf') %>
+            <div class="form-grid"><input name="name" required maxlength="80" placeholder="e.g. Goats"><input name="description" maxlength="500" placeholder="Description"><input type="number" name="display_order" value="0" min="0"><button class="btn btn-primary">Add Type</button></div>
+          </form>
+        </div>
+        <% types.forEach(type => { %>
+          <form id="type-edit-<%= type.id %>" method="post" action="/admin/livestock-types/<%= type.id %>"><%- include('csrf') %></form>
+          <form id="type-delete-<%= type.id %>" method="post" action="/admin/livestock-types/<%= type.id %>/delete" onsubmit="return confirm('Delete this type? It can only be deleted when it has no breeds or animal listings.')"><%- include('csrf') %></form>
+        <% }) %>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Name</th><th>Description</th><th>Order</th><th>Actions</th></tr></thead>
+          <tbody>
+            <% types.forEach(type => { %>
+              <tr>
+                <td><input form="type-edit-<%= type.id %>" name="name" value="<%= type.name %>" required maxlength="80"></td>
+                <td><input form="type-edit-<%= type.id %>" name="description" value="<%= type.description||'' %>" maxlength="500"></td>
+                <td><input form="type-edit-<%= type.id %>" type="number" name="display_order" value="<%= type.display_order %>" min="0" aria-label="Display order"></td>
+                <td><button form="type-edit-<%= type.id %>" class="table-link">Save</button> <button form="type-delete-<%= type.id %>" class="danger-link">Delete</button></td>
+              </tr>
+            <% }) %>
+            <% if(!types.length){ %><tr><td colspan="4">No livestock types yet.</td></tr><% } %>
+          </tbody>
+        </table></div>
+      </section>
+
+      <section class="admin-panel">
+        <div class="panel-heading"><div><h2>Classifications</h2><p>For example: Cattle → Dairy, Beef, Dual-purpose; Sheep → Meat, Hair/Meat, Wool.</p></div></div>
+        <div class="form-card">
+          <form method="post" action="/admin/livestock-classifications">
+            <%- include('csrf') %>
+            <div class="form-grid"><select name="livestock_type_id" required><option value="">Type</option><% types.forEach(t=>{ %><option value="<%= t.id %>"><%= t.name %></option><% }) %></select><input name="name" required maxlength="100" placeholder="e.g. Dairy"><input name="description" maxlength="500" placeholder="Description"><input type="number" name="display_order" value="0" min="0"><button class="btn btn-primary">Add Classification</button></div>
+          </form>
+        </div>
+        <% classifications.forEach(c => { %>
+          <form id="class-edit-<%= c.id %>" method="post" action="/admin/livestock-classifications/<%= c.id %>"><%- include('csrf') %></form>
+          <form id="class-delete-<%= c.id %>" method="post" action="/admin/livestock-classifications/<%= c.id %>/delete" onsubmit="return confirm('Delete this classification? It can only be deleted when no breeds or animal listings use it.')"><%- include('csrf') %></form>
+        <% }) %>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Type</th><th>Name</th><th>Description</th><th>Order</th><th>Actions</th></tr></thead>
+          <tbody>
+            <% classifications.forEach(c => { %>
+              <tr>
+                <td><strong><%= c.livestock_type_name %></strong></td>
+                <td><input form="class-edit-<%= c.id %>" name="name" value="<%= c.name %>" required maxlength="100"></td>
+                <td><input form="class-edit-<%= c.id %>" name="description" value="<%= c.description||'' %>" maxlength="500"></td>
+                <td><input form="class-edit-<%= c.id %>" type="number" name="display_order" value="<%= c.display_order %>" min="0" aria-label="Display order"></td>
+                <td><button form="class-edit-<%= c.id %>" class="table-link">Save</button> <button form="class-delete-<%= c.id %>" class="danger-link">Delete</button></td>
+              </tr>
+            <% }) %>
+            <% if(!classifications.length){ %><tr><td colspan="5">No classifications yet.</td></tr><% } %>
+          </tbody>
+        </table></div>
+      </section>
+    </div>
+  </main>
+</body></html>

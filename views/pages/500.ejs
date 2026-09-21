@@ -1,0 +1,17 @@
+﻿<%- include('../partials/head', { title: 'Something went wrong', description: 'An unexpected error occurred.' }) %>
+<body>
+  <%- include('../partials/header') %>
+
+  <main>
+    <section class="error-section">
+      <div class="container error-card">
+        <p class="eyebrow">500</p>
+        <h1>Something went wrong.</h1>
+        <p><%= typeof errorMessage !== 'undefined' ? errorMessage : 'An unexpected error occurred. Please try again.' %></p>
+        <a class="btn btn-primary" href="/">Back to Home</a>
+      </div>
+    </section>
+  </main>
+
+  <%- include('../partials/footer') %>
+</body>

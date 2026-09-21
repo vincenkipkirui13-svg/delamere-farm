@@ -1,0 +1,22 @@
+<%- include('../partials/head', { title: 'Our Products', description: 'Explore products from Delamere Farm.' }) %>
+<body>
+  <%- include('../partials/header') %>
+  <main>
+    <section class="page-hero"><div class="container"><p class="eyebrow"><%= site.pageContent.dairy.eyebrow %></p><h1><%= site.pageContent.dairy.title %></h1><p><%= site.pageContent.dairy.lead %></p></div></section>
+    <section class="section"><div class="container">
+      <form class="filter-form" method="get" action="/dairy" role="search"><label>Search products<input type="search" name="search" value="<%= search||'' %>" placeholder="Search milk, yoghurt, butter..."></label><button class="btn btn-secondary" type="submit">Search</button><% if(search){ %><a class="text-link" href="/dairy">Clear</a><% } %></form>
+      <% if(!products || !products.length){ %><div class="empty-state"><h2>No products available</h2><p><%= search ? 'No available products match your search.' : 'Our product collection will be updated soon.' %></p></div>
+      <% } else { %><div class="products-list">
+        <% products.forEach(product => { %><article class="product-showcase-card">
+          <div class="product-showcase-image"><% if(product.image){ %><img src="<%= helpers.mediaUrl(product.image) %>" alt="<%= product.name %>" loading="lazy" decoding="async"><% } else { %><div class="image-placeholder">No image available</div><% } %></div>
+          <div class="product-showcase-content"><p class="eyebrow"><%= product.category || 'Farm Product' %></p><h2><%= product.name %></h2><span class="status-badge <%= product.availability==='Available' ? 'status-available' : 'status-muted' %>"><%= product.availability %></span>
+            <% if(product.description){ %><p><%= product.description %></p><% } %>
+            <% if(product.price !== null && product.price !== undefined){ %><p class="product-price"><strong>Price:</strong> KSh <%= product.price %><%= product.unit ? ' / '+product.unit : '' %></p><% } %>
+            <a class="btn btn-secondary" href="/dairy/<%= product.slug %>">View product</a>
+          </div>
+        </article><% }) %>
+      </div><% } %>
+    </div></section>
+  </main>
+  <%- include('../partials/footer') %>
+</body>

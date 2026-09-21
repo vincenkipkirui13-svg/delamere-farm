@@ -1,0 +1,62 @@
+<%- include('../partials/head', { title, description }) %>
+<body>
+<%- include('../partials/header') %>
+
+<main>
+  <section class="section section-light">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/livestock">Livestock</a>
+        <span aria-hidden="true">&#8594;</span>
+        <a href="/livestock/<%= type.slug %>"><%= type.name %></a>
+        <span aria-hidden="true">&#8594;</span>
+        <a href="/livestock/<%= type.slug %>/<%= classification.slug %>"><%= classification.name %></a>
+        <span aria-hidden="true">&#8594;</span>
+        <strong><%= breed.name %></strong>
+      </div>
+
+      <div class="detail-grid livestock-breed-detail">
+        <div class="detail-media image-wrap">
+          <img src="<%= helpers.imageUrl(breed.image) %>" alt="<%= breed.name %>" decoding="async">
+        </div>
+        <div class="detail-copy">
+          <span class="card-kicker"><%= type.name %> · <%= classification.name %></span>
+          <h1><%= breed.name %></h1>
+          <p class="detail-lead"><%= breed.description || 'Quality livestock breed presented by Delamere Farm.' %></p>
+          <div class="facts">
+            <div><span>Type</span><strong><%= type.name %></strong></div>
+            <div><span>Classification</span><strong><%= classification.name %></strong></div>
+            <div><span>Individual animals</span><strong><%= animals.length %></strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-soft">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Individual animals</p>
+          <h2><%= breed.name %> at Delamere Farm</h2>
+        </div>
+      </div>
+
+      <% if (animals.length) { %>
+        <div class="card-grid">
+          <% animals.forEach(animal => { %>
+            <%- include('../partials/animal-card', { animal, helpers }) %>
+          <% }) %>
+        </div>
+      <% } else { %>
+        <div class="empty-state">
+          <h3>No individual animals added yet</h3>
+          <p>This breed is configured and ready, but individual animals have not been added to it yet.</p>
+        </div>
+      <% } %>
+    </div>
+  </section>
+</main>
+
+<%- include('../partials/footer') %>
+</body>

@@ -1,0 +1,47 @@
+<%- include('../partials/head', { title, description }) %>
+<body>
+<%- include('../partials/header') %>
+
+<main>
+  <%- include('../partials/page-hero', {
+    eyebrow: site.pageContent.livestock.eyebrow,
+    heading: site.pageContent.livestock.title,
+    lead: site.pageContent.livestock.lead
+  }) %>
+
+  <section class="section section-light" id="livestock-collections">
+    <div class="container">
+      <div class="catalog-intro">
+        <p class="eyebrow"><%= site.pageContent.livestock.catalogEyebrow %></p>
+        <h2><%= site.pageContent.livestock.catalogTitle %></h2>
+        <p><%= site.pageContent.livestock.catalogDescription %></p>
+      </div>
+
+      <div class="card-grid livestock-type-grid">
+        <% types.forEach(type => { %>
+          <a class="card livestock-type-card" href="/livestock/<%= type.slug %>">
+            <% if (type.image) { %>
+              <div class="livestock-type-media image-wrap">
+                <img src="<%= helpers.imageUrl(type.image) %>" alt="<%= type.name %>" loading="lazy" decoding="async">
+              </div>
+            <% } else { %>
+              <div class="type-icon" aria-hidden="true">
+                <%= type.name === 'Cattle' ? '&#128004;' : '&#128017;' %>
+              </div>
+            <% } %>
+
+            <div class="card-body">
+              <p class="card-kicker">Livestock Type</p>
+              <h3><%= type.name %></h3>
+              <p><%= type.description || '' %></p>
+              <span class="text-link">Explore <span aria-hidden="true">&#8594;</span></span>
+            </div>
+          </a>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+</main>
+
+<%- include('../partials/footer') %>
+</body>

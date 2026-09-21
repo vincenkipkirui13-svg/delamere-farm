@@ -1,0 +1,48 @@
+<%- include('../partials/head', { title, description }) %>
+<body>
+<%- include('../partials/header') %>
+
+<main>
+  <section class="section section-light">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/livestock">Livestock</a>
+        <span aria-hidden="true">&#8594;</span>
+        <strong><%= type.name %></strong>
+      </div>
+
+      <div class="catalog-intro">
+        <p class="eyebrow"><%= type.name %></p>
+        <h1><%= type.name %></h1>
+        <p>Choose a classification to continue to the breeds in this livestock type.</p>
+      </div>
+
+      <div class="card-grid livestock-classification-grid">
+        <% classifications.forEach(classification => { %>
+          <a class="card livestock-type-card" href="/livestock/<%= type.slug %>/<%= classification.slug %>">
+            <% if (classification.image) { %>
+              <div class="livestock-category-media image-wrap">
+                <img src="<%= helpers.imageUrl(classification.image) %>" alt="<%= classification.name %>" loading="lazy" decoding="async">
+              </div>
+            <% } else { %>
+              <div class="livestock-category-placeholder" aria-hidden="true"></div>
+            <% } %>
+
+            <div class="card-body">
+              <p class="card-kicker">Classification</p>
+              <h3><%= classification.name %></h3>
+              <p><%= classification.description || '' %></p>
+              <div class="meta-row">
+                <span><strong><%= classification.breeds.length %></strong> breeds</span>
+              </div>
+              <span class="text-link">View breeds <span aria-hidden="true">&#8594;</span></span>
+            </div>
+          </a>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+</main>
+
+<%- include('../partials/footer') %>
+</body>
