@@ -24,7 +24,7 @@ module.exports = {
   port: Number(process.env.PORT || 3000),
   host: process.env.HOST || '0.0.0.0',
   siteName: process.env.SITE_NAME || 'Delamere Farm',
-  siteUrl: process.env.SITE_URL || '',
+  siteUrl: process.env.SITE_URL || 'https://delamerefarm.org',
   sessionSecret: sessionSecret || 'development-only-secret-change-me',
   adminUsername,
   adminPassword,
