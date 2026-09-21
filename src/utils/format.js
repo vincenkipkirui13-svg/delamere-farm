@@ -12,12 +12,19 @@ function truncate(text, max = 120) {
   return value.length <= max ? value : `${value.slice(0, max - 1).trimEnd()}…`;
 }
 
+function resolveImagePath(image, fallback) {
+  if (!image) return fallback;
+  const value = String(image).trim();
+  if (value.startsWith('/')) return value;
+  return `/uploads/${value}`;
+}
+
 function imageUrl(image) {
-  return image ? `/uploads/${image}` : '/images/placeholder.svg';
+  return resolveImagePath(image, '/images/placeholder.svg');
 }
 
 function mediaUrl(image, fallback = '/images/farm-placeholder.svg') {
-  return image ? `/uploads/${image}` : fallback;
+  return resolveImagePath(image, fallback);
 }
 
 module.exports = { formatDate, truncate, imageUrl, mediaUrl };
