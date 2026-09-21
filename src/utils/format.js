@@ -15,7 +15,7 @@ function truncate(text, max = 120) {
 function resolveImagePath(image, fallback) {
   if (!image) return fallback;
   const value = String(image).trim();
-  if (/^https:\/\/(?:commons\\.wikimedia\\.org|upload\\.wikimedia\\.org)\//i.test(value)) return value;
+  if (/^https:\/\/(?:commons\.wikimedia\.org|upload\.wikimedia\.org)\//i.test(value)) return value;
   if (value.startsWith('/')) return value;
   return `/uploads/${value}`;
 }
