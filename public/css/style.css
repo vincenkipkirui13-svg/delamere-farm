@@ -3657,3 +3657,554 @@ td small {
 #selected-livestock .animal-card:hover .card-media img {
   transform: none;
 }
+
+/* =========================================================
+   FINAL MOBILE PROFESSIONAL PASS
+   Public website only — compact spacing and responsive cards.
+   ========================================================= */
+@media screen and (max-width: 760px) {
+  /* Global rhythm */
+  .section {
+    padding: 44px 0 !important;
+  }
+
+  .section-heading {
+    margin-bottom: 22px !important;
+  }
+
+  .section-heading h2 {
+    margin-bottom: 9px !important;
+  }
+
+  .section-heading > p:last-child {
+    line-height: 1.5;
+  }
+
+  /* Inner page heroes */
+  .page-hero {
+    padding: 96px 0 34px !important;
+    background: var(--cream-2);
+  }
+
+  .page-hero-inner {
+    min-height: 0 !important;
+  }
+
+  .page-hero h1 {
+    margin-bottom: 9px !important;
+    font-size: clamp(2.05rem, 10vw, 2.8rem) !important;
+    line-height: 1.06 !important;
+  }
+
+  .page-hero p:last-child {
+    margin-bottom: 0;
+    font-size: .94rem;
+    line-height: 1.5;
+  }
+
+  /* Homepage intro / image blocks */
+  .split-section {
+    gap: 22px !important;
+  }
+
+  .split-visual {
+    min-height: 0 !important;
+    aspect-ratio: 16 / 10;
+    border-radius: 20px;
+  }
+
+  .split-copy p {
+    margin-bottom: 11px;
+  }
+
+  .split-copy h2 {
+    margin-bottom: 10px;
+  }
+
+  /* Homepage exploration cards */
+  .offer-grid {
+    gap: 12px !important;
+  }
+
+  .offer-media {
+    aspect-ratio: 16 / 10;
+  }
+
+  .offer-body {
+    padding: 15px 15px 17px !important;
+  }
+
+  .offer-body h3 {
+    margin-bottom: 6px;
+  }
+
+  .offer-body p {
+    min-height: 0 !important;
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
+
+  /* General catalogue cards */
+  .card-grid {
+    gap: 12px !important;
+  }
+
+  .card-media {
+    aspect-ratio: 16 / 10;
+  }
+
+  .card-body {
+    padding: 14px !important;
+  }
+
+  .card-body h3 {
+    font-size: 1.12rem !important;
+    margin-bottom: 5px;
+  }
+
+  .card-body p {
+    margin-bottom: 9px;
+    line-height: 1.5;
+    font-size: .9rem;
+  }
+
+  .meta-row {
+    gap: 7px;
+  }
+
+  /* Keep the requested Selected livestock photos complete.
+     Their source aspect ratio determines image height, so nothing is cropped. */
+  #selected-livestock .animal-card .card-media {
+    aspect-ratio: auto !important;
+    height: auto !important;
+  }
+
+  #selected-livestock .animal-card .card-media img {
+    width: 100% !important;
+    height: auto !important;
+    object-fit: contain !important;
+    transform: none !important;
+  }
+
+  /* Livestock + product listing pages: remove oversized showcase feel */
+  .livestock-list,
+  .products-list {
+    gap: 14px !important;
+  }
+
+  .livestock-card,
+  .product-showcase-card {
+    gap: 12px !important;
+    padding: 10px !important;
+    border-radius: 18px;
+  }
+
+  .livestock-card-image,
+  .product-showcase-image {
+    min-height: 0 !important;
+    aspect-ratio: 16 / 10;
+    border-radius: 14px;
+  }
+
+  .livestock-card-image img,
+  .product-showcase-image img {
+    width: 100%;
+    height: 100%;
+    min-height: 0 !important;
+    object-fit: contain;
+  }
+
+  .livestock-card-content,
+  .product-showcase-content {
+    padding: 3px !important;
+  }
+
+  .product-showcase-content h2,
+  .livestock-card-content h2 {
+    font-size: 1.55rem;
+    margin-bottom: 7px;
+  }
+
+  .product-showcase-content p,
+  .livestock-card-content p {
+    font-size: .9rem;
+    line-height: 1.5;
+  }
+
+  .livestock-card .btn,
+  .product-showcase-card .btn {
+    margin-top: 7px;
+  }
+
+  /* Type/classification/breed catalogue media */
+  .livestock-type-media,
+  .livestock-category-media {
+    aspect-ratio: 16 / 10;
+  }
+
+  .type-icon {
+    min-height: 150px !important;
+    font-size: 54px !important;
+  }
+
+  .catalog-intro {
+    margin-bottom: 22px !important;
+  }
+
+  .breadcrumb {
+    margin-bottom: 17px !important;
+    gap: 5px !important;
+    font-size: .78rem !important;
+    line-height: 1.4;
+  }
+
+  /* Detail pages */
+  .detail-section {
+    padding-top: 92px !important;
+  }
+
+  .detail-grid {
+    gap: 22px !important;
+  }
+
+  .detail-media,
+  .detail-image {
+    min-height: 0 !important;
+    aspect-ratio: 16 / 10;
+    border-radius: 20px;
+  }
+
+  .detail-media img,
+  .detail-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .detail-copy h1 {
+    font-size: clamp(2rem, 9vw, 2.7rem) !important;
+    line-height: 1.06 !important;
+    margin-bottom: 10px !important;
+  }
+
+  .detail-lead {
+    font-size: .94rem;
+    line-height: 1.55;
+  }
+
+  .detail-breadcrumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 9px;
+    font-size: .76rem;
+    line-height: 1.4;
+    color: var(--muted);
+  }
+
+  .back-link {
+    display: inline-flex;
+    margin-bottom: 14px;
+    font-size: .82rem;
+    font-weight: 700;
+  }
+
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin: 18px 0;
+  }
+
+  .facts > div {
+    padding: 11px;
+    border-radius: 12px;
+    background: #f5f8f4;
+    border: 1px solid #e4ebe4;
+  }
+
+  .facts span {
+    display: block;
+    margin-bottom: 2px;
+    color: var(--muted);
+    font-size: .66rem;
+    text-transform: uppercase;
+    letter-spacing: .07em;
+  }
+
+  .facts strong {
+    display: block;
+    font-size: .88rem;
+    line-height: 1.35;
+  }
+
+  .detail-extra {
+    margin: 14px 0 !important;
+    padding-top: 12px !important;
+  }
+
+  .detail-extra h3 {
+    margin-bottom: 5px !important;
+    font-size: 1.08rem;
+  }
+
+  .breed-navigation {
+    margin-top: 18px !important;
+    gap: 8px !important;
+  }
+
+  .breed-navigation .btn {
+    min-height: 42px;
+    padding: 9px 13px;
+    font-size: .8rem;
+  }
+
+  .public-animal-gallery {
+    gap: 8px !important;
+    margin-top: 9px !important;
+  }
+
+  .public-animal-gallery img {
+    height: 96px !important;
+  }
+
+  /* About page */
+  .about-image-strip {
+    gap: 12px !important;
+    margin-top: 14px !important;
+  }
+
+  .about-image-strip img {
+    max-height: none !important;
+  }
+
+  .values-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .value-card {
+    padding: 16px;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .value-card span {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--moss);
+    font-weight: 800;
+    font-size: .72rem;
+    letter-spacing: .08em;
+  }
+
+  .value-card h3 {
+    margin-bottom: 5px;
+    font-size: 1.15rem;
+  }
+
+  .value-card p {
+    margin-bottom: 0;
+    font-size: .88rem;
+    line-height: 1.5;
+  }
+
+  /* Gallery */
+  .filter-pills {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+  }
+
+  .pill {
+    padding: 7px 11px;
+    font-size: .76rem;
+    line-height: 1.2;
+  }
+
+  .gallery-grid.large {
+    gap: 10px !important;
+  }
+
+  .gallery-grid.large .gallery-tile {
+    min-height: 0 !important;
+    aspect-ratio: 16 / 10;
+  }
+
+  /* FAQ */
+  .faq-list {
+    gap: 9px !important;
+  }
+
+  .faq-item {
+    border-radius: 14px;
+  }
+
+  .faq-item summary {
+    padding: 15px 0 !important;
+    font-size: .9rem;
+    line-height: 1.4;
+  }
+
+  .faq-item p {
+    padding-bottom: 15px !important;
+    font-size: .88rem;
+    line-height: 1.5;
+  }
+
+  /* Contact */
+  .contact-grid {
+    gap: 22px !important;
+  }
+
+  .contact-items {
+    gap: 12px !important;
+    margin-top: 20px !important;
+  }
+
+  .contact-note {
+    margin-top: 17px !important;
+    padding: 14px !important;
+  }
+
+  .form-card {
+    padding: 16px !important;
+    border-radius: 18px;
+  }
+
+  .form-card form > label {
+    margin-bottom: 12px;
+  }
+
+  textarea {
+    min-height: 110px !important;
+  }
+
+  .selected-inquiry {
+    margin-bottom: 14px !important;
+    padding: 11px 12px !important;
+    flex-wrap: wrap;
+  }
+
+  /* Reviews: compact without removing customer feedback */
+  .reviews-grid {
+    gap: 10px !important;
+  }
+
+  .review-card {
+    padding: 15px !important;
+  }
+
+  .review-text {
+    margin: .75rem 0 1rem;
+    font-size: .9rem !important;
+    line-height: 1.55;
+  }
+
+  /* Benefits / experience */
+  .dark-band {
+    padding: 44px 0 !important;
+  }
+
+  .dark-band .benefits-grid {
+    gap: 20px !important;
+  }
+
+  .dark-band .benefit-list {
+    gap: 9px !important;
+  }
+
+  .dark-band .benefit {
+    padding: 17px 15px 17px 21px !important;
+    border-radius: 15px;
+  }
+
+  .dark-band .benefit-intro h2 {
+    margin-bottom: 9px;
+  }
+
+  .dark-band .benefit-intro > p:last-child,
+  .dark-band .benefit p {
+    font-size: .88rem;
+    line-height: 1.52;
+  }
+
+  /* CTA */
+  .cta-section {
+    padding: 48px 0 !important;
+  }
+
+  .cta-inner p {
+    line-height: 1.5;
+  }
+
+  /* Footer */
+  .site-footer {
+    padding-top: 48px;
+  }
+
+  .footer-grid {
+    gap: 18px !important;
+    padding-bottom: 30px;
+  }
+
+  .site-footer a,
+  .site-footer span {
+    margin: 6px 0;
+  }
+
+  .footer-copy {
+    margin-top: 12px;
+    line-height: 1.5;
+  }
+
+  .footer-bottom {
+    gap: 8px !important;
+    padding: 15px 0 18px;
+  }
+
+  /* Floating WhatsApp should not dominate the viewport */
+  .whatsapp-float {
+    width: 52px !important;
+    height: 52px !important;
+    right: 12px !important;
+    bottom: calc(12px + env(safe-area-inset-bottom)) !important;
+  }
+
+  .whatsapp-float .whatsapp-icon {
+    width: 27px;
+    height: 27px;
+  }
+}
+
+@media screen and (max-width: 390px) {
+  .section {
+    padding: 40px 0 !important;
+  }
+
+  .page-hero {
+    padding-top: 90px !important;
+    padding-bottom: 30px !important;
+  }
+
+  .detail-section {
+    padding-top: 88px !important;
+  }
+
+  .card-body {
+    padding: 13px !important;
+  }
+
+  .facts {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .whatsapp-float {
+    width: 50px !important;
+    height: 50px !important;
+  }
+}
