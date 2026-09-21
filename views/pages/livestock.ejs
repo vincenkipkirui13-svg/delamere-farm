@@ -22,7 +22,7 @@
           <a class="card livestock-type-card" href="/livestock/<%= type.slug %>">
             <% if (type.image) { %>
               <div class="livestock-type-media image-wrap">
-                <img src="<%= helpers.imageUrl(type.image) %>" alt="<%= type.name %>" loading="lazy" decoding="async">
+                <img src="<%= helpers.imageUrl(type.image) %>" alt="<%= type.name %> livestock at <%= site.name %>" loading="lazy" decoding="async">
               </div>
             <% } else { %>
               <div class="type-icon" aria-hidden="true">
