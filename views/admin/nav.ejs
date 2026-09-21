@@ -20,7 +20,7 @@
 
     <div class="admin-nav-label">Content Management</div>
     <% if (adminUser?.role === 'Super Admin' || adminUser?.role === 'Content Manager') { %>
-      <a href="/admin/dairy" class="<%= currentPath.startsWith('/admin/dairy') ? 'active' : '' %>">🥛 <span>Dairy Products</span></a>
+      <a href="/admin/dairy" class="<%= currentPath.startsWith('/admin/dairy') ? 'active' : '' %>">🥛 <span>Our Products</span></a>
       <a href="/admin/gallery" class="<%= currentPath.startsWith('/admin/gallery') ? 'active' : '' %>">🖼️ <span>Gallery</span></a>
       <a href="/admin/faqs" class="<%= currentPath.startsWith('/admin/faqs') ? 'active' : '' %>">❓ <span>FAQs</span></a>
       <a href="/admin/reviews" class="<%= currentPath.startsWith('/admin/reviews') ? 'active' : '' %>">⭐ <span>Reviews</span></a>
