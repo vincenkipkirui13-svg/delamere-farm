@@ -41,6 +41,13 @@ app.use((req, res, next) => {
   res.setHeader('X-Frame-Options', 'SAMEORIGIN');
   res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
   res.setHeader('X-DNS-Prefetch-Control', 'on');
+  res.setHeader('X-Permitted-Cross-Domain-Policies', 'none');
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+  res.setHeader('Origin-Agent-Cluster', '?1');
+  if (req.path.startsWith('/admin') || req.path === '/health') {
+    res.setHeader('Cache-Control', 'no-store');
+    res.setHeader('X-Robots-Tag', 'noindex, nofollow');
+  }
   if (settings.isProduction) res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
   next();
 });
@@ -71,7 +78,7 @@ app.use((req, res, next) => {
 });
 app.use('/', publicRoutes);
 app.use('/admin', adminRoutes);
-app.use((req, res) => res.status(404).render('pages/404', { title: 'Page Not Found', description: 'The page you requested could not be found.' }));
+app.use((req, res) => res.status(404).render('pages/404', { title: 'Page Not Found', description: 'The page you requested could not be found.', robots: 'noindex, nofollow' }));
 app.use((err, req, res, _next) => {
   console.error(err);
   const message = settings.isProduction ? 'Something went wrong. Please try again.' : err.message;
