@@ -18,7 +18,7 @@
   "@type":"Product",
   "name":animal.name,
   "description":animal.description || description,
-  "image":[animal.image, ...(photos || []).map(photo => photo.image)].filter(Boolean).map(image => siteBase + "/uploads/" + image),
+  "image":[animal.image, ...(photos || []).map(photo => photo.image)].filter(Boolean).map(image => siteBase + helpers.mediaUrl(image)),
   "brand":{"@type":"Brand","name":site.name || "Delamere Farm"},
   "category":animal.breed || animal.category || "Livestock",
   "offers":{"@type":"Offer","url":siteBase + "/animals/" + animal.slug,"availability":animal.availability === "Available" ? "https://schema.org/InStock" : "https://schema.org/OutOfStock","priceCurrency":"KES","price":animal.price !== null && animal.price !== undefined ? Number(animal.price) : undefined}
