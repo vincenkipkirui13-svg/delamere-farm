@@ -3617,3 +3617,23 @@ td small {
 .animal-card:hover .card-media img {
   transform: none;
 }
+
+
+/* Featured livestock: fill the complete image frame without clipping any source pixels. */
+.animal-card .card-media {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+.animal-card .card-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  object-position: center;
+  transform: none;
+}
+
+.animal-card:hover .card-media img {
+  transform: none;
+}
