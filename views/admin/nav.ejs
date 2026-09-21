@@ -1,23 +1,24 @@
 <aside class="admin-sidebar">
   <a class="admin-side-brand" href="/admin">
     <span class="brand-mark">DF</span>
-    <span><strong>Delamere Farm</strong><small>Admin</small></span>
+    <span><strong>Delamere Farm</strong><small>Admin workspace</small></span>
   </a>
 
   <nav class="admin-side-nav" aria-label="Admin navigation">
     <a href="/admin" class="<%= currentPath === '/admin' ? 'active' : '' %>">📊 <span>Dashboard</span></a>
 
-    <div class="admin-nav-label">Livestock</div>
+    <div class="admin-nav-label">Livestock Management</div>
     <% if (adminUser?.role === 'Super Admin' || adminUser?.role === 'Livestock Manager') { %>
-      <a href="/admin/animals" class="<%= currentPath.startsWith('/admin/animals') && !currentPath.startsWith('/admin/animals/new') ? 'active' : '' %>">🐄 <span>All Animals</span></a>
-      <a href="/admin/animals/new">➕ <span>Add Animal</span></a>
+      <a href="/admin/animals" class="<%= currentPath.startsWith('/admin/animals') ? 'active' : '' %>">🐄 <span>Animals</span></a>
       <a href="/admin/breeds" class="<%= currentPath.startsWith('/admin/breeds') ? 'active' : '' %>">🧬 <span>Breed Library</span></a>
-      <a href="/admin/breeds/new">➕ <span>Add Breed</span></a>
       <a href="/admin/taxonomy" class="<%= currentPath.startsWith('/admin/taxonomy') ? 'active' : '' %>">🗂️ <span>Categories & Classifications</span></a>
       <a href="/admin/livestock-catalog" class="<%= currentPath.startsWith('/admin/livestock-catalog') ? 'active' : '' %>">📷 <span>Collection Photos</span></a>
+      <div class="admin-nav-label admin-nav-label-sub">Quick Add</div>
+      <a href="/admin/animals/new">➕ <span>Add Animal</span></a>
+      <a href="/admin/breeds/new">➕ <span>Add Breed</span></a>
     <% } %>
 
-    <div class="admin-nav-label">Content</div>
+    <div class="admin-nav-label">Content Management</div>
     <% if (adminUser?.role === 'Super Admin' || adminUser?.role === 'Content Manager') { %>
       <a href="/admin/dairy" class="<%= currentPath.startsWith('/admin/dairy') ? 'active' : '' %>">🥛 <span>Dairy Products</span></a>
       <a href="/admin/gallery" class="<%= currentPath.startsWith('/admin/gallery') ? 'active' : '' %>">🖼️ <span>Gallery</span></a>
@@ -35,7 +36,7 @@
         <a href="/admin/settings#business">Business Information</a>
         <a href="/admin/settings#homepage">Homepage</a>
         <a href="/admin/settings#about">About Page</a>
-        <a href="/admin/settings#pages">Public Page Content</a>
+        <a href="/admin/settings#pages">Public Pages</a>
         <a href="/admin/settings#branding">Appearance & Branding</a>
         <a href="/admin/settings#contact">Contact & Social</a>
         <a href="/admin/settings#navigation">Navigation</a>
