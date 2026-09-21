@@ -21,7 +21,6 @@ addColumn('animals', 'breeding_information', 'TEXT');
 addColumn('animals', 'production_information', 'TEXT');
 addColumn('animals', 'display_order', 'INTEGER NOT NULL DEFAULT 0');
 
-// Taxonomy tables are intentionally separate from individual animal listings.
 db.exec(`
 CREATE TABLE IF NOT EXISTS livestock_types (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -72,47 +71,103 @@ CREATE INDEX IF NOT EXISTS idx_animals_livestock_type ON animals(livestock_type)
 CREATE INDEX IF NOT EXISTS idx_animals_livestock_classification ON animals(livestock_classification);
 CREATE INDEX IF NOT EXISTS idx_animals_breed_id ON animals(breed_id);
 `);
+
 addColumn('livestock_breeds', 'display_order', 'INTEGER NOT NULL DEFAULT 0');
 
-if (!db.prepare('SELECT 1 FROM livestock_types LIMIT 1').get()) {
-  const typeSeed = [
-    { name: 'Cattle', order: 0, description: 'Explore dairy, beef, and dual-purpose cattle breeds.' },
-    { name: 'Sheep', order: 1, description: 'Explore meat, hair/meat, and wool sheep breeds.' }
-  ];
-  const classificationSeed = {
-    Cattle: [
-      { name: 'Dairy', breeds: ['Friesian / Holstein', 'Ayrshire', 'Jersey', 'Guernsey', 'Girolando', 'Sahiwal'] },
-      { name: 'Beef', breeds: ['Boran', 'Brahman'] },
-      { name: 'Dual-purpose', breeds: ['Sahiwal', 'Fleckvieh'] }
-    ],
-    Sheep: [
-      { name: 'Meat', breeds: ['Dorper', 'White Dorper', 'Red Maasai', 'Hampshire'] },
-      { name: 'Hair/Meat', breeds: ['Red Maasai', 'Dorper'] },
-      { name: 'Wool', breeds: ['Merino'] }
-    ]
-  };
-  const typeInsert = db.prepare('INSERT INTO livestock_types (name, slug, description, display_order) VALUES (?, ?, ?, ?)');
-  const classInsert = db.prepare('INSERT INTO livestock_classifications (livestock_type_id, name, slug, description, display_order) VALUES (?, ?, ?, ?, ?)');
-  const breedInsert = db.prepare('INSERT INTO livestock_breeds (livestock_type_id, name, slug, description, featured, display_order) VALUES (?, ?, ?, ?, 0, ?)');
-  const linkInsert = db.prepare('INSERT OR IGNORE INTO livestock_breed_classifications (breed_id, classification_id) VALUES (?, ?)');
-  db.transaction(() => {
-    for (const typeData of typeSeed) {
-      const typeResult = typeInsert.run(typeData.name, slugify(typeData.name), typeData.description, typeData.order);
-      const classes = classificationSeed[typeData.name] || [];
-      classes.forEach((classification, classIndex) => {
-        const classResult = classInsert.run(typeResult.lastInsertRowid, classification.name, slugify(classification.name), `${classification.name} ${typeData.name.toLowerCase()} breeds.`, classIndex);
-        classification.breeds.forEach((breedName, breedIndex) => {
-          let breed = db.prepare('SELECT id FROM livestock_breeds WHERE livestock_type_id=? AND name=?').get(typeResult.lastInsertRowid, breedName);
-          if (!breed) {
-            const result = breedInsert.run(typeResult.lastInsertRowid, breedName, slugify(breedName), `${breedName} livestock breed.`, breedIndex);
-            breed = { id: result.lastInsertRowid };
-          }
-          linkInsert.run(breed.id, classResult.lastInsertRowid);
-        });
+// Keep the taxonomy idempotent so existing Railway databases receive new
+// livestock types, classifications and breeds without duplicating existing data.
+const typeSeed = [
+  { name: 'Cattle', order: 0, description: 'Explore dairy, beef, and dual-purpose cattle breeds.' },
+  { name: 'Sheep', order: 1, description: 'Explore meat, hair/meat, and wool sheep breeds.' },
+  { name: 'Goats', order: 2, description: 'Explore meat and other goat breeds available through Delamere Farm.' }
+];
+
+const classificationSeed = {
+  Cattle: [
+    { name: 'Dairy', breeds: ['Friesian / Holstein', 'Ayrshire', 'Jersey', 'Guernsey', 'Girolando', 'Sahiwal'] },
+    { name: 'Beef', breeds: ['Boran', 'Brahman'] },
+    { name: 'Dual-purpose', breeds: ['Sahiwal', 'Fleckvieh'] }
+  ],
+  Sheep: [
+    { name: 'Meat', breeds: ['Dorper', 'White Dorper', 'Red Maasai', 'Hampshire', 'Dormer'] },
+    { name: 'Hair/Meat', breeds: ['Red Maasai', 'Dorper'] },
+    { name: 'Wool', breeds: ['Merino'] }
+  ],
+  Goats: [
+    { name: 'Meat', breeds: ['Boer', 'Kalahari Red'] }
+  ]
+};
+
+const typeInsert = db.prepare('INSERT OR IGNORE INTO livestock_types (name, slug, description, display_order) VALUES (?, ?, ?, ?)');
+const classInsert = db.prepare('INSERT OR IGNORE INTO livestock_classifications (livestock_type_id, name, slug, description, display_order) VALUES (?, ?, ?, ?, ?)');
+const breedInsert = db.prepare('INSERT OR IGNORE INTO livestock_breeds (livestock_type_id, name, slug, description, featured, display_order) VALUES (?, ?, ?, ?, 0, ?)');
+const linkInsert = db.prepare('INSERT OR IGNORE INTO livestock_breed_classifications (breed_id, classification_id) VALUES (?, ?)');
+
+db.transaction(() => {
+  for (const typeData of typeSeed) {
+    typeInsert.run(typeData.name, slugify(typeData.name), typeData.description, typeData.order);
+    const type = db.prepare('SELECT id FROM livestock_types WHERE name=?').get(typeData.name);
+    const classes = classificationSeed[typeData.name] || [];
+
+    classes.forEach((classification, classIndex) => {
+      classInsert.run(type.id, classification.name, slugify(classification.name), `${classification.name} ${typeData.name.toLowerCase()} breeds.`, classIndex);
+      const classRow = db.prepare('SELECT id FROM livestock_classifications WHERE livestock_type_id=? AND name=?').get(type.id, classification.name);
+
+      classification.breeds.forEach((breedName, breedIndex) => {
+        breedInsert.run(type.id, breedName, slugify(breedName), `${breedName} livestock breed.`, breedIndex);
+        const breed = db.prepare('SELECT id FROM livestock_breeds WHERE livestock_type_id=? AND name=?').get(type.id, breedName);
+        linkInsert.run(breed.id, classRow.id);
       });
-    }
-  })();
-}
+    });
+  }
+})();
+
+// Initial individual animal catalogue requested for the admin area.
+// These records are intentionally photo-free so staff can add the real farm
+// photographs from Admin > Livestock > Animals after deployment.
+const animalSeed = [
+  ...Array.from({ length: 5 }, (_, i) => ({ name: `Friesian Dairy Cow ${i + 1}`, type: 'Cattle', classification: 'Dairy', breed: 'Friesian / Holstein', category: 'Dairy Cattle', sex: 'Female' })),
+  ...Array.from({ length: 3 }, (_, i) => ({ name: `Jersey Dairy Cow ${i + 1}`, type: 'Cattle', classification: 'Dairy', breed: 'Jersey', category: 'Dairy Cattle', sex: 'Female' })),
+  ...Array.from({ length: 2 }, (_, i) => ({ name: `Girolando Dairy Cow ${i + 1}`, type: 'Cattle', classification: 'Dairy', breed: 'Girolando', category: 'Dairy Cattle', sex: 'Female' })),
+  ...Array.from({ length: 2 }, (_, i) => ({ name: `Guernsey Dairy Cow ${i + 1}`, type: 'Cattle', classification: 'Dairy', breed: 'Guernsey', category: 'Dairy Cattle', sex: 'Female' })),
+  ...Array.from({ length: 3 }, (_, i) => ({ name: `Sahiwal Cattle ${i + 1}`, type: 'Cattle', classification: 'Dual-purpose', breed: 'Sahiwal', category: 'Cattle', sex: 'Female' })),
+  ...Array.from({ length: 4 }, (_, i) => ({ name: `Ayrshire Dairy Cow ${i + 1}`, type: 'Cattle', classification: 'Dairy', breed: 'Ayrshire', category: 'Dairy Cattle', sex: 'Female' })),
+  ...Array.from({ length: 5 }, (_, i) => ({ name: `Boran Cattle ${i + 1}`, type: 'Cattle', classification: 'Beef', breed: 'Boran', category: 'Beef Cattle', sex: 'Female' })),
+  ...Array.from({ length: 5 }, (_, i) => ({ name: `Brahman Cattle ${i + 1}`, type: 'Cattle', classification: 'Beef', breed: 'Brahman', category: 'Beef Cattle', sex: 'Female' })),
+  ...Array.from({ length: 5 }, (_, i) => ({ name: `Fleckvieh Cattle ${i + 1}`, type: 'Cattle', classification: 'Dual-purpose', breed: 'Fleckvieh', category: 'Dual-purpose Cattle', sex: 'Female' })),
+  ...Array.from({ length: 4 }, (_, i) => ({ name: `Dormer Sheep ${i + 1}`, type: 'Sheep', classification: 'Meat', breed: 'Dormer', category: 'Meat Sheep', sex: 'Female' })),
+  ...Array.from({ length: 3 }, (_, i) => ({ name: `Red Maasai Sheep ${i + 1}`, type: 'Sheep', classification: 'Hair/Meat', breed: 'Red Maasai', category: 'Sheep', sex: 'Female' })),
+  ...Array.from({ length: 4 }, (_, i) => ({ name: `Hampshire Sheep ${i + 1}`, type: 'Sheep', classification: 'Meat', breed: 'Hampshire', category: 'Meat Sheep', sex: 'Female' })),
+  ...Array.from({ length: 5 }, (_, i) => ({ name: `Boer Goat ${i + 1}`, type: 'Goats', classification: 'Meat', breed: 'Boer', category: 'Meat Goats', sex: 'Female' })),
+  ...Array.from({ length: 2 }, (_, i) => ({ name: `Kalahari Red Goat ${i + 1}`, type: 'Goats', classification: 'Meat', breed: 'Kalahari Red', category: 'Meat Goats', sex: 'Female' }))
+];
+
+const animalInsert = db.prepare(`
+  INSERT OR IGNORE INTO animals
+    (name, slug, category, breed, description, image, availability, featured, livestock_type, livestock_classification, breed_id, sex, gender, display_order)
+  VALUES (?, ?, ?, ?, ?, NULL, 'Available', 0, ?, ?, ?, ?, ?, ?)
+`);
+
+db.transaction(() => {
+  for (const animal of animalSeed) {
+    const breed = db.prepare('SELECT id FROM livestock_breeds WHERE livestock_type_id=(SELECT id FROM livestock_types WHERE name=?) AND name=?').get(animal.type, animal.breed);
+    if (!breed) continue;
+    const description = `${animal.name} — ${animal.breed} ${animal.type.toLowerCase()} listed by Delamere Farm. Update the description, availability and other details from the admin area.`;
+    animalInsert.run(
+      animal.name,
+      slugify(animal.name),
+      animal.category,
+      animal.breed,
+      description,
+      animal.type,
+      animal.classification,
+      breed.id,
+      animal.sex,
+      animal.sex,
+      animalSeed.indexOf(animal) + 1
+    );
+  }
+})();
 
 function getTypes() { return db.prepare('SELECT * FROM livestock_types ORDER BY display_order, name').all(); }
 function getType(slug) { return db.prepare('SELECT * FROM livestock_types WHERE slug=?').get(slug); }
