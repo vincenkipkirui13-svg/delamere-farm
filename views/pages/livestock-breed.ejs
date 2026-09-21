@@ -24,7 +24,9 @@
           {"@type":"ListItem","position":3,"name":classification.name,"item":(siteUrl || "https://delamerefarm.org").replace(/\/$/,"") + "/livestock/" + type.slug + "/" + classification.slug},
           {"@type":"ListItem","position":4,"name":breed.name,"item":(siteUrl || "https://delamerefarm.org").replace(/\/$/,"") + "/livestock/" + type.slug + "/" + classification.slug + "/" + breed.slug}
         ]
-      }) %></script>\n\n      <div class="detail-grid livestock-breed-detail">
+      }) %></script>
+
+      <div class="detail-grid livestock-breed-detail">
         <div class="detail-media image-wrap">
           <img src="<%= helpers.imageUrl(breed.image) %>" alt="<%= breed.name %> <%= type.name %> at <%= site.name %>" decoding="async">
         </div>
@@ -39,6 +41,17 @@
           </div>
         </div>
       </div>
+
+      <div class="breed-navigation" style="margin-top:24px;display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+        <a class="btn btn-secondary" href="/livestock/<%= type.slug %>/<%= classification.slug %>">View <%= classification.name %> <%= type.name %></a>
+        <a class="btn btn-secondary" href="/animals">Browse Individual Animals</a>
+        <% if (classifications && classifications.length > 1) { %>
+          <% classifications.filter(item => item.id !== classification.id).forEach(item => { %>
+            <a class="text-link" href="/livestock/<%= type.slug %>/<%= item.slug %>">More <%= item.name %> breeds</a>
+          <% }) %>
+        <% } %>
+      </div>
+
     </div>
   </section>
 
