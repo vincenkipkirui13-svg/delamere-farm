@@ -29,7 +29,7 @@ test('public and admin entry routes render successfully', async t => {
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   t.after(() => server.close());
 
-  for (const path of ['/', '/about', '/livestock', '/animals', '/dairy', '/gallery', '/faq', '/contact', '/admin/login', '/health']) {
+  for (const path of ['/', '/about', '/livestock', '/animals', '/dairy', '/gallery', '/faq', '/contact', '/robots.txt', '/sitemap.xml', '/admin/login', '/health']) {
     const response = await request(server, path);
     assert.equal(response.status, 200, `${path} should return 200`);
   }
@@ -40,6 +40,9 @@ test('public and admin entry routes render successfully', async t => {
   assert.equal(missing.headers['x-content-type-options'], 'nosniff');
   assert.equal(missing.headers['x-frame-options'], 'SAMEORIGIN');
   assert.equal(missing.headers['x-permitted-cross-domain-policies'], 'none');
+  const sitemap = await request(server, '/sitemap.xml');
+  assert.match(sitemap.body, /<urlset[^>]*sitemaps\.org\/schemas\/sitemap\/0\.9/);
+  assert.match(sitemap.body, /<lastmod>\d{4}-\d{2}-\d{2}T/);
 });
 
 test('database contains the core admin/content structures', () => {
