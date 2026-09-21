@@ -24,9 +24,15 @@
           <h2><%= siteSettings.homepage_offer_title %></h2>
           <p><%= siteSettings.homepage_offer_description %></p>
         </div>
-        <div class="card-grid">
+        <div class="offer-list" aria-label="<%= siteSettings.homepage_offer_title %>">
           <% for(let i=1;i<=8;i++){ %>
-            <article class="info-card reveal"><div class="offer-body"><h3><%= siteSettings['homepage_offer_'+i+'_title'] %></h3><p><%= siteSettings['homepage_offer_'+i+'_description'] %></p></div></article>
+            <div class="offer-list-item reveal">
+              <span class="offer-list-number"><%= String(i).padStart(2,'0') %></span>
+              <div class="offer-list-copy">
+                <h3><%= siteSettings['homepage_offer_'+i+'_title'] %></h3>
+                <p><%= siteSettings['homepage_offer_'+i+'_description'] %></p>
+              </div>
+            </div>
           <% } %>
         </div>
       </div>
