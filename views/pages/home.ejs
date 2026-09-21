@@ -65,7 +65,7 @@
       </div>
     </section>
 
-    <section class="section section-light">
+    <section class="section section-light" id="selected-livestock">
       <div class="container">
         <div class="section-heading split-heading reveal"><div><p class="eyebrow"><%= siteSettings.homepage_livestock_eyebrow %></p><h2><%= siteSettings.homepage_livestock_title %></h2></div><a class="btn btn-secondary" href="/livestock"><%= siteSettings.homepage_livestock_cta_text %></a></div>
         <% if(featuredAnimals.length){ %><div class="card-grid"><% featuredAnimals.forEach(animal => { %><%- include('../partials/animal-card', { animal, helpers }) %><% }) %></div><% } else { %><div class="empty-state">Livestock listings will appear here as the catalogue is populated.</div><% } %>
