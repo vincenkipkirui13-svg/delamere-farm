@@ -13,6 +13,16 @@
         <strong><%= classification.name %></strong>
       </div>
 
+      <script type="application/ld+json"><%- JSON.stringify({
+        "@context":"https://schema.org",
+        "@type":"BreadcrumbList",
+        "itemListElement":[
+          {"@type":"ListItem","position":1,"name":"Livestock","item":(siteUrl || "https://delamerefarm.org").replace(/\/$/,"") + "/livestock"},
+          {"@type":"ListItem","position":2,"name":type.name,"item":(siteUrl || "https://delamerefarm.org").replace(/\/$/,"") + "/livestock/" + type.slug},
+          {"@type":"ListItem","position":3,"name":classification.name,"item":(siteUrl || "https://delamerefarm.org").replace(/\/$/,"") + "/livestock/" + type.slug + "/" + classification.slug}
+        ]
+      }) %></script>
+
       <div class="catalog-intro">
         <p class="eyebrow"><%= type.name %> · Classification</p>
         <h1><%= classification.name %> <%= type.name %> at <%= site.name %></h1>
@@ -23,7 +33,7 @@
         <% breeds.forEach(breed => { %>
           <a class="card livestock-breed-card" href="/livestock/<%= type.slug %>/<%= classification.slug %>/<%= breed.slug %>">
             <div class="card-media image-wrap">
-              <img src="<%= helpers.imageUrl(breed.image) %>" alt="<%= breed.name %>" loading="lazy" decoding="async">
+              <img src="<%= helpers.imageUrl(breed.image) %>" alt="<%= breed.name %> <%= type.name %> at <%= site.name %>" loading="lazy" decoding="async">
             </div>
             <div class="card-body">
               <p class="card-kicker"><%= type.name %></p>
