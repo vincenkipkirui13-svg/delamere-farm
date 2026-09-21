@@ -18,24 +18,17 @@ function extensionForMime(mime) {
   return '';
 }
 
-function detectImageType(filePath) {
-  const fd = fs.openSync(filePath, 'r');
-  try {
-    const header = Buffer.alloc(32);
-    const bytesRead = fs.readSync(fd, header, 0, header.length, 0);
-    const data = header.subarray(0, bytesRead);
-
-    if (data.length >= 3 && data[0] === 0xff && data[1] === 0xd8 && data[2] === 0xff) return 'jpeg';
-    if (data.length >= 8 && data.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))) return 'png';
-    if (data.length >= 12 && data.subarray(0, 4).toString('ascii') === 'RIFF' && data.subarray(8, 12).toString('ascii') === 'WEBP') return 'webp';
-    if (data.length >= 12 && data.subarray(4, 8).toString('ascii') === 'ftyp') {
-      const brands = data.subarray(8).toString('ascii');
-      if (brands.includes('avif') || brands.includes('avis')) return 'avif';
-    }
-    return null;
-  } finally {
-    fs.closeSync(fd);
+function detectImageType(file) {
+  const ext = path.extname(file?.originalname || file?.filename || '').toLowerCase();
+  const mime = String(file?.mimetype || '').toLowerCase();
+  if (allowedMime.has(mime)) {
+    if (mime === 'image/jpeg' || mime === 'image/jpg' || mime === 'image/pjpeg') return 'jpeg';
+    if (mime === 'image/png') return 'png';
+    if (mime === 'image/webp') return 'webp';
+    if (mime === 'image/avif') return 'avif';
   }
+  if (allowedExt.has(ext)) return ext === '.jfif' ? 'jpeg' : ext.slice(1);
+  return null;
 }
 
 function removeUploadFile(file) {
@@ -49,7 +42,7 @@ function removeUploadFile(file) {
 
 function validateUploadedFile(file) {
   if (!file?.path) return 'The uploaded image could not be processed.';
-  const detected = detectImageType(file.path);
+  const detected = detectImageType(file);
   if (!detected) {
     removeUploadFile(file);
     return 'The uploaded file is not a valid JPG, PNG, WEBP, or AVIF image.';
