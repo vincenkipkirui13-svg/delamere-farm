@@ -1,5 +1,6 @@
 const express = require('express');
 const crypto = require('node:crypto');
+const compression = require('node:zlib');
 const session = require('express-session');
 const settings = require('./config/settings');
 require('./db/livestock');
@@ -30,6 +31,28 @@ class SQLiteSessionStore extends session.Store {
 }
 
 const app = express();
+
+// Lightweight gzip compression without adding a runtime dependency.
+app.use((req, res, next) => {
+  if (req.method === 'HEAD' || req.headers['accept-encoding']?.includes('gzip') === false) return next();
+  const originalWrite = res.write;
+  const originalEnd = res.end;
+  let chunks = [];
+  const shouldCompress = () => /^(text\/|application\/(json|javascript|xml)|image\/svg\+xml)/i.test(String(res.getHeader('Content-Type') || '')) && !res.getHeader('Content-Encoding');
+  res.write = function(chunk, encoding) { if (!shouldCompress()) return originalWrite.call(this, chunk, encoding); if (chunk) chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk, encoding)); return true; };
+  res.end = function(chunk, encoding) {
+    if (!shouldCompress()) return originalEnd.call(this, chunk, encoding);
+    if (chunk) chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk, encoding));
+    const body = Buffer.concat(chunks);
+    if (body.length < 1024) return originalEnd.call(this, body);
+    const gzipped = compression.gzipSync(body, { level: 6 });
+    res.setHeader('Content-Encoding', 'gzip');
+    res.setHeader('Vary', 'Accept-Encoding');
+    res.setHeader('Content-Length', gzipped.length);
+    return originalEnd.call(this, gzipped);
+  };
+  next();
+});
 app.disable('x-powered-by');
 app.set('trust proxy', settings.isProduction ? 1 : false);
 app.set('view engine', 'ejs');
@@ -39,13 +62,15 @@ app.use((req, res, next) => {
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   res.setHeader('X-Frame-Options', 'SAMEORIGIN');
   res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  res.setHeader('X-DNS-Prefetch-Control', 'on');
+  if (settings.isProduction) res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
   next();
 });
 app.get('/health', (_req, res) => res.status(200).json({ status: 'ok' }));
 app.use(express.urlencoded({ extended: true, limit: '100kb' }));
 app.use(express.json({ limit: '100kb' }));
 app.use(express.static(settings.paths.public, { maxAge: settings.isProduction ? '7d' : 0 }));
-app.use('/uploads', express.static(settings.paths.uploads, { maxAge: settings.isProduction ? '7d' : 0, index: false }));
+app.use('/uploads', express.static(settings.paths.uploads, { maxAge: settings.isProduction ? '30d' : 0, index: false, setHeaders: res => { res.setHeader('Cache-Control', 'public, max-age=2592000, immutable'); } }));
 app.use(session({
   name: 'delamerefarm.sid',
   secret: settings.sessionSecret,
