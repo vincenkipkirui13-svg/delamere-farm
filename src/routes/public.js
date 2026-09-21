@@ -45,6 +45,31 @@ function ensureHomepagePresentation() {
       }
     });
 
+    const navRow = db.prepare('SELECT value FROM site_settings WHERE key=?').get('nav_items');
+    const footerRow = db.prepare('SELECT value FROM site_settings WHERE key=?').get('footer_quick_links');
+    const renameLinks = raw => {
+      try {
+        const parsed = JSON.parse(raw || '[]');
+        return JSON.stringify(Array.isArray(parsed) ? parsed.map(item => ({ ...item, label: item.label === 'Dairy Products' ? 'Our Products' : item.label })) : parsed);
+      } catch {
+        return raw;
+      }
+    };
+    if (navRow?.value) db.prepare('UPDATE site_settings SET value=? WHERE key=?').run(renameLinks(navRow.value), 'nav_items');
+    if (footerRow?.value) db.prepare('UPDATE site_settings SET value=? WHERE key=?').run(renameLinks(footerRow.value), 'footer_quick_links');
+    const labelSettings = [
+      ['homepage_explore_2_title', 'Our Products'],
+      ['homepage_explore_2_cta', 'View our products'],
+      ['homepage_dairy_eyebrow', 'From the farm'],
+      ['homepage_dairy_title', 'Explore our products.'],
+      ['homepage_dairy_cta_text', 'View our products'],
+      ['dairy_page_title', 'Our Products'],
+      ['dairy_page_lead', 'Explore the products available from Delamere Farm.']
+    ];
+    for (const [key, value] of labelSettings) {
+      db.prepare('INSERT INTO site_settings (key,value) VALUES (?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value').run(key, value);
+    }
+
     db.prepare('INSERT INTO site_settings (key,value) VALUES (?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value')
       .run('homepage_featured_animals_limit', '6');
     db.prepare('INSERT INTO site_settings (key,value) VALUES (?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value')
