@@ -6,6 +6,53 @@ const { imageUrl, truncate, mediaUrl, whatsappUrl } = require('../utils/format')
 const slugify = require('../utils/slugify');
 
 const router = express.Router();
+
+function ensureHomepagePresentation() {
+  const seedKey = 'homepage_presentation_seed_v1';
+  if (db.prepare('SELECT value FROM site_settings WHERE key=?').get(seedKey)) return;
+
+  const featured = [
+    ['Friesian Dairy Cow 1', '/animal-photos/cattle/friesian-holstein/friesian-holstein-03.jfif'],
+    ['Girolando Dairy Cow 1', '/animal-photos/cattle/girolando/girolando-02.jfif'],
+    ['Brahman Cattle 1', '/animal-photos/cattle/brahman/brahman-01.jfif'],
+    ['Ayrshire Dairy Cow 1', '/animal-photos/cattle/ayrshire/ayrshire-01.jfif'],
+    ['Red Maasai Sheep 1', '/animal-photos/sheep/red-maasai/red-maasai-01.jfif'],
+    ['Boer Goat 1', '/animal-photos/goats/boer/boer-05.jfif']
+  ];
+
+  const gallery = [
+    ['Farm Reference — Dairy Pasture', 'Farm Reference', 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Wisconsin_dairy_farm.jpg', 'Representative dairy-farm imagery from Wikimedia Commons. CC0/public domain.'],
+    ['Farm Reference — Goat Farming', 'Farm Reference', 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Goat_farming.jpg', 'Representative goat-farming imagery from Wikimedia Commons. CC0/public domain.'],
+    ['Farm Reference — Sheep Flock', 'Farm Reference', 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Sheep_Farm_at_Virginia%28GN07754%29.jpg', 'Representative sheep-farm imagery from Wikimedia Commons. CC0/public domain.'],
+    ['Farm Reference — Livestock Farming', 'Farm Reference', 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Livestock_farming.jpg', 'Representative livestock-farming imagery from Wikimedia Commons. CC0/public domain.'],
+    ['Farm Reference — Cattle Barn', 'Farm Reference', 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Cattle_Barn.jpg', 'Representative cattle-farm imagery from Wikimedia Commons. CC0/public domain.'],
+    ['Farm Reference — Countryside Farm', 'Farm Reference', 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Farm_in_the_field.jpg', 'Representative farm-landscape imagery from Wikimedia Commons. CC0/public domain.']
+  ];
+
+  db.transaction(() => {
+    db.prepare('UPDATE animals SET featured=0').run();
+    for (const [name, image] of featured) {
+      const animal = db.prepare('SELECT id FROM animals WHERE name=? AND availability!=\'Sold\' LIMIT 1').get(name);
+      if (animal) {
+        db.prepare('UPDATE animals SET featured=1,image=? WHERE id=?').run(image, animal.id);
+      }
+    }
+
+    const insertGallery = db.prepare('INSERT INTO gallery_items (title,category,image,description,featured,display_order) VALUES (?,?,?,?,1,?)');
+    gallery.forEach(([title, category, image, description], index) => {
+      if (!db.prepare('SELECT id FROM gallery_items WHERE title=? LIMIT 1').get(title)) {
+        insertGallery.run(title, category, image, description, index + 1);
+      }
+    });
+
+    db.prepare('INSERT INTO site_settings (key,value) VALUES (?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value')
+      .run('homepage_featured_animals_limit', '6');
+    db.prepare('INSERT INTO site_settings (key,value) VALUES (?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value')
+      .run(seedKey, 'completed');
+  })();
+}
+
+ensureHomepagePresentation();
 const allowedInquiryTypes = new Set(['Animal', 'Dairy Product', 'General Inquiry']);
 
 function seo(key, fallbackTitle, fallbackDescription) {
@@ -165,7 +212,7 @@ router.get('/dairy', (req, res) => {
   const search = String(req.query.search || '').trim();
   const q = search ? `%${search}%` : null;
   const products = q ? db.prepare("SELECT * FROM dairy_products WHERE availability!='Unavailable' AND (name LIKE ? OR description LIKE ? OR category LIKE ?) ORDER BY featured DESC,display_order,created_at DESC").all(q,q,q) : db.prepare("SELECT * FROM dairy_products WHERE availability!='Unavailable' ORDER BY featured DESC,display_order,created_at DESC").all();
-  res.render('pages/dairy', { title: 'Dairy Products | Delamere Farm', description: 'Explore dairy products available from Delamere Farm and view product details and availability.', products, search });
+  res.render('pages/dairy', { title: 'Our Products | Delamere Farm', description: 'Explore dairy products available from Delamere Farm and view product details and availability.', products, search });
 });
 
 router.get('/dairy/:slug', (req, res) => {
