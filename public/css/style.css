@@ -3598,3 +3598,22 @@ td small {
     line-height: 1.48;
   }
 }
+
+/* Featured livestock photos: show the complete source image at full card width.
+   Do not crop, stretch, or zoom the supplied animal photography. */
+.animal-card .card-media {
+  aspect-ratio: auto;
+  height: auto;
+}
+
+.animal-card .card-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  transform: none;
+}
+
+.animal-card:hover .card-media img {
+  transform: none;
+}
