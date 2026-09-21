@@ -169,6 +169,67 @@ db.transaction(() => {
   }
 })();
 
+// Assign reviewed repository photos without overwriting any photo that staff have
+// already attached in Admin. Photos are matched by the breed classification we
+// established during the visual review. Extra photos remain in the repository
+// for later gallery/individual-photo use rather than being misassigned.
+const reviewedStaticPhotos = {
+  'Friesian / Holstein': ['friesian-holstein-01.jfif','friesian-holstein-02.jfif','friesian-holstein-03.jfif'],
+  'Ayrshire': ['ayrshire-01.jfif','ayrshire-02.jfif'],
+  'Jersey': ['jersey-01.jfif','jersey-02.jfif'],
+  'Guernsey': ['guernsey-01.jfif'],
+  'Girolando': ['girolando-01.jfif','girolando-02.jfif'],
+  'Sahiwal': Array.from({ length: 10 }, (_, i) => `sahiwal-${String(i + 1).padStart(2, '0')}.jfif`),
+  'Boran': ['boran-01.jfif'],
+  'Brahman': Array.from({ length: 5 }, (_, i) => `brahman-${String(i + 1).padStart(2, '0')}.jfif`),
+  'Fleckvieh': Array.from({ length: 8 }, (_, i) => `fleckvieh-${String(i + 1).padStart(2, '0')}.jfif`),
+  'Dorper': Array.from({ length: 10 }, (_, i) => `dorper-${String(i + 1).padStart(2, '0')}.jfif`),
+  'Hampshire': ['hampshire-01.jfif','hampshire-02.jfif','hampshire-03.jfif'],
+  'Red Maasai': ['red-maasai-01.jfif','red-maasai-02.jfif','red-maasai-04.jfif','red-maasai-05.jfif','red-maasai-06.jfif','red-maasai-07.jfif'],
+  'Boer': Array.from({ length: 5 }, (_, i) => `boer-${String(i + 1).padStart(2, '0')}.jfif`),
+  'Kalahari Red': ['kalahari-red-01.jfif']
+};
+
+const breedPhotoFolders = {
+  'Friesian / Holstein': 'cattle/friesian-holstein',
+  'Ayrshire': 'cattle/ayrshire',
+  'Jersey': 'cattle/jersey',
+  'Guernsey': 'cattle/guernsey',
+  'Girolando': 'cattle/girolando',
+  'Sahiwal': 'cattle/sahiwal',
+  'Boran': 'cattle/boran',
+  'Brahman': 'cattle/brahman',
+  'Fleckvieh': 'cattle/fleckvieh',
+  'Dorper': 'sheep/dorper',
+  'Hampshire': 'sheep/hampshire',
+  'Red Maasai': 'sheep/red-maasai',
+  'Boer': 'goats/boer',
+  'Kalahari Red': 'goats/kalahari-red'
+};
+
+db.transaction(() => {
+  const findBreed = db.prepare('SELECT id FROM livestock_breeds WHERE name=? LIMIT 1');
+  const getAnimals = db.prepare('SELECT id FROM animals WHERE breed_id=? AND (image IS NULL OR image=\'\') ORDER BY display_order,id');
+  const setAnimalImage = db.prepare('UPDATE animals SET image=? WHERE id=? AND (image IS NULL OR image=\'\')');
+  const setBreedImage = db.prepare('UPDATE livestock_breeds SET image=? WHERE id=? AND (image IS NULL OR image=\'\')');
+
+  for (const [breedName, filenames] of Object.entries(reviewedStaticPhotos)) {
+    const breed = findBreed.get(breedName);
+    if (!breed || !filenames.length) continue;
+
+    const folder = breedPhotoFolders[breedName];
+    const firstPhoto = `/animal-photos/${folder}/${filenames[0]}`;
+    setBreedImage.run(firstPhoto, breed.id);
+
+    const animals = getAnimals.all(breed.id);
+    const limit = Math.min(animals.length, filenames.length);
+    for (let i = 0; i < limit; i += 1) {
+      const image = `/animal-photos/${folder}/${filenames[i]}`;
+      setAnimalImage.run(image, animals[i].id);
+    }
+  }
+})();
+
 function getTypes() { return db.prepare('SELECT * FROM livestock_types ORDER BY display_order, name').all(); }
 function getType(slug) { return db.prepare('SELECT * FROM livestock_types WHERE slug=?').get(slug); }
 function getClassifications(typeId) { return db.prepare('SELECT * FROM livestock_classifications WHERE livestock_type_id=? ORDER BY display_order, name').all(typeId); }
