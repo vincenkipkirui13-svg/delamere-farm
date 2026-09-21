@@ -10,4 +10,4 @@
   "email":site.email || undefined,
   "address":site.location ? {"@type":"PostalAddress","addressLocality":site.location} : undefined,
   "sameAs":[site.social?.facebook,site.social?.instagram,site.social?.tiktok,site.social?.youtube].filter(Boolean)
-}) %></script><script type="application/ld+json"><%- JSON.stringify({"@context":"https://schema.org","@type":"LocalBusiness","name":site.name || "Delamere Farm","url":(siteUrl || "https://delamerefarm.org").replace(/\/$/,""),"description":description || site.description || ""}) %></script></head>
+}) %></script></head>
