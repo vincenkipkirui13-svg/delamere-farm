@@ -1,2 +1,13 @@
 <%- include('../partials/head', { title, description }) %>
+<% if (faqs && faqs.length) { %>
+<script type="application/ld+json"><%- JSON.stringify({
+  "@context":"https://schema.org",
+  "@type":"FAQPage",
+  "mainEntity":faqs.map(faq => ({
+    "@type":"Question",
+    "name":faq.question,
+    "acceptedAnswer":{"@type":"Answer","text":faq.answer}
+  }))
+}) %></script>
+<% } %>
 <body><%- include('../partials/header') %><main><%- include('../partials/page-hero', { eyebrow: site.pageContent.faq.eyebrow, heading: site.pageContent.faq.title, lead: site.pageContent.faq.lead }) %><section class="section section-light"><div class="container faq-list"><% if (faqs.length) { faqs.forEach((faq, index) => { %><details class="faq-item" <%= index === 0 ? 'open' : '' %>><summary><%= faq.question %><span>+</span></summary><p><%= faq.answer %></p></details><% }) } else { %><div class="empty-state">FAQs are being updated.</div><% } %></div></section><section class="cta-section"><div class="container cta-inner reveal"><p class="eyebrow eyebrow-light"><%= site.pageContent.faq.ctaEyebrow %></p><h2><%= site.pageContent.faq.ctaTitle %></h2><p><%= site.pageContent.faq.ctaDescription %></p><a class="btn btn-light" href="/contact"><%= site.pageContent.faq.ctaButtonText %></a></div></section></main><%- include('../partials/footer') %></body>
