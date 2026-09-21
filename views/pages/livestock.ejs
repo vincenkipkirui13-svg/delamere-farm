@@ -11,6 +11,15 @@
 
   <section class="section section-light" id="livestock-collections">
     <div class="container">
+      <script type="application/ld+json"><%- JSON.stringify({
+        "@context":"https://schema.org",
+        "@type":"BreadcrumbList",
+        "itemListElement":[
+          {"@type":"ListItem","position":1,"name":"Livestock","item":(siteUrl || "https://delamerefarm.org").replace(/\/$/,"") + "/livestock"}
+        ]
+      }) %></script>
+    </div>
+    <div class="container">
       <div class="catalog-intro">
         <p class="eyebrow"><%= site.pageContent.livestock.catalogEyebrow %></p>
         <h2><%= site.pageContent.livestock.catalogTitle %></h2>
