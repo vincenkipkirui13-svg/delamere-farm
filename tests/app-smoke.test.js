@@ -36,6 +36,10 @@ test('public and admin entry routes render successfully', async t => {
 
   const missing = await request(server, '/this-page-does-not-exist');
   assert.equal(missing.status, 404);
+  assert.match(missing.body, /name="robots" content="noindex, nofollow"/);
+  assert.equal(missing.headers['x-content-type-options'], 'nosniff');
+  assert.equal(missing.headers['x-frame-options'], 'SAMEORIGIN');
+  assert.equal(missing.headers['x-permitted-cross-domain-policies'], 'none');
 });
 
 test('database contains the core admin/content structures', () => {
