@@ -58,6 +58,7 @@ app.locals.helpers = format;
 app.locals.currentPath = '';
 app.use((req, res, next) => {
   res.locals.site = db.getSiteSettings();
+  res.locals.siteUrl = settings.siteUrl;
   res.locals.currentPath = req.path;
   res.locals.isAdmin = Boolean(req.session?.admin);
   res.locals.adminUser = req.session?.admin || null;
