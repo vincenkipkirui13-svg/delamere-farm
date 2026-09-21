@@ -237,7 +237,7 @@ router.get('/dairy', (req, res) => {
   const search = String(req.query.search || '').trim();
   const q = search ? `%${search}%` : null;
   const products = q ? db.prepare("SELECT * FROM dairy_products WHERE availability!='Unavailable' AND (name LIKE ? OR description LIKE ? OR category LIKE ?) ORDER BY featured DESC,display_order,created_at DESC").all(q,q,q) : db.prepare("SELECT * FROM dairy_products WHERE availability!='Unavailable' ORDER BY featured DESC,display_order,created_at DESC").all();
-  res.render('pages/dairy', { title: 'Our Products | Delamere Farm', description: 'Explore dairy products available from Delamere Farm and view product details and availability.', products, search });
+  res.render('pages/dairy', { title: 'Our Products | Delamere Farm', description: 'Explore products available from Delamere Farm and view product details and availability.', products, search });
 });
 
 router.get('/dairy/:slug', (req, res) => {
