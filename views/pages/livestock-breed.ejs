@@ -15,7 +15,16 @@
         <strong><%= breed.name %></strong>
       </div>
 
-      <script type="application/ld+json"><%- JSON.stringify({\n        "@context":"https://schema.org",\n        "@type":"BreadcrumbList",\n        "itemListElement":[\n          {"@type":"ListItem","position":1,"name":"Livestock","item":(siteUrl || "https://delamerefarm.org").replace(/\\/$/,"") + "/livestock"},\n          {"@type":"ListItem","position":2,"name":type.name,"item":(siteUrl || "https://delamerefarm.org").replace(/\\/$/,"") + "/livestock/" + type.slug},\n          {"@type":"ListItem","position":3,"name":classification.name,"item":(siteUrl || "https://delamerefarm.org").replace(/\\/$/,"") + "/livestock/" + type.slug + "/" + classification.slug},\n          {"@type":"ListItem","position":4,"name":breed.name,"item":(siteUrl || "https://delamerefarm.org").replace(/\\/$/,"") + "/livestock/" + type.slug + "/" + classification.slug + "/" + breed.slug}\n        ]\n      }) %></script>\n\n      <div class="detail-grid livestock-breed-detail">
+      <script type="application/ld+json"><%- JSON.stringify({
+        "@context":"https://schema.org",
+        "@type":"BreadcrumbList",
+        "itemListElement":[
+          {"@type":"ListItem","position":1,"name":"Livestock","item":(siteUrl || "https://delamerefarm.org").replace(/\/$/,"") + "/livestock"},
+          {"@type":"ListItem","position":2,"name":type.name,"item":(siteUrl || "https://delamerefarm.org").replace(/\/$/,"") + "/livestock/" + type.slug},
+          {"@type":"ListItem","position":3,"name":classification.name,"item":(siteUrl || "https://delamerefarm.org").replace(/\/$/,"") + "/livestock/" + type.slug + "/" + classification.slug},
+          {"@type":"ListItem","position":4,"name":breed.name,"item":(siteUrl || "https://delamerefarm.org").replace(/\/$/,"") + "/livestock/" + type.slug + "/" + classification.slug + "/" + breed.slug}
+        ]
+      }) %></script>\n\n      <div class="detail-grid livestock-breed-detail">
         <div class="detail-media image-wrap">
           <img src="<%= helpers.imageUrl(breed.image) %>" alt="<%= breed.name %> <%= type.name %> at <%= site.name %>" decoding="async">
         </div>
