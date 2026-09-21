@@ -3637,3 +3637,23 @@ td small {
 .animal-card:hover .card-media img {
   transform: none;
 }
+
+/* Selected livestock to explore: show each complete source photo at full card width. */
+#selected-livestock .animal-card .card-media {
+  aspect-ratio: auto;
+  height: auto;
+  overflow: hidden;
+}
+
+#selected-livestock .animal-card .card-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  object-position: center;
+  transform: none;
+}
+
+#selected-livestock .animal-card:hover .card-media img {
+  transform: none;
+}
