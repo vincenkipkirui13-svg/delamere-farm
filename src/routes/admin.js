@@ -679,8 +679,8 @@ router.post('/livestock-classifications/:id/photo/delete', livestockEditor, (req
 });
 
 // ---------------- Dairy ----------------
-router.get('/dairy', contentEditor, (_req, res) => res.render('admin/dairy', { title: 'Manage Dairy Products', products: db.prepare('SELECT * FROM dairy_products ORDER BY featured DESC,display_order,created_at DESC').all() }));
-router.get('/dairy/new', contentEditor, (_req, res) => res.render('admin/dairy-form', { title: 'Add Dairy Product', product: null, error: null }));
+router.get('/dairy', contentEditor, (_req, res) => res.render('admin/dairy', { title: 'Manage Our Products', products: db.prepare('SELECT * FROM dairy_products ORDER BY featured DESC,display_order,created_at DESC').all() }));
+router.get('/dairy/new', contentEditor, (_req, res) => res.render('admin/dairy-form', { title: 'Add Our Product', product: null, error: null }));
 
 function dairyPayload(body) {
   const name = safeText(body.name, 100);
@@ -704,24 +704,24 @@ function dairyPayload(body) {
 router.post('/dairy', contentEditor, uploadSingle(dairyUpload, 'image'), validateMultipartCsrf, (req, res) => {
   let product;
   try { product = dairyPayload(req.body); }
-  catch (error) { removeUpload(req.file && `dairy/${req.file.filename}`); return res.status(400).render('admin/dairy-form', { title: 'Add Dairy Product', product: req.body, error: error.message }); }
-  if (req.uploadError) { removeUpload(req.file && `dairy/${req.file.filename}`); return res.status(400).render('admin/dairy-form', { title: 'Add Dairy Product', product: req.body, error: req.uploadError }); }
+  catch (error) { removeUpload(req.file && `dairy/${req.file.filename}`); return res.status(400).render('admin/dairy-form', { title: 'Add Our Product', product: req.body, error: error.message }); }
+  if (req.uploadError) { removeUpload(req.file && `dairy/${req.file.filename}`); return res.status(400).render('admin/dairy-form', { title: 'Add Our Product', product: req.body, error: req.uploadError }); }
   const image = req.file ? `dairy/${req.file.filename}` : null;
   try {
     const result = db.prepare('INSERT INTO dairy_products (name,slug,description,image,availability,featured,category,price,unit,display_order) VALUES (?,?,?,?,?,?,?,?,?,?)')
       .run(product.name, product.slug, product.description, image, product.availability, product.featured, product.category, product.price, product.unit, product.display_order);
-    logActivity(req, 'Created dairy product', 'Dairy Product', result.lastInsertRowid);
+    logActivity(req, 'Created product', 'Dairy Product', result.lastInsertRowid);
     res.redirect('/admin/dairy');
   } catch (error) {
     removeUpload(image);
-    res.status(400).render('admin/dairy-form', { title: 'Add Dairy Product', product: req.body, error: error.message.includes('UNIQUE') ? 'That slug is already in use.' : 'Unable to save product.' });
+    res.status(400).render('admin/dairy-form', { title: 'Add Our Product', product: req.body, error: error.message.includes('UNIQUE') ? 'That slug is already in use.' : 'Unable to save product.' });
   }
 });
 
 router.get('/dairy/:id/edit', contentEditor, (req, res) => {
   const product = getProduct(req.params.id);
   if (!product) return res.redirect('/admin/dairy');
-  res.render('admin/dairy-form', { title: 'Edit Dairy Product', product, error: null });
+  res.render('admin/dairy-form', { title: 'Edit Our Product', product, error: null });
 });
 
 router.post('/dairy/:id', contentEditor, uploadSingle(dairyUpload, 'image'), validateMultipartCsrf, (req, res) => {
@@ -729,18 +729,18 @@ router.post('/dairy/:id', contentEditor, uploadSingle(dairyUpload, 'image'), val
   if (!existing) { removeUpload(req.file && `dairy/${req.file.filename}`); return res.redirect('/admin/dairy'); }
   let product;
   try { product = dairyPayload(req.body); }
-  catch (error) { removeUpload(req.file && `dairy/${req.file.filename}`); return res.status(400).render('admin/dairy-form', { title: 'Edit Dairy Product', product: { ...existing, ...req.body }, error: error.message }); }
-  if (req.uploadError) { removeUpload(req.file && `dairy/${req.file.filename}`); return res.status(400).render('admin/dairy-form', { title: 'Edit Dairy Product', product: { ...existing, ...req.body }, error: req.uploadError }); }
+  catch (error) { removeUpload(req.file && `dairy/${req.file.filename}`); return res.status(400).render('admin/dairy-form', { title: 'Edit Our Product', product: { ...existing, ...req.body }, error: error.message }); }
+  if (req.uploadError) { removeUpload(req.file && `dairy/${req.file.filename}`); return res.status(400).render('admin/dairy-form', { title: 'Edit Our Product', product: { ...existing, ...req.body }, error: req.uploadError }); }
   const image = req.file ? `dairy/${req.file.filename}` : existing.image;
   try {
     db.prepare('UPDATE dairy_products SET name=?,slug=?,description=?,image=?,availability=?,featured=?,category=?,price=?,unit=?,display_order=? WHERE id=?')
       .run(product.name, product.slug, product.description, image, product.availability, product.featured, product.category, product.price, product.unit, product.display_order, existing.id);
     if (req.file) removeUpload(existing.image);
-    logActivity(req, 'Updated dairy product', 'Dairy Product', existing.id);
+    logActivity(req, 'Updated product', 'Dairy Product', existing.id);
     res.redirect('/admin/dairy');
   } catch (error) {
     if (req.file) removeUpload(`dairy/${req.file.filename}`);
-    res.status(400).render('admin/dairy-form', { title: 'Edit Dairy Product', product: { ...existing, ...req.body, image: existing.image }, error: error.message.includes('UNIQUE') ? 'That slug is already in use.' : 'Unable to update product.' });
+    res.status(400).render('admin/dairy-form', { title: 'Edit Our Product', product: { ...existing, ...req.body, image: existing.image }, error: error.message.includes('UNIQUE') ? 'That slug is already in use.' : 'Unable to update product.' });
   }
 });
 
@@ -749,7 +749,7 @@ router.post('/dairy/:id/delete', contentEditor, (req, res) => {
   if (!row) return res.redirect('/admin/dairy');
   db.prepare('DELETE FROM dairy_products WHERE id=?').run(req.params.id);
   removeUpload(row.image);
-  logActivity(req, 'Deleted dairy product', 'Dairy Product', req.params.id);
+  logActivity(req, 'Deleted product', 'Dairy Product', req.params.id);
   res.redirect('/admin/dairy');
 });
 
