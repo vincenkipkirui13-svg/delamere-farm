@@ -307,10 +307,9 @@ function animalPayload(body, existing = null) {
     : null;
   const requestedType = safeText(body.livestock_type, 60);
   const requestedClassification = safeText(body.livestock_classification, 100);
+  const selectedType = breedRecord?.type_name || requestedType || existing?.livestock_type || '';
   const classification = requestedClassification
-    ? (breedId
-      ? db.prepare('SELECT c.* FROM livestock_classifications c JOIN livestock_breed_classifications bc ON bc.classification_id=c.id WHERE bc.breed_id=? AND c.name=?').get(breedId, requestedClassification)
-      : db.prepare('SELECT c.* FROM livestock_classifications c JOIN livestock_types t ON t.id=c.livestock_type_id WHERE t.name=? AND c.name=?').get(requestedType, requestedClassification))
+    ? db.prepare('SELECT c.* FROM livestock_classifications c JOIN livestock_types t ON t.id=c.livestock_type_id WHERE t.name=? AND c.name=?').get(selectedType, requestedClassification)
     : null;
   if (requestedClassification && !classification) throw new Error('Please choose a valid classification for the selected livestock type/breed.');
   const name = safeText(body.name, 100);
