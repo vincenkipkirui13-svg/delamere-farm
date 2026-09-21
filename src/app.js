@@ -1,6 +1,5 @@
 const express = require('express');
 const crypto = require('node:crypto');
-const compression = require('node:zlib');
 const session = require('express-session');
 const settings = require('./config/settings');
 require('./db/livestock');
@@ -32,27 +31,6 @@ class SQLiteSessionStore extends session.Store {
 
 const app = express();
 
-// Lightweight gzip compression without adding a runtime dependency.
-app.use((req, res, next) => {
-  if (req.method === 'HEAD' || req.headers['accept-encoding']?.includes('gzip') === false) return next();
-  const originalWrite = res.write;
-  const originalEnd = res.end;
-  let chunks = [];
-  const shouldCompress = () => /^(text\/|application\/(json|javascript|xml)|image\/svg\+xml)/i.test(String(res.getHeader('Content-Type') || '')) && !res.getHeader('Content-Encoding');
-  res.write = function(chunk, encoding) { if (!shouldCompress()) return originalWrite.call(this, chunk, encoding); if (chunk) chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk, encoding)); return true; };
-  res.end = function(chunk, encoding) {
-    if (!shouldCompress()) return originalEnd.call(this, chunk, encoding);
-    if (chunk) chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk, encoding));
-    const body = Buffer.concat(chunks);
-    if (body.length < 1024) return originalEnd.call(this, body);
-    const gzipped = compression.gzipSync(body, { level: 6 });
-    res.setHeader('Content-Encoding', 'gzip');
-    res.setHeader('Vary', 'Accept-Encoding');
-    res.setHeader('Content-Length', gzipped.length);
-    return originalEnd.call(this, gzipped);
-  };
-  next();
-});
 app.disable('x-powered-by');
 app.set('trust proxy', settings.isProduction ? 1 : false);
 app.set('view engine', 'ejs');
