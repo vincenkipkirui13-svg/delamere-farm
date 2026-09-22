@@ -73,6 +73,7 @@ CREATE INDEX IF NOT EXISTS idx_animals_breed_id ON animals(breed_id);
 `);
 
 addColumn('livestock_breeds', 'display_order', 'INTEGER NOT NULL DEFAULT 0');
+addColumn('livestock_breeds', 'price_range', 'TEXT');
 
 // Keep the taxonomy idempotent so existing Railway databases receive new
 // livestock types, classifications and breeds without duplicating existing data.
