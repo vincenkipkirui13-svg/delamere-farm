@@ -6,7 +6,7 @@
   <div class="card-body">
     <p class="card-kicker">Product</p>
     <h3><a href="/dairy/<%= product.slug %>"><%= product.name %></a></h3>
-    <p><%= helpers.truncate(product.description, 105) %></p>
+    <p><%= helpers.truncate(product.description, 105) %></p><p class="product-price"><strong>Price:</strong> <%= product.price !== null && product.price !== undefined && product.price !== '' ? 'KSh ' + Number(product.price).toLocaleString('en-KE') + (product.unit ? ' / ' + product.unit : '') : 'Price on request' %></p>
     <a class="text-link" href="/dairy/<%= product.slug %>">View product <span>→</span></a>
   </div>
 </article>
