@@ -21,12 +21,12 @@ function ensureHomepagePresentation() {
   ];
 
   const gallery = [
-    ['Farm Reference — Dairy Pasture', 'Farm Reference', 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Wisconsin_dairy_farm.jpg', 'Representative dairy-farm imagery from Wikimedia Commons. CC0/public domain.'],
-    ['Farm Reference — Goat Farming', 'Farm Reference', 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Goat_farming.jpg', 'Representative goat-farming imagery from Wikimedia Commons. CC0/public domain.'],
-    ['Farm Reference — Sheep Flock', 'Farm Reference', 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Sheep_Farm_at_Virginia%28GN07754%29.jpg', 'Representative sheep-farm imagery from Wikimedia Commons. CC0/public domain.'],
-    ['Farm Reference — Livestock Farming', 'Farm Reference', 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Livestock_farming.jpg', 'Representative livestock-farming imagery from Wikimedia Commons. CC0/public domain.'],
-    ['Farm Reference — Cattle Barn', 'Farm Reference', 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Cattle_Barn.jpg', 'Representative cattle-farm imagery from Wikimedia Commons. CC0/public domain.'],
-    ['Farm Reference — Countryside Farm', 'Farm Reference', 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Farm_in_the_field.jpg', 'Representative farm-landscape imagery from Wikimedia Commons. CC0/public domain.']
+    ['Dairy Pasture', 'Farm Life', 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Wisconsin_dairy_farm.jpg', 'Farm photography from Wikimedia Commons. CC0/public domain.'],
+    ['Goat Farming', 'Farm Life', 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Goat_farming.jpg', 'Farm photography from Wikimedia Commons. CC0/public domain.'],
+    ['Sheep Flock', 'Farm Life', 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Sheep_Farm_at_Virginia%28GN07754%29.jpg', 'Farm photography from Wikimedia Commons. CC0/public domain.'],
+    ['Livestock Farming', 'Farm Life', 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Livestock_farming.jpg', 'Farm photography from Wikimedia Commons. CC0/public domain.'],
+    ['Cattle Barn', 'Farm Life', 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Cattle_Barn.jpg', 'Farm photography from Wikimedia Commons. CC0/public domain.'],
+    ['Countryside Farm', 'Farm Life', 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Farm_in_the_field.jpg', 'Farm photography from Wikimedia Commons. CC0/public domain.']
   ];
 
   db.transaction(() => {
@@ -77,6 +77,25 @@ function ensureHomepagePresentation() {
   })();
 }
 
+
+function ensureSectionPhotography() {
+  const updates = [
+    ['livestock_image','/animal-photos/cattle/friesian-holstein/friesian-holstein-03.jfif'],
+    ['dairy_image','https://commons.wikimedia.org/wiki/Special:Redirect/file/A_display_of_dairy_products_in_a_grocery_in_Nairobi_001.jpg'],
+    ['experience_image','https://commons.wikimedia.org/wiki/Special:Redirect/file/Wisconsin_dairy_farm.jpg']
+  ];
+  const set = db.prepare('INSERT INTO site_settings (key,value) VALUES (?,?) ON CONFLICT(key) DO UPDATE SET value=CASE WHEN site_settings.value IS NULL OR site_settings.value=\'\' THEN excluded.value ELSE site_settings.value END');
+  for (const [key,value] of updates) set.run(key,value);
+
+  const productImages = {
+    'Fresh Farm Milk':'https://commons.wikimedia.org/wiki/Special:Redirect/file/Bottle_of_milk.jpg',
+    'Farm Yogurt':'https://commons.wikimedia.org/wiki/Special:Redirect/file/Yogurt.jpg'
+  };
+  const setProduct = db.prepare('UPDATE dairy_products SET image=? WHERE name=? AND (image IS NULL OR image=\'\')');
+  for (const [name,image] of Object.entries(productImages)) setProduct.run(image,name);
+  db.prepare("UPDATE dairy_products SET category=COALESCE(NULLIF(category,''),'Farm Dairy'), unit=COALESCE(NULLIF(unit,''),'Contact farm for current price')").run();
+}
+ensureSectionPhotography();
 ensureHomepagePresentation();
 const allowedInquiryTypes = new Set(['Animal', 'Dairy Product', 'General Inquiry']);
 
