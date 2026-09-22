@@ -1,16 +1,16 @@
-﻿<article class="card animal-card">
+<article class="card animal-card" data-animal-breed="<%= animal.breed || '' %>">
   <a href="/animals/<%= animal.slug %>" class="card-media image-wrap" aria-label="View <%= animal.name %>">
     <img
       src="<%= helpers.imageUrl(animal.image) %>"
       alt="<%= animal.name %>"
       loading="lazy"
       decoding="async"
+      referrerpolicy="no-referrer"
     >
 
     <span class="status-badge <%= animal.availability === 'Available' ? 'status-available' : 'status-muted' %>">
       <%= animal.availability %>
     </span>
-
   </a>
 
   <div class="card-body">
