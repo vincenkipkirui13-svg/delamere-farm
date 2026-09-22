@@ -37,11 +37,13 @@
       <% } %>
     </div>
 
-    <% if (animal.price !== null && animal.price !== undefined && animal.price !== '') { %>
+    <% if (animal.price_range || (animal.price !== null && animal.price !== undefined && animal.price !== '')) { %>
       <p class="animal-price">
         <strong>Price:</strong>
-        KSh <%= Number(animal.price).toLocaleString('en-KE') %>
+        <%= animal.price_range || ('KSh ' + Number(animal.price).toLocaleString('en-KE')) %>
       </p>
+    <% } else { %>
+      <p class="animal-price"><strong>Price:</strong> Price on request</p>
     <% } %>
 
     <a class="text-link" href="/animals/<%= animal.slug %>">
