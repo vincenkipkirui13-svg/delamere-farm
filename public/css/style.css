@@ -4208,3 +4208,437 @@ td small {
     height: 50px !important;
   }
 }
+
+/* =========================================================
+   MOBILE COMPACT PASS — PUBLIC WEBSITE
+   Phone-only presentation. Desktop layout remains unchanged.
+   ========================================================= */
+@media (max-width: 760px) {
+  /* Tight, consistent page rhythm */
+  .section {
+    padding: 40px 0 !important;
+  }
+
+  .section-heading {
+    margin-bottom: 20px !important;
+  }
+
+  .section-heading h2 {
+    margin-bottom: 8px !important;
+  }
+
+  .section-heading > p:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  /* Keep the fixed header from creating excessive top whitespace */
+  .page-hero {
+    padding: 82px 0 26px !important;
+  }
+
+  .page-hero h1 {
+    font-size: clamp(2rem, 9.5vw, 2.65rem) !important;
+    margin-bottom: 7px !important;
+  }
+
+  /* Homepage hero: compact content while preserving the full photo */
+  .hero-content {
+    padding-top: 70px !important;
+    padding-bottom: 22px !important;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.05rem, 9.8vw, 3rem) !important;
+    margin-bottom: 9px !important;
+  }
+
+  .hero-lead {
+    margin-bottom: 11px !important;
+    font-size: .9rem !important;
+  }
+
+  /* What We Offer */
+  #what-we-offer {
+    padding-top: 38px !important;
+    padding-bottom: 38px !important;
+  }
+
+  #what-we-offer .offer-list-item {
+    padding: 14px 0 !important;
+  }
+
+  /* Selected livestock to explore */
+  #selected-livestock {
+    padding-top: 40px !important;
+    padding-bottom: 40px !important;
+  }
+
+  #selected-livestock .card-grid {
+    gap: 10px !important;
+  }
+
+  #selected-livestock .animal-card {
+    border-radius: 17px;
+  }
+
+  #selected-livestock .animal-card .card-body {
+    padding: 12px !important;
+  }
+
+  #selected-livestock .animal-card .card-body h3 {
+    font-size: 1.12rem !important;
+    margin-bottom: 5px !important;
+  }
+
+  #selected-livestock .animal-card .card-body p {
+    margin-bottom: 7px !important;
+  }
+
+  /* Homepage exploration cards */
+  .offer-grid {
+    gap: 10px !important;
+  }
+
+  .offer-card {
+    border-radius: 18px;
+  }
+
+  .offer-media {
+    aspect-ratio: 16 / 9 !important;
+  }
+
+  .offer-body {
+    padding: 13px 14px 14px !important;
+  }
+
+  /* General catalogue cards */
+  .card-grid {
+    gap: 10px !important;
+  }
+
+  .card {
+    border-radius: 17px;
+  }
+
+  .card-body {
+    padding: 12px !important;
+  }
+
+  .card-body h3 {
+    font-size: 1.08rem !important;
+  }
+
+  .card-body p {
+    font-size: .86rem;
+    margin-bottom: 7px;
+  }
+
+  /* Livestock / product listing cards — compact instead of tall showcase blocks */
+  .livestock-list,
+  .products-list {
+    gap: 10px !important;
+  }
+
+  .livestock-card,
+  .product-showcase-card {
+    grid-template-columns: 1fr !important;
+    gap: 9px !important;
+    padding: 8px !important;
+    border-radius: 16px !important;
+  }
+
+  .livestock-card-image,
+  .product-showcase-image {
+    min-height: 0 !important;
+    height: 150px !important;
+    aspect-ratio: auto !important;
+    border-radius: 12px !important;
+  }
+
+  .livestock-card-image img,
+  .product-showcase-image img {
+    width: 100%;
+    height: 100%;
+    min-height: 0 !important;
+    object-fit: contain !important;
+  }
+
+  .livestock-card-content,
+  .product-showcase-content {
+    padding: 2px !important;
+  }
+
+  .livestock-card-content h2,
+  .product-showcase-content h2 {
+    font-size: 1.38rem !important;
+    margin: 2px 0 6px !important;
+  }
+
+  .livestock-card-content p,
+  .product-showcase-content p {
+    font-size: .86rem !important;
+    line-height: 1.45 !important;
+    margin-bottom: 7px;
+  }
+
+  .livestock-card .btn,
+  .product-showcase-card .btn {
+    margin-top: 4px !important;
+    min-height: 42px;
+  }
+
+  /* Livestock taxonomy */
+  .livestock-type-media,
+  .livestock-category-media {
+    aspect-ratio: 16 / 9 !important;
+  }
+
+  .livestock-category-placeholder {
+    min-height: 0 !important;
+    aspect-ratio: 16 / 9;
+  }
+
+  .type-icon {
+    min-height: 120px !important;
+    font-size: 48px !important;
+  }
+
+  .catalog-intro {
+    margin-bottom: 16px !important;
+  }
+
+  .breadcrumb {
+    margin-bottom: 12px !important;
+    gap: 4px !important;
+    font-size: .75rem !important;
+  }
+
+  /* Detail pages */
+  .detail-section {
+    padding-top: 82px !important;
+    padding-bottom: 38px !important;
+  }
+
+  .detail-grid {
+    gap: 18px !important;
+  }
+
+  .detail-media,
+  .detail-image {
+    aspect-ratio: 16 / 9 !important;
+    border-radius: 17px !important;
+  }
+
+  .detail-copy h1 {
+    font-size: clamp(1.95rem, 9vw, 2.6rem) !important;
+    margin-bottom: 8px !important;
+  }
+
+  .detail-lead {
+    font-size: .9rem !important;
+    line-height: 1.5 !important;
+  }
+
+  .detail-breadcrumbs {
+    margin-bottom: 7px !important;
+  }
+
+  /* Breadcrumb already provides navigation on phones; remove duplicated back-link space */
+  .detail-section .back-link {
+    display: none !important;
+  }
+
+  .facts {
+    margin: 14px 0 !important;
+    gap: 7px !important;
+  }
+
+  .facts > div {
+    padding: 10px !important;
+  }
+
+  .detail-extra {
+    margin: 11px 0 !important;
+    padding-top: 10px !important;
+  }
+
+  .public-animal-gallery img {
+    height: 86px !important;
+  }
+
+  /* Breed detail navigation */
+  .breed-navigation {
+    margin-top: 14px !important;
+    gap: 7px !important;
+  }
+
+  .breed-navigation .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* About */
+  .about-image-strip {
+    gap: 9px !important;
+    margin-top: 10px !important;
+  }
+
+  .values-grid {
+    gap: 9px !important;
+  }
+
+  .value-card {
+    padding: 14px !important;
+  }
+
+  /* Gallery */
+  .filter-pills {
+    margin-bottom: 12px !important;
+    gap: 6px !important;
+  }
+
+  .pill {
+    padding: 6px 9px !important;
+  }
+
+  .gallery-grid.large {
+    gap: 8px !important;
+  }
+
+  .gallery-grid.large .gallery-tile {
+    aspect-ratio: 16 / 10 !important;
+  }
+
+  /* FAQ */
+  .faq-list {
+    gap: 7px !important;
+  }
+
+  .faq-item summary {
+    padding: 13px 0 !important;
+  }
+
+  .faq-item p {
+    padding-bottom: 13px !important;
+  }
+
+  /* Contact */
+  .contact-grid {
+    gap: 18px !important;
+  }
+
+  .direct-contact-actions {
+    margin: 12px 0 !important;
+    gap: 8px !important;
+  }
+
+  .contact-items {
+    gap: 10px !important;
+    margin-top: 15px !important;
+  }
+
+  .contact-note {
+    margin-top: 13px !important;
+    padding: 12px !important;
+  }
+
+  .form-card {
+    padding: 14px !important;
+  }
+
+  /* Reviews / benefits */
+  .reviews-grid {
+    gap: 8px !important;
+  }
+
+  .review-card {
+    padding: 14px !important;
+  }
+
+  .dark-band {
+    padding: 38px 0 !important;
+  }
+
+  .dark-band .benefits-grid {
+    gap: 16px !important;
+  }
+
+  .dark-band .benefit {
+    padding: 14px 13px 14px 18px !important;
+  }
+
+  /* CTA */
+  .cta-section {
+    padding: 40px 0 !important;
+  }
+
+  /* Footer */
+  .site-footer {
+    padding-top: 40px !important;
+  }
+
+  .footer-grid {
+    gap: 15px !important;
+    padding-bottom: 26px !important;
+  }
+
+  .footer-copy {
+    margin-top: 9px !important;
+  }
+
+  .footer-bottom {
+    padding: 13px 0 16px !important;
+  }
+
+  /* Error / success states */
+  .error-section,
+  .success-section {
+    padding: 86px 0 40px !important;
+  }
+
+  .error-card,
+  .success-card {
+    padding: 22px !important;
+    border-radius: 18px;
+  }
+}
+
+@media (max-width: 390px) {
+  .section {
+    padding: 36px 0 !important;
+  }
+
+  .page-hero {
+    padding-top: 78px !important;
+    padding-bottom: 23px !important;
+  }
+
+  .detail-section {
+    padding-top: 78px !important;
+    padding-bottom: 34px !important;
+  }
+
+  .hero-content {
+    padding-top: 62px !important;
+    padding-bottom: 18px !important;
+  }
+
+  .livestock-card-image,
+  .product-showcase-image {
+    height: 136px !important;
+  }
+
+  #selected-livestock .animal-card .card-body,
+  .card-body {
+    padding: 11px !important;
+  }
+
+  .cta-section {
+    padding: 36px 0 !important;
+  }
+
+  .site-footer {
+    padding-top: 36px !important;
+  }
+}
+
