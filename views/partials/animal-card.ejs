@@ -11,11 +11,7 @@
       <%= animal.availability %>
     </span>
 
-    <% if (animal.price !== null && animal.price !== undefined && animal.price !== '') { %>
-      <span class="price-badge">
-        KSh <%= Number(animal.price).toLocaleString('en-KE') %>
-      </span>
-    <% } %>
+    <span class="price-badge"><%= animal.price_range || (animal.price !== null && animal.price !== undefined && animal.price !== '' ? 'KSh ' + Number(animal.price).toLocaleString('en-KE') : 'Price on request') %></span>
   </a>
 
   <div class="card-body">
