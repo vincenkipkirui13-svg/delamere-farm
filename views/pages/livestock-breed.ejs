@@ -61,16 +61,13 @@
     </div>
   </section>
 
-  <!-- Breed photography is loaded directly from Wikimedia Commons.
-       No image files are copied into the repository. The search is breed-specific
-       and prioritises African/Kenyan results before falling back to the wider breed. -->
   <section class="section section-soft">
     <div class="container">
       <div class="section-heading">
         <div>
           <p class="eyebrow">Breed photography</p>
           <h2><%= breed.name %> in the field</h2>
-          <p>High-resolution reference photography sourced directly from Wikimedia Commons. Images remain hosted by their original source.</p>
+          <p>High-resolution breed photography displayed directly on Delamere Farm.</p>
         </div>
       </div>
 
@@ -81,8 +78,7 @@
       </div>
 
       <p style="margin-top:14px;font-size:.76rem;color:var(--muted)">
-        Photography source: <a class="text-link" href="https://commons.wikimedia.org/" target="_blank" rel="noopener noreferrer">Wikimedia Commons</a>.
-        Individual image licences and creators are available from each source page.
+        Photography is sourced from Wikimedia Commons and displayed here directly. Source and licence information remains available in the image metadata.
       </p>
     </div>
   </section>
@@ -93,11 +89,12 @@
         <div>
           <p class="eyebrow">Individual animals</p>
           <h2><%= breed.name %> at Delamere Farm</h2>
+          <p>Each animal card now uses a different high-quality breed photograph when a farm photograph is not yet attached.</p>
         </div>
       </div>
 
       <% if (animals.length) { %>
-        <div class="card-grid">
+        <div class="card-grid" id="individual-animals-grid">
           <% animals.forEach(animal => { %>
             <%- include('../partials/animal-card', { animal, helpers }) %>
           <% }) %>
@@ -117,6 +114,7 @@
   const breed = <%- JSON.stringify(breed.name) %>;
   const gallery = document.getElementById('breed-source-gallery');
   const cover = document.getElementById('breed-source-cover');
+  const animalCards = Array.from(document.querySelectorAll('#individual-animals-grid .animal-card'));
   const api = 'https://commons.wikimedia.org/w/api.php';
 
   const searchTerms = [
@@ -138,31 +136,40 @@
       generator: 'search',
       gsrsearch: term + ' filetype:bitmap',
       gsrnamespace: '6',
-      gsrlimit: '30',
+      gsrlimit: '40',
       prop: 'imageinfo',
       iiprop: 'url|size|mime',
       iiurlwidth: '1600',
       format: 'json',
       origin: '*'
     });
+
     const response = await fetch(api + '?' + params.toString(), {
       headers: { 'Accept': 'application/json' }
     });
+
     if (!response.ok) throw new Error('Wikimedia request failed');
+
     const data = await response.json();
+
     return Object.values(data.query?.pages || {})
       .map(page => {
         const info = page.imageinfo?.[0];
         return {
           title: page.title,
-          url: info?.thumburl || info?.url,
+          url: info?.url,
+          thumb: info?.thumburl,
           width: Number(info?.width || 0),
           height: Number(info?.height || 0),
-          mime: info?.mime || '',
-          page: 'https://commons.wikimedia.org/wiki/' + encodeURIComponent(page.title.replace(/ /g, '_'))
+          mime: info?.mime || ''
         };
       })
-      .filter(item => item.url && item.mime.startsWith('image/') && item.width >= 1000 && item.height >= 700);
+      .filter(item =>
+        item.url &&
+        item.mime.startsWith('image/') &&
+        item.width >= 1200 &&
+        item.height >= 800
+      );
   }
 
   async function loadBreedPhotos() {
@@ -171,30 +178,51 @@
     for (const term of searchTerms) {
       try {
         const photos = await searchCommons(term);
+
         photos.forEach(photo => {
           const key = photo.url.split('?')[0];
           if (!unique.has(key)) unique.set(key, photo);
         });
       } catch (_) {
-        // Continue with the next source query so one failed query does not break the page.
+        // Continue searching other regional terms.
       }
-      if (unique.size >= 18) break;
+
+      if (unique.size >= Math.max(24, animalCards.length + 18)) break;
     }
 
-    const photos = Array.from(unique.values()).slice(0, 18);
+    const photos = Array.from(unique.values()).slice(0, 24);
 
     if (!photos.length) {
-      gallery.innerHTML = '<div class="gallery-placeholder" style="grid-column:1/-1">The source gallery is temporarily unavailable. Please refresh to try again.</div>';
+      gallery.innerHTML = '<div class="gallery-placeholder" style="grid-column:1/-1">Breed photography is temporarily unavailable. Please refresh to try again.</div>';
       return;
     }
 
+    // Keep the first image as the breed cover, but never send visitors away
+    // to Wikimedia when viewing photographs.
     cover.src = photos[0].url;
 
+    // Give every individual animal a different breed photograph.
+    animalCards.forEach((card, index) => {
+      const photo = photos[index % photos.length];
+      if (!photo) return;
+
+      const image = card.querySelector('img');
+      if (!image) return;
+
+      image.src = photo.url;
+      image.alt = card.querySelector('h3')?.textContent?.trim() || (breed + ' at Delamere Farm');
+      image.loading = index < 3 ? 'eager' : 'lazy';
+      image.decoding = 'async';
+      image.referrerPolicy = 'no-referrer';
+    });
+
+    // Display the photographs inside Delamere Farm itself. They are not links,
+    // so a visitor stays on the Delamere website while browsing the images.
     gallery.innerHTML = photos.map((photo, index) => `
-      <a class="gallery-tile" href="${escapeHtml(photo.page)}" target="_blank" rel="noopener noreferrer" style="min-height:0;aspect-ratio:16/10" aria-label="Open source for <%= breed.name %> photograph ${index + 1}">
+      <figure class="gallery-tile" style="min-height:0;aspect-ratio:16/10;margin:0">
         <img src="${escapeHtml(photo.url)}" alt="<%= breed.name %> photograph ${index + 1}" loading="${index < 3 ? 'eager' : 'lazy'}" decoding="async" referrerpolicy="no-referrer">
-        <span>Wikimedia Commons · View source</span>
-      </a>
+        <figcaption style="padding:8px 10px;font-size:.72rem;color:var(--muted)">Breed photograph ${index + 1}</figcaption>
+      </figure>
     `).join('');
   }
 
