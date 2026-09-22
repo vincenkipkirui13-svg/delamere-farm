@@ -11,7 +11,7 @@
           <div class="product-showcase-image"><% if(product.image){ %><img src="<%= helpers.mediaUrl(product.image) %>" alt="<%= product.name %>" loading="lazy" decoding="async"><% } else { %><div class="image-placeholder">No image available</div><% } %></div>
           <div class="product-showcase-content"><p class="eyebrow"><%= product.category || 'Farm Product' %></p><h2><%= product.name %></h2><span class="status-badge <%= product.availability==='Available' ? 'status-available' : 'status-muted' %>"><%= product.availability %></span>
             <% if(product.description){ %><p><%= product.description %></p><% } %>
-            <% if(product.price !== null && product.price !== undefined){ %><p class="product-price"><strong>Price:</strong> KSh <%= product.price %><%= product.unit ? ' / '+product.unit : '' %></p><% } %>
+            <p class="product-price"><strong>Price:</strong> <%= product.price !== null && product.price !== undefined && product.price !== '' ? 'KSh ' + Number(product.price).toLocaleString('en-KE') + (product.unit && product.unit.indexOf('Contact farm') !== 0 ? ' / ' + product.unit : '') : 'Price on request' %></p>
             <a class="btn btn-secondary" href="/dairy/<%= product.slug %>">View product</a>
           </div>
         </article><% }) %>
