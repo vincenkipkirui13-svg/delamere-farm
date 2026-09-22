@@ -230,6 +230,58 @@ db.transaction(() => {
   }
 })();
 
+
+/* =========================================================
+   Breed presentation data: photography + customer price ranges
+   ========================================================= */
+const breedPresentation = {
+  'Friesian / Holstein': { price:'2–4 months: KSh 15,000–25,000 · 4–6 months: KSh 25,000–45,000 · 7–12 months: KSh 45,000–60,000 · 1–2 years: KSh 75,000–125,000 · In-calf / Milking: KSh 120,000–180,000', image:'/animal-photos/cattle/friesian-holstein/friesian-holstein-03.jfif' },
+  'Ayrshire': { price:'2–4 months: KSh 15,000–25,000 · 4–6 months: KSh 25,000–45,000 · 7–12 months: KSh 45,000–60,000 · 1–2 years: KSh 75,000–125,000 · In-calf / Milking: KSh 120,000–180,000', image:'/animal-photos/cattle/ayrshire/ayrshire-01.jfif' },
+  'Jersey': { price:'2–4 months: KSh 15,000–25,000 · 4–6 months: KSh 25,000–45,000 · 7–12 months: KSh 45,000–60,000 · 1–2 years: KSh 75,000–125,000 · In-calf / Milking: KSh 120,000–180,000', image:'/animal-photos/cattle/jersey/jersey-01.jfif' },
+  'Guernsey': { price:'2–4 months: KSh 15,000–25,000 · 4–6 months: KSh 25,000–45,000 · 7–12 months: KSh 45,000–60,000 · 1–2 years: KSh 75,000–125,000 · In-calf / Milking: KSh 120,000–180,000', image:'/animal-photos/cattle/guernsey/guernsey-01.jfif' },
+  'Girolando': { price:'2–4 months: KSh 25,000–40,000 · 4–6 months: KSh 40,000–60,000 · 7–12 months: KSh 60,000–90,000 · 1–2 years: KSh 85,000–140,000 · In-calf / Milking: KSh 130,000–250,000', image:'/animal-photos/cattle/girolando/girolando-02.jfif' },
+  'Sahiwal': { price:'2–4 months: KSh 15,000–25,000 · 4–6 months: KSh 25,000–45,000 · 7–12 months: KSh 45,000–60,000 · 1–2 years: KSh 75,000–125,000 · In-calf / Milking: KSh 120,000–180,000', image:'/animal-photos/cattle/sahiwal/sahiwal-01.jfif' },
+  'Brahman': { price:'5–7 months: KSh 25,000–40,000 · 7–9 months: KSh 40,000–55,000 · 9–12 months: KSh 50,000–70,000 · 11–14 months: KSh 65,000–90,000 · 1–2 years: KSh 80,000–150,000+', image:'/animal-photos/cattle/brahman/brahman-01.jfif' },
+  'Fleckvieh': { price:'2–4 months: KSh 15,000–25,000 · 4–6 months: KSh 25,000–45,000 · 7–12 months: KSh 45,000–60,000 · 1–2 years: KSh 75,000–125,000 · In-calf / Milking: KSh 120,000–180,000', image:'/animal-photos/cattle/fleckvieh/fleckvieh-01.jfif' },
+  'Dorper': { price:'4–6 months: KSh 4,000–7,000 · 7–12 months: KSh 5,500–8,000 · 12–15 months: KSh 8,000–15,000 · Mature breeding: KSh 15,000–40,000 · Mature breeding RAM: KSh 20,000–60,000', image:'/animal-photos/sheep/dorper/dorper-01.jfif' },
+  'Red Maasai': { price:'2–4 months: KSh 3,000–5,000 · 5–7 months: KSh 5,000–8,000 · 7–10 months: KSh 7,000–12,000 · Mature breeding: KSh 10,000–18,000', image:'/animal-photos/sheep/red-maasai/red-maasai-01.jfif' },
+  'Hampshire': { price:'3 months: KSh 10,000–15,000 · 4–6 months: KSh 26,000–32,000 · 7–12 months: KSh 32,000–42,000 · 12–15 months: KSh 42,000–55,000 · Mature breeding: KSh 45,000–65,000', image:'/animal-photos/sheep/hampshire/hampshire-01.jfif' },
+  'Merino': { price:'Up to 3 months: KSh 5,000–8,000 · 4–6 months: KSh 7,000–12,000 · 7–12 months: KSh 10,000–18,000 · 12–15 months: KSh 15,000–25,000 · Mature breeding: KSh 20,000–40,000', image:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Merino_sheep.jpg' },
+  'Kalahari Red': { price:'2–4 months: KSh 8,000 · 4–8 months: KSh 15,000 · 8–12 months: KSh 30,000 · 1–2 years — breeding: KSh 35,000 · Mature breeding doe: KSh 40,000 · Mature breeding buck: KSh 50,000 · Elite/purebred buck: KSh 120,000', image:'/animal-photos/goats/kalahari-red/kalahari-red-01.jfif' },
+  'Boer': { price:'2–3 months: KSh 5,000 · 4–6 months: KSh 7,000 · 7–9 months: KSh 10,000 · 10–12 months: KSh 15,000 · 1–2 years — breeding: KSh 20,000 · Mature breeding doe: KSh 25,000 · Mature breeding buck: KSh 30,000 · Elite/pedigree buck: KSh 60,000', image:'/animal-photos/goats/boer/boer-05.jfif' },
+  'Boran': { price:'Price on request', image:'/animal-photos/cattle/boran/boran-01.jfif' },
+  'White Dorper': { price:'Price on request', image:'https://commons.wikimedia.org/wiki/Special:Redirect/file/White_Dorper_ewes.jpg' },
+  'Dormer': { price:'Price on request', image:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Dormer_sheep.jpg' }
+};
+
+const breedPresentationUpdate = db.prepare('UPDATE livestock_breeds SET price_range=?, image=CASE WHEN image IS NULL OR image=\'\' THEN ? ELSE image END WHERE name=?');
+const animalPriceUpdate = db.prepare('UPDATE animals SET price_range=? WHERE breed_id=? AND (price_range IS NULL OR price_range=\'\')');
+const breedIdLookup = db.prepare('SELECT id FROM livestock_breeds WHERE name=? LIMIT 1');
+for (const [breedName, data] of Object.entries(breedPresentation)) {
+  const breed = breedIdLookup.get(breedName);
+  if (!breed) continue;
+  breedPresentationUpdate.run(data.price, data.image, breedName);
+  animalPriceUpdate.run(data.price, breed.id);
+}
+
+// Every livestock type and classification gets a real photographic cover.
+// Classification images use the first configured breed photograph in that group.
+const typeCover = {
+  Cattle:'/animal-photos/cattle/friesian-holstein/friesian-holstein-03.jfif',
+  Sheep:'/animal-photos/sheep/dorper/dorper-01.jfif',
+  Goats:'/animal-photos/goats/boer/boer-05.jfif'
+};
+const typeCoverUpdate = db.prepare('UPDATE livestock_types SET image=CASE WHEN image IS NULL OR image=\'\' THEN ? ELSE image END WHERE name=?');
+Object.entries(typeCover).forEach(([name,image])=>typeCoverUpdate.run(image,name));
+const classCover = db.prepare('UPDATE livestock_classifications SET image=CASE WHEN image IS NULL OR image=\'\' THEN ? ELSE image END WHERE id=?');
+for (const type of db.prepare('SELECT id,name FROM livestock_types').all()) {
+  const classes = db.prepare('SELECT id,name FROM livestock_classifications WHERE livestock_type_id=?').all(type.id);
+  for (const cls of classes) {
+    const breed = db.prepare('SELECT image FROM livestock_breeds WHERE id IN (SELECT breed_id FROM livestock_breed_classifications WHERE classification_id=?) AND image IS NOT NULL AND image!=\'\' ORDER BY display_order LIMIT 1').get(cls.id);
+    if (breed?.image) classCover.run(breed.image, cls.id);
+  }
+}
+
 function getTypes() { return db.prepare('SELECT * FROM livestock_types ORDER BY display_order, name').all(); }
 function getType(slug) { return db.prepare('SELECT * FROM livestock_types WHERE slug=?').get(slug); }
 function getClassifications(typeId) { return db.prepare('SELECT * FROM livestock_classifications WHERE livestock_type_id=? ORDER BY display_order, name').all(typeId); }
