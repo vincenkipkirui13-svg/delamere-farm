@@ -112,118 +112,47 @@
 <script>
 (() => {
   const breed = <%- JSON.stringify(breed.name) %>;
+  const livestockType = <%- JSON.stringify(type.name) %>;
   const gallery = document.getElementById('breed-source-gallery');
   const cover = document.getElementById('breed-source-cover');
   const animalCards = Array.from(document.querySelectorAll('#individual-animals-grid .animal-card'));
-  const api = 'https://commons.wikimedia.org/w/api.php';
-
-  const searchTerms = [
-    breed + ' Kenya',
-    breed + ' Africa',
-    breed + ' South Africa',
-    breed + ' Tanzania',
-    breed + ' Uganda',
-    breed
-  ];
-
-  const escapeHtml = value => String(value || '').replace(/[&<>"']/g, char => ({
-    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
-  }[char]));
-
-  async function searchCommons(term) {
-    const params = new URLSearchParams({
-      action: 'query',
-      generator: 'search',
-      gsrsearch: term + ' filetype:bitmap',
-      gsrnamespace: '6',
-      gsrlimit: '40',
-      prop: 'imageinfo',
-      iiprop: 'url|size|mime',
-      iiurlwidth: '1600',
-      format: 'json',
-      origin: '*'
-    });
-
-    const response = await fetch(api + '?' + params.toString(), {
-      headers: { 'Accept': 'application/json' }
-    });
-
-    if (!response.ok) throw new Error('Wikimedia request failed');
-
-    const data = await response.json();
-
-    return Object.values(data.query?.pages || {})
-      .map(page => {
-        const info = page.imageinfo?.[0];
-        return {
-          title: page.title,
-          url: info?.url,
-          thumb: info?.thumburl,
-          width: Number(info?.width || 0),
-          height: Number(info?.height || 0),
-          mime: info?.mime || ''
-        };
-      })
-      .filter(item =>
-        item.url &&
-        item.mime.startsWith('image/') &&
-        item.width >= 1200 &&
-        item.height >= 800
-      );
+  const localPhotos = {
+    'Friesian / Holstein':['/animal-photos/cattle/friesian-holstein/friesian-holstein-01.jfif','/animal-photos/cattle/friesian-holstein/friesian-holstein-02.jfif','/animal-photos/cattle/friesian-holstein/friesian-holstein-03.jfif'],
+    'Ayrshire':['/animal-photos/cattle/ayrshire/ayrshire-01.jfif','/animal-photos/cattle/ayrshire/ayrshire-02.jfif'],
+    'Jersey':['/animal-photos/cattle/jersey/jersey-01.jfif','/animal-photos/cattle/jersey/jersey-02.jfif'],
+    'Guernsey':['/animal-photos/cattle/guernsey/guernsey-01.jfif'],
+    'Girolando':['/animal-photos/cattle/girolando/girolando-01.jfif','/animal-photos/cattle/girolando/girolando-02.jfif'],
+    'Sahiwal':Array.from({length:10},(_,i)=>'/animal-photos/cattle/sahiwal/sahiwal-'+String(i+1).padStart(2,'0')+'.jfif'),
+    'Boran':['/animal-photos/cattle/boran/boran-01.jfif'],
+    'Brahman':Array.from({length:5},(_,i)=>'/animal-photos/cattle/brahman/brahman-'+String(i+1).padStart(2,'0')+'.jfif'),
+    'Fleckvieh':Array.from({length:8},(_,i)=>'/animal-photos/cattle/fleckvieh/fleckvieh-'+String(i+1).padStart(2,'0')+'.jfif'),
+    'Dorper':Array.from({length:10},(_,i)=>'/animal-photos/sheep/dorper/dorper-'+String(i+1).padStart(2,'0')+'.jfif'),
+    'Hampshire':['/animal-photos/sheep/hampshire/hampshire-01.jfif','/animal-photos/sheep/hampshire/hampshire-02.jfif','/animal-photos/sheep/hampshire/hampshire-03.jfif'],
+    'Red Maasai':['/animal-photos/sheep/red-maasai/red-maasai-01.jfif','/animal-photos/sheep/red-maasai/red-maasai-02.jfif','/animal-photos/sheep/red-maasai/red-maasai-04.jfif','/animal-photos/sheep/red-maasai/red-maasai-05.jfif','/animal-photos/sheep/red-maasai/red-maasai-06.jfif','/animal-photos/sheep/red-maasai/red-maasai-07.jfif'],
+    'Boer':['/animal-photos/goats/boer/boer-01.jfif','/animal-photos/goats/boer/boer-02.jfif','/animal-photos/goats/boer/boer-03.jfif','/animal-photos/goats/boer/boer-04.jfif','/animal-photos/goats/boer/boer-05.jfif'],
+    'Kalahari Red':['/animal-photos/goats/kalahari-red/kalahari-red-01.jfif']
+  };
+  const typeWord={Cattle:['cattle','cow','bull','calf'],Sheep:['sheep','ram','ewe','lamb'],Goats:['goat','goats','kid','doe','buck']}[livestockType]||[];
+  const escapeHtml=value=>String(value||'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[char]));
+  function renderPhotos(photos){
+    if(!photos.length){gallery.innerHTML='<div class="gallery-placeholder" style="grid-column:1/-1">No verified breed photographs are available yet. Please add approved photographs from the Delamere Farm admin area.</div>';return;}
+    cover.src=photos[0].url||photos[0];
+    animalCards.forEach((card,index)=>{const photo=photos[index%photos.length],image=card.querySelector('img');if(!image)return;image.src=photo.url||photo;image.alt=card.querySelector('h3')?.textContent?.trim()||(breed+' at Delamere Farm');image.loading=index<3?'eager':'lazy';image.decoding='async';image.referrerPolicy='no-referrer';});
+    gallery.innerHTML=photos.map((photo,index)=>{const src=photo.url||photo;return '<figure class="gallery-tile" style="min-height:0;aspect-ratio:16/10;margin:0"><img src="'+escapeHtml(src)+'" alt="'+escapeHtml(breed+' photograph '+(index+1))+'" loading="'+(index<3?'eager':'lazy')+'" decoding="async" referrerpolicy="no-referrer"><figcaption style="padding:8px 10px;font-size:.72rem;color:var(--muted)">'+escapeHtml(breed)+' photograph '+(index+1)+'</figcaption></figure>';}).join('');
   }
-
-  async function loadBreedPhotos() {
-    const unique = new Map();
-
-    for (const term of searchTerms) {
-      try {
-        const photos = await searchCommons(term);
-
-        photos.forEach(photo => {
-          const key = photo.url.split('?')[0];
-          if (!unique.has(key)) unique.set(key, photo);
-        });
-      } catch (_) {
-        // Continue searching other regional terms.
-      }
-
-      if (unique.size >= Math.max(24, animalCards.length + 18)) break;
-    }
-
-    const photos = Array.from(unique.values()).slice(0, 24);
-
-    if (!photos.length) {
-      gallery.innerHTML = '<div class="gallery-placeholder" style="grid-column:1/-1">Breed photography is temporarily unavailable. Please refresh to try again.</div>';
-      return;
-    }
-
-    // Keep the first image as the breed cover, but never send visitors away
-    // to Wikimedia when viewing photographs.
-    cover.src = photos[0].url;
-
-    // Give every individual animal a different breed photograph.
-    animalCards.forEach((card, index) => {
-      const photo = photos[index % photos.length];
-      if (!photo) return;
-
-      const image = card.querySelector('img');
-      if (!image) return;
-
-      image.src = photo.url;
-      image.alt = card.querySelector('h3')?.textContent?.trim() || (breed + ' at Delamere Farm');
-      image.loading = index < 3 ? 'eager' : 'lazy';
-      image.decoding = 'async';
-      image.referrerPolicy = 'no-referrer';
-    });
-
-    // Display the photographs inside Delamere Farm itself. They are not links,
-    // so a visitor stays on the Delamere website while browsing the images.
-    gallery.innerHTML = photos.map((photo, index) => `
-      <figure class="gallery-tile" style="min-height:0;aspect-ratio:16/10;margin:0">
-        <img src="${escapeHtml(photo.url)}" alt="<%= breed.name %> photograph ${index + 1}" loading="${index < 3 ? 'eager' : 'lazy'}" decoding="async" referrerpolicy="no-referrer">
-        <figcaption style="padding:8px 10px;font-size:.72rem;color:var(--muted)">Breed photograph ${index + 1}</figcaption>
-      </figure>
-    `).join('');
+  async function searchVerifiedCommons(term){
+    const api='https://commons.wikimedia.org/w/api.php';
+    const params=new URLSearchParams({action:'query',generator:'search',gsrsearch:'"'+term+'" filetype:bitmap',gsrnamespace:'6',gsrlimit:'40',prop:'imageinfo',iiprop:'url|size|mime',iiurlwidth:'1600',format:'json',origin:'*'});
+    const response=await fetch(api+'?'+params.toString(),{headers:{Accept:'application/json'}});
+    if(!response.ok)throw new Error('Image search failed');
+    const data=await response.json();
+    return Object.values(data.query?.pages||{}).map(page=>{const info=page.imageinfo?.[0];return{title:page.title,url:info?.url,width:Number(info?.width||0),height:Number(info?.height||0),mime:info?.mime||''};}).filter(item=>{if(!item.url||!item.mime.startsWith('image/')||item.width<1200||item.height<800)return false;const h=(item.title||'').toLowerCase();const terms=breed.toLowerCase().split(/\s*[/–-]\s*/).filter(Boolean);return terms.some(t=>h.includes(t))&&typeWord.some(t=>h.includes(t));});
+  }
+  async function loadBreedPhotos(){
+    if(localPhotos[breed]?.length){renderPhotos(localPhotos[breed]);return;}
+    const terms=[breed+' '+livestockType,breed+' '+(typeWord[0]||'')],unique=new Map();
+    for(const term of terms){try{const photos=await searchVerifiedCommons(term);photos.forEach(photo=>{const key=photo.url.split('?')[0];if(!unique.has(key))unique.set(key,photo);});}catch(_){}}
+    renderPhotos(Array.from(unique.values()).slice(0,24));
   }
 
   loadBreedPhotos();
