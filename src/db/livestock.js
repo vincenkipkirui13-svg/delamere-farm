@@ -255,7 +255,7 @@ const breedPresentation = {
   'Dormer': { price:'Price on request', image:'https://commons.wikimedia.org/wiki/Special:Redirect/file/Dormer_sheep.jpg' }
 };
 
-const breedPresentationUpdate = db.prepare('UPDATE livestock_breeds SET price_range=?, image=CASE WHEN image IS NULL OR image=\'\' THEN ? ELSE image END WHERE name=?');
+const breedPresentationUpdate = db.prepare('UPDATE livestock_breeds SET price_range=?, image=? WHERE name=?');
 const animalPriceUpdate = db.prepare('UPDATE animals SET price_range=? WHERE breed_id=? AND (price_range IS NULL OR price_range=\'\')');
 const breedIdLookup = db.prepare('SELECT id FROM livestock_breeds WHERE name=? LIMIT 1');
 for (const [breedName, data] of Object.entries(breedPresentation)) {
@@ -272,9 +272,9 @@ const typeCover = {
   Sheep:'/animal-photos/sheep/dorper/dorper-01.jfif',
   Goats:'/animal-photos/goats/boer/boer-05.jfif'
 };
-const typeCoverUpdate = db.prepare('UPDATE livestock_types SET image=CASE WHEN image IS NULL OR image=\'\' THEN ? ELSE image END WHERE name=?');
+const typeCoverUpdate = db.prepare('UPDATE livestock_types SET image=? WHERE name=?');
 Object.entries(typeCover).forEach(([name,image])=>typeCoverUpdate.run(image,name));
-const classCover = db.prepare('UPDATE livestock_classifications SET image=CASE WHEN image IS NULL OR image=\'\' THEN ? ELSE image END WHERE id=?');
+const classCover = db.prepare('UPDATE livestock_classifications SET image=? WHERE id=?');
 for (const type of db.prepare('SELECT id,name FROM livestock_types').all()) {
   const classes = db.prepare('SELECT id,name FROM livestock_classifications WHERE livestock_type_id=?').all(type.id);
   for (const cls of classes) {
