@@ -197,28 +197,28 @@ router.get('/livestock', (_req, res) => {
 
 router.get('/livestock/:typeSlug', (req, res) => {
   const type = livestock.getType(slugify(req.params.typeSlug));
-  if (!type) return res.status(404).render('pages/404', { title: 'Livestock Type Not Found', description: 'The livestock type you requested could not be found.' });
+  if (!type) return res.status(404).render('pages/404', { title: 'Livestock Type Not Found', description: 'The livestock type you requested could not be found.' , robots: 'noindex, nofollow'});
   const classifications = livestock.getClassifications(type.id).map(c => ({ ...c, breeds: livestock.getBreedsForClassification(c.id) }));
   res.render('pages/livestock-type', { title: `${type.name} Livestock at Delamere Farm`, description: `Explore ${type.name.toLowerCase()} at Delamere Farm, including classifications and available breeds.`, type, classifications });
 });
 
 router.get('/livestock/:typeSlug/:classificationSlug', (req, res) => {
   const type = livestock.getType(slugify(req.params.typeSlug));
-  if (!type) return res.status(404).render('pages/404', { title: 'Livestock Type Not Found', description: 'The livestock type you requested could not be found.' });
+  if (!type) return res.status(404).render('pages/404', { title: 'Livestock Type Not Found', description: 'The livestock type you requested could not be found.' , robots: 'noindex, nofollow'});
   const classification = livestock.getClassification(type.id, slugify(req.params.classificationSlug));
-  if (!classification) return res.status(404).render('pages/404', { title: 'Classification Not Found', description: 'The livestock classification you requested could not be found.' });
+  if (!classification) return res.status(404).render('pages/404', { title: 'Classification Not Found', description: 'The livestock classification you requested could not be found.' , robots: 'noindex, nofollow'});
   const breeds = livestock.getBreedsForClassification(classification.id).map(breed => ({ ...breed, animalCount: db.prepare("SELECT COUNT(*) count FROM animals WHERE breed_id=? AND availability!='Sold'").get(breed.id).count }));
   res.render('pages/livestock-classification', { title: `${classification.name} ${type.name} | Delamere Farm`, description: `Explore ${classification.name.toLowerCase()} ${type.name.toLowerCase()} breeds at Delamere Farm and view available individual animals.`, type, classification, breeds });
 });
 
 router.get('/livestock/:typeSlug/:classificationSlug/:breedSlug', (req, res) => {
   const type = livestock.getType(slugify(req.params.typeSlug));
-  if (!type) return res.status(404).render('pages/404', { title: 'Livestock Type Not Found', description: 'The livestock type you requested could not be found.' });
+  if (!type) return res.status(404).render('pages/404', { title: 'Livestock Type Not Found', description: 'The livestock type you requested could not be found.' , robots: 'noindex, nofollow'});
   const classification = livestock.getClassification(type.id, slugify(req.params.classificationSlug));
-  if (!classification) return res.status(404).render('pages/404', { title: 'Classification Not Found', description: 'The livestock classification you requested could not be found.' });
+  if (!classification) return res.status(404).render('pages/404', { title: 'Classification Not Found', description: 'The livestock classification you requested could not be found.' , robots: 'noindex, nofollow'});
   const breed = livestock.getBreed(type.id, slugify(req.params.breedSlug));
   const linked = breed && db.prepare('SELECT 1 FROM livestock_breed_classifications WHERE breed_id=? AND classification_id=?').get(breed.id, classification.id);
-  if (!breed || !linked) return res.status(404).render('pages/404', { title: 'Breed Not Found', description: 'The livestock breed you requested could not be found in this classification.' });
+  if (!breed || !linked) return res.status(404).render('pages/404', { title: 'Breed Not Found', description: 'The livestock breed you requested could not be found in this classification.' , robots: 'noindex, nofollow'});
   const animals = db.prepare("SELECT * FROM animals WHERE breed_id=? AND availability!='Sold' ORDER BY featured DESC,display_order,created_at DESC").all(breed.id);
   res.render('pages/livestock-breed', { title: `${breed.name} ${type.name} | Delamere Farm`, description: `Learn about ${breed.name}, a ${type.name.toLowerCase()} breed at Delamere Farm, and view available individual animals.`, type, classification, breed, animals, classifications: livestock.getClassificationsForBreed(breed.id) });
 });
@@ -243,7 +243,7 @@ router.get('/animals', (req, res) => {
 
 router.get('/animals/:slug', (req, res) => {
   const animal = db.prepare('SELECT * FROM animals WHERE slug=?').get(slugify(req.params.slug));
-  if (!animal || animal.availability === 'Sold') return res.status(404).render('pages/404', { title: 'Animal Not Found', description: 'The animal you requested could not be found.' });
+  if (!animal || animal.availability === 'Sold') return res.status(404).render('pages/404', { title: 'Animal Not Found', description: 'The animal you requested could not be found.' , robots: 'noindex, nofollow'});
   const related = db.prepare("SELECT * FROM animals WHERE category=? AND id!=? AND availability!='Sold' ORDER BY featured DESC,display_order,created_at DESC LIMIT 3").all(animal.category, animal.id);
   const taxonomy = animal.breed_id ? db.prepare(`SELECT b.id AS breed_id,b.name AS breed_name,b.slug AS breed_slug,t.id AS type_id,t.name AS type_name,t.slug AS type_slug,c.id AS classification_id,c.name AS classification_name,c.slug AS classification_slug FROM livestock_breeds b JOIN livestock_types t ON t.id=b.livestock_type_id LEFT JOIN livestock_breed_classifications bc ON bc.breed_id=b.id LEFT JOIN livestock_classifications c ON c.id=bc.classification_id WHERE b.id=? ORDER BY c.id LIMIT 1`).get(animal.breed_id) : null;
   const photos = db.prepare('SELECT * FROM animal_photos WHERE animal_id=? ORDER BY display_order,id').all(animal.id);
@@ -261,7 +261,7 @@ router.get('/dairy', (req, res) => {
 
 router.get('/dairy/:slug', (req, res) => {
   const product = db.prepare("SELECT * FROM dairy_products WHERE slug=? AND availability!='Unavailable'").get(slugify(req.params.slug));
-  if (!product) return res.status(404).render('pages/404', { title: 'Product Not Found', description: 'The dairy product you requested could not be found.' });
+  if (!product) return res.status(404).render('pages/404', { title: 'Product Not Found', description: 'The dairy product you requested could not be found.' , robots: 'noindex, nofollow'});
   const related = db.prepare("SELECT * FROM dairy_products WHERE id!=? AND availability!='Unavailable' ORDER BY featured DESC,display_order,created_at DESC LIMIT 3").all(product.id);
   res.render('pages/dairy-detail', { title: `${product.name} | Delamere Farm`, description: `${product.name} from Delamere Farm. View product details, availability and how to make an inquiry.`, product, related, inquiryType: 'Dairy Product', inquiryId: product.id, inquiryName: product.name });
 });
