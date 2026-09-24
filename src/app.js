@@ -74,6 +74,17 @@ app.use((req, res, next) => {
   res.locals.adminUser = req.session?.admin || null;
   if (req.session && !req.session.csrfToken) req.session.csrfToken = crypto.randomBytes(32).toString('hex');
   res.locals.csrfToken = req.session?.csrfToken || '';
+
+  // Search/filter/query variants should not become competing indexed URLs.
+  // Their canonical remains the clean path URL emitted by the head partial.
+  if (Object.keys(req.query || {}).length && !req.path.startsWith('/admin')) {
+    res.setHeader('X-Robots-Tag', 'noindex, follow');
+    res.locals.robots = 'noindex, follow';
+  } else {
+    res.locals.robots = req.path.startsWith('/admin') || req.path === '/health'
+      ? 'noindex, nofollow'
+      : (res.locals.site.seo?.robots || 'index, follow');
+  }
   next();
 });
 app.use('/', publicRoutes);
