@@ -20,16 +20,16 @@ function resolveImagePath(image, fallback) {
   const value = String(image).trim();
   if (/^https:\/\/(?:commons\.wikimedia\.org|upload\.wikimedia\.org)\//i.test(value)) {
     const photo = value.toLowerCase();
-    if (photo.includes('goat_farming')) return '/animal-photos/goats/boer/boer-01.jfif';
-    if (photo.includes('sheep_farm') || photo.includes('sheep_flock')) return '/animal-photos/sheep/red-maasai/red-maasai-01.jfif';
-    if (photo.includes('cattle_barn')) return '/animal-photos/cattle/ayrshire/ayrshire-01.jfif';
-    if (photo.includes('farm_in_the_field')) return '/animal-photos/cattle/sahiwal/sahiwal-01.jfif';
-    if (photo.includes('livestock_farming')) return '/animal-photos/cattle/brahman/brahman-01.jfif';
-    if (photo.includes('wisconsin_dairy_farm')) return '/animal-photos/cattle/friesian-holstein/friesian-holstein-03.jfif';
+    if (photo.includes('goat_farming')) return '/animal-photos/goats/boer/boer-05.jfif';
+    if (photo.includes('sheep_farm') || photo.includes('sheep_flock')) return '/animal-photos/sheep/dorper/dorper-10.jfif';
+    if (photo.includes('cattle_barn')) return '/animal-photos/cattle/guernsey/guernsey-01.jfif';
+    if (photo.includes('farm_in_the_field')) return '/animal-photos/cattle/sahiwal/sahiwal-07.jfif';
+    if (photo.includes('livestock_farming')) return '/animal-photos/cattle/brahman/brahman-02.jfif';
+    if (photo.includes('wisconsin_dairy_farm')) return '/animal-photos/cattle/friesian-holstein/friesian-holstein-01.jfif';
     // Do not substitute an unrelated livestock photo for an actual product photo.
     if (photo.includes('bottle_of_milk') || photo.includes('yogurt')) return '/images/placeholder.svg';
     if (photo.includes('dairy_products_in_a_grocery')) return '/images/placeholder.svg';
-    return '/animal-photos/cattle/friesian-holstein/friesian-holstein-03.jfif';
+    return '/animal-photos/cattle/friesian-holstein/friesian-holstein-01.jfif';
   }
   // Preserve explicitly configured external image URLs instead of treating them
   // as local upload filenames (which made valid custom photos appear broken).
@@ -43,7 +43,7 @@ function imageUrl(image) {
   return resolveImagePath(image, '/images/placeholder.svg');
 }
 
-function mediaUrl(image, fallback = '/animal-photos/cattle/friesian-holstein/friesian-holstein-03.jfif') {
+function mediaUrl(image, fallback = '/animal-photos/cattle/friesian-holstein/friesian-holstein-01.jfif') {
   return resolveImagePath(image, fallback);
 }
 

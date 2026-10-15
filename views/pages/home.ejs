@@ -3,7 +3,7 @@
   <%- include('../partials/header') %>
   <main>
     <section class="hero">
-      <img class="hero-image" src="<%= helpers.mediaUrl(siteSettings.heroImage, '/animal-photos/cattle/friesian-holstein/friesian-holstein-03.jfif') %>" alt="<%= siteSettings.name %> farm landscape and facilities" decoding="async" fetchpriority="high">
+      <img class="hero-image" src="<%= helpers.mediaUrl(siteSettings.heroImage, '/animal-photos/cattle/friesian-holstein/friesian-holstein-01.jfif') %>" alt="<%= siteSettings.name %> farm landscape and facilities" decoding="async" fetchpriority="high">
       <div class="hero-overlay"></div>
       <div class="container hero-content reveal">
         <p class="eyebrow hero-eyebrow"><%= siteSettings.heroSubtitle %></p>
@@ -41,7 +41,7 @@
     <section class="section section-light" id="intro">
       <div class="container split-section">
         <div class="split-visual image-wrap reveal">
-          <img src="<%= helpers.mediaUrl(siteSettings.aboutImage, '/animal-photos/cattle/ayrshire/ayrshire-01.jfif') %>" alt="<%= siteSettings.name %>" loading="lazy" decoding="async">
+          <img src="<%= helpers.mediaUrl(siteSettings.aboutImage, '/animal-photos/cattle/jersey/jersey-02.jfif') %>" alt="<%= siteSettings.name %>" loading="lazy" decoding="async">
           <% if(siteSettings.aboutCaption){ %><span class="image-caption"><%= siteSettings.aboutCaption %></span><% } %>
         </div>
         <div class="split-copy reveal">
@@ -58,9 +58,9 @@
       <div class="container">
         <div class="section-heading centered reveal"><p class="eyebrow"><%= siteSettings.homepage_explore_eyebrow %></p><h2><%= siteSettings.homepage_explore_title %></h2><p><%= siteSettings.homepage_explore_description %></p></div>
         <div class="offer-grid">
-          <a class="offer-card reveal" href="/livestock"><div class="offer-media"><img src="<%= helpers.mediaUrl(siteSettings.featureImages.livestock, '/animal-photos/sheep/dorper/dorper-01.jfif') %>" alt="Livestock at <%= siteSettings.name %>" loading="lazy" decoding="async"><span class="offer-badge">01</span></div><div class="offer-body"><p class="card-kicker">Livestock Library</p><h3><%= siteSettings.homepage_explore_1_title %></h3><p><%= siteSettings.homepage_explore_1_description %></p><% if(livestockSummary?.length){ %><div class="livestock-mini-list"><% livestockSummary.slice(0,3).forEach(type=>{ %><span><%= type.name %>: <%= type.classifications.join(', ') || 'General' %></span><% }) %></div><% } %><span class="text-link"><%= siteSettings.homepage_explore_1_cta %> <b>&#8594;</b></span></div></a>
-          <a class="offer-card reveal" href="/dairy"><div class="offer-media"><img src="<%= helpers.mediaUrl(siteSettings.featureImages.dairy, '/images/placeholder.svg') %>" alt="Our products from <%= siteSettings.name %>" loading="lazy" decoding="async"><span class="offer-badge">02</span></div><div class="offer-body"><h3><%= siteSettings.homepage_explore_2_title %></h3><p><%= siteSettings.homepage_explore_2_description %></p><span class="text-link"><%= siteSettings.homepage_explore_2_cta %> <b>&#8594;</b></span></div></a>
-          <a class="offer-card reveal" href="/gallery"><div class="offer-media"><img src="<%= helpers.mediaUrl(siteSettings.featureImages.experience, '/animal-photos/sheep/red-maasai/red-maasai-01.jfif') %>" alt="Farm experience at <%= siteSettings.name %>" loading="lazy" decoding="async"><span class="offer-badge">03</span></div><div class="offer-body"><h3><%= siteSettings.homepage_explore_3_title %></h3><p><%= siteSettings.homepage_explore_3_description %></p><span class="text-link"><%= siteSettings.homepage_explore_3_cta %> <b>&#8594;</b></span></div></a>
+          <a class="offer-card reveal" href="/livestock"><div class="offer-media"><img src="<%= helpers.mediaUrl(siteSettings.featureImages.livestock, '/animal-photos/sheep/dorper/dorper-10.jfif') %>" alt="Livestock at <%= siteSettings.name %>" loading="lazy" decoding="async"><span class="offer-badge">01</span></div><div class="offer-body"><p class="card-kicker">Livestock Library</p><h3><%= siteSettings.homepage_explore_1_title %></h3><p><%= siteSettings.homepage_explore_1_description %></p><% if(livestockSummary?.length){ %><div class="livestock-mini-list"><% livestockSummary.slice(0,3).forEach(type=>{ %><span><%= type.name %>: <%= type.classifications.join(', ') || 'General' %></span><% }) %></div><% } %><span class="text-link"><%= siteSettings.homepage_explore_1_cta %> <b>&#8594;</b></span></div></a>
+          <a class="offer-card reveal" href="/dairy"><div class="offer-media"><img src="<%= helpers.mediaUrl(siteSettings.featureImages.dairy, '/animal-photos/cattle/jersey/jersey-01.jfif') %>" alt="Our products from <%= siteSettings.name %>" loading="lazy" decoding="async"><span class="offer-badge">02</span></div><div class="offer-body"><h3><%= siteSettings.homepage_explore_2_title %></h3><p><%= siteSettings.homepage_explore_2_description %></p><span class="text-link"><%= siteSettings.homepage_explore_2_cta %> <b>&#8594;</b></span></div></a>
+          <a class="offer-card reveal" href="/gallery"><div class="offer-media"><img src="<%= helpers.mediaUrl(siteSettings.featureImages.experience, '/animal-photos/sheep/hampshire/hampshire-03.jfif') %>" alt="Farm experience at <%= siteSettings.name %>" loading="lazy" decoding="async"><span class="offer-badge">03</span></div><div class="offer-body"><h3><%= siteSettings.homepage_explore_3_title %></h3><p><%= siteSettings.homepage_explore_3_description %></p><span class="text-link"><%= siteSettings.homepage_explore_3_cta %> <b>&#8594;</b></span></div></a>
         </div>
       </div>
     </section>
