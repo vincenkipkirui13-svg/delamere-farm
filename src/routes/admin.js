@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const fs = require('node:fs');
 const path = require('node:path');
+const crypto = require('node:crypto');
 const livestock = require('../db/livestock');
 const db = require('../db/database');
 const settings = require('../config/settings');
@@ -201,9 +202,13 @@ router.post('/login', async (req, res) => {
   }
   clearLoginFailures(ip);
   await new Promise((resolve, reject) => req.session.regenerate(error => error ? reject(error) : resolve()));
+  // Regenerating the session invalidates its previous CSRF token. Issue a new
+  // token immediately and persist the authenticated session before redirecting.
+  req.session.csrfToken = crypto.randomBytes(32).toString('hex');
   req.session.admin = { id: user.id, username: user.username, role: user.role };
   db.prepare('UPDATE admin_users SET last_login_at=CURRENT_TIMESTAMP WHERE id=?').run(user.id);
   logActivity(req, 'Logged in', 'Admin User', user.id);
+  await new Promise((resolve, reject) => req.session.save(error => error ? reject(error) : resolve()));
   return res.redirect('/admin');
 });
 

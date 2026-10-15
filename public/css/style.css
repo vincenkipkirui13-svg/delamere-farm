@@ -4968,3 +4968,36 @@ html,body{overflow-x:hidden}.container{width:calc(100% - 24px)!important}.header
   .call-float { right: 67px !important; }
   .whatsapp-float { right: 11px !important; }
 }
+
+
+/* Keep livestock cards uniform without stretching animals into tall, distorted images. */
+.card-media {
+  aspect-ratio: 4 / 3 !important;
+  height: auto !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+.card-media > img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  object-fit: cover !important;
+  object-position: center 45% !important;
+  transform: none !important;
+}
+.animal-card .card-media {
+  aspect-ratio: 4 / 3 !important;
+  max-height: 320px !important;
+}
+@media (max-width: 760px) {
+  .animal-card .card-media {
+    aspect-ratio: 4 / 3 !important;
+    max-height: 250px !important;
+  }
+  .animal-card .card-media > img {
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+}
