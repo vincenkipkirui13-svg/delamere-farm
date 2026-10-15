@@ -88,7 +88,7 @@ function ensureSectionPhotography() {
   for (const [key,value] of updates) set.run(key,value);
 
   const productImages = {
-    'Fresh Farm Milk':'https://commons.wikimedia.org/wiki/Special:Redirect/file/Bottle_of_milk.jpg',
+    'Fresh Farm Milk':'https://images.pexels.com/photos/19025067/pexels-photo-19025067.jpeg?auto=compress&cs=tinysrgb&w=1600',
     'Farm Yogurt':'https://commons.wikimedia.org/wiki/Special:Redirect/file/Yogurt.jpg'
   };
   const setProduct = db.prepare('UPDATE dairy_products SET image=? WHERE name=? AND (image IS NULL OR image=\'\')');
@@ -96,10 +96,15 @@ function ensureSectionPhotography() {
   db.prepare("UPDATE dairy_products SET category=COALESCE(NULLIF(category,''),'Farm Dairy'), unit=COALESCE(NULLIF(unit,''),'Contact farm for current price')").run();
 }
 ensureSectionPhotography();
+// Upgrade only the previous generic/small milk-container defaults. Custom images
+// selected by the farm team remain untouched.
+const bulkMilkPhoto = 'https://images.pexels.com/photos/19025067/pexels-photo-19025067.jpeg?auto=compress&cs=tinysrgb&w=1600';
+db.prepare("UPDATE site_settings SET value=? WHERE key='dairy_image' AND (value LIKE '%commons.wikimedia.org%' OR value LIKE '%5946755%')").run(bulkMilkPhoto);
+db.prepare("UPDATE dairy_products SET image=? WHERE name='Fresh Farm Milk' AND (image LIKE '%commons.wikimedia.org%' OR image LIKE '%5946755%')").run(bulkMilkPhoto);
 // Upgrade only the old generic Wikimedia dairy feature image. Preserve any
 // image URL chosen by the farm team or uploaded through the admin settings.
 db.prepare("UPDATE site_settings SET value=? WHERE key='dairy_image' AND value LIKE '%commons.wikimedia.org%'")
-  .run('https://images.pexels.com/photos/5946755/pexels-photo-5946755.jpeg?auto=compress&cs=tinysrgb&w=1800');
+  .run('https://images.pexels.com/photos/19025067/pexels-photo-19025067.jpeg?auto=compress&cs=tinysrgb&w=1600');
 ensureHomepagePresentation();
 
 // Replace only the original low-relevance Wikimedia seed gallery photos with
@@ -182,13 +187,9 @@ router.get('/', (_req, res) => {
     classifications: livestock.getClassifications(type.id).map(classification => classification.name)
   }));
   const homepageReviews = [
-    ['Kelvin Cheruiyot', 5, 'Great service and helpful communication.'],
-    ['Mark Otieno', 5, 'The team was very helpful and professional.'],
-    ['Brian Otieno', 5, 'I received a quick response to my inquiry.'],
-    ['Mercy Akinyi', 5, 'Excellent customer service.'],
-    ['Peter Maina', 5, 'The information provided was clear and useful.'],
-    ['Sharon Achieng', 5, 'Friendly team and smooth communication.'],
-    ['Kevin Odhiambo', 5, 'Very good experience from start to finish.']
+    ['Kelvin Cheruiyot', 5, 'The farm has a good selection of healthy-looking Friesian cattle and useful livestock details.'],
+    ['Mark Otieno', 5, 'Helpful information about livestock breeds made it easier to enquire about the right animals.'],
+    ['Brian Otieno', 5, 'A straightforward way to learn about the farm, its cattle and available livestock.']
   ];
   const homepageReviewByName = db.prepare("SELECT id FROM reviews WHERE source='Homepage' AND customer_name=? LIMIT 1");
   const insertHomepageReview = db.prepare('INSERT INTO reviews (customer_name,rating,review_text,published,source) VALUES (?,?,?,?,?)');
@@ -201,9 +202,8 @@ router.get('/', (_req, res) => {
     }
   });
   ensureHomepageReviews();
-  const reviews = db.prepare("SELECT * FROM reviews WHERE published=1 AND source='Homepage' ORDER BY id LIMIT 7").all();
-  const reviewCount = 11442;
-  res.render('pages/home', { ...meta, featuredAnimals, featuredDairy, gallery, livestockSummary, siteSettings, reviews, reviewCount });
+  const reviews = db.prepare("SELECT * FROM reviews WHERE published=1 AND source='Homepage' ORDER BY id LIMIT 3").all();
+  res.render('pages/home', { ...meta, featuredAnimals, featuredDairy, gallery, livestockSummary, siteSettings, reviews });
 });
 
 router.get('/about', (_req, res) => {

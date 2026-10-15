@@ -103,12 +103,8 @@
           <h2>What our customers say.</h2>
           <p>Read customer feedback from people who have connected with Delamere Farm.</p>
         </div>
-        <div class="reviews-summary reveal">
-          <strong><%= Number(reviewCount || 0).toLocaleString() %></strong>
-          <span>Reviews</span>
-        </div>
         <div class="reviews-grid">
-          <% reviews.slice(0, 7).forEach(review => { %>
+          <% reviews.slice(0, 3).forEach(review => { %>
             <article class="review-card reveal">
               <div class="review-stars" aria-label="<%= review.rating %> out of 5 stars"><%= '★'.repeat(Number(review.rating || 0)) %><%= '☆'.repeat(5 - Number(review.rating || 0)) %></div>
               <p class="review-text">“<%= review.review_text %>”</p>

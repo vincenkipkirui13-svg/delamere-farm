@@ -4846,3 +4846,125 @@ html,body{overflow-x:hidden}.container{width:calc(100% - 24px)!important}.header
     height: auto !important;
   }
 }
+
+
+/* Delamere Farm visual polish: consistent full-card photography and readable mobile hero. */
+.brand-logo-cow {
+  object-fit: cover !important;
+  object-position: 52% 50% !important;
+  border-radius: 50% !important;
+  background: #f2f5f1;
+  border: 2px solid rgba(255,255,255,.72);
+}
+.hero {
+  height: min(82svh, 790px) !important;
+  min-height: 570px !important;
+  max-height: 790px !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+.hero-image {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  max-height: none !important;
+  object-fit: cover !important;
+  object-position: center 48% !important;
+}
+.hero-overlay {
+  background: linear-gradient(90deg, rgba(5,20,12,.78) 0%, rgba(5,20,12,.47) 50%, rgba(5,20,12,.12) 100%),
+              linear-gradient(0deg, rgba(5,20,12,.42), transparent 65%) !important;
+}
+.hero-content {
+  position: absolute !important;
+  inset: 0 auto 0 max(16px, calc((100vw - var(--container))/2)) !important;
+  justify-content: center !important;
+  padding: 110px 0 76px !important;
+  max-width: 760px !important;
+}
+.card-media, .offer-media, .gallery-tile {
+  position: relative !important;
+  height: auto !important;
+  min-height: 0 !important;
+  aspect-ratio: 4 / 3 !important;
+  overflow: hidden !important;
+  background: #e9eee8 !important;
+}
+.card-media img, .offer-media img, .gallery-tile img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  max-height: none !important;
+  object-fit: fill !important;
+  object-position: center !important;
+  transform: none !important;
+}
+.product-showcase-card {
+  align-items: center;
+}
+.product-showcase-image {
+  height: 300px !important;
+  min-height: 0 !important;
+  max-height: 300px !important;
+  aspect-ratio: 4 / 3 !important;
+  overflow: hidden !important;
+  background: #edf1ec !important;
+}
+.product-showcase-image img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  object-fit: fill !important;
+  object-position: center !important;
+}
+@media (max-width: 760px) {
+  .hero {
+    height: 76svh !important;
+    min-height: 500px !important;
+    max-height: 660px !important;
+  }
+  .hero-image {
+    object-position: 58% center !important;
+  }
+  .hero-content {
+    left: 12px !important;
+    right: 12px !important;
+    width: auto !important;
+    max-width: none !important;
+    padding: 84px 0 34px !important;
+  }
+  .hero h1 {
+    max-width: 100% !important;
+    font-size: clamp(2rem, 8.5vw, 2.8rem) !important;
+    line-height: 1.04 !important;
+    margin-bottom: 10px !important;
+  }
+  .hero-eyebrow {
+    font-size: .65rem !important;
+    margin-bottom: 8px !important;
+  }
+  .hero-lead {
+    max-width: 100% !important;
+    width: 100% !important;
+    font-size: clamp(.9rem, 3.7vw, 1rem) !important;
+    line-height: 1.5 !important;
+    margin-bottom: 13px !important;
+  }
+  .hero .btn {
+    min-height: 42px !important;
+    padding: 9px 12px !important;
+    font-size: .78rem !important;
+  }
+  .product-showcase-image {
+    height: 190px !important;
+    max-height: 190px !important;
+    aspect-ratio: 16 / 9 !important;
+  }
+  .brand-logo-cow, .brand-logo { width: 38px !important; height: 38px !important; }
+  .call-float { right: 67px !important; }
+  .whatsapp-float { right: 11px !important; }
+}
