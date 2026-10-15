@@ -97,6 +97,25 @@ function ensureSectionPhotography() {
 }
 ensureSectionPhotography();
 ensureHomepagePresentation();
+
+// Replace only the original low-relevance Wikimedia seed gallery photos with
+// crisp, livestock-focused photography. Custom images uploaded in the admin
+// gallery are preserved.
+function upgradeSeedGalleryPhotography() {
+  const photos = [
+    ['Dairy Pasture', 'https://images.pexels.com/photos/66400/pexels-photo-66400.jpeg?auto=compress&cs=tinysrgb&w=1800', 'Healthy Holstein Friesian dairy cattle grazing in a green pasture.'],
+    ['Goat Farming', 'https://images.pexels.com/photos/29405430/pexels-photo-29405430.jpeg?auto=compress&cs=tinysrgb&w=1800', 'Healthy Boer goats in a rural farm setting.'],
+    ['Sheep Flock', 'https://images.pexels.com/photos/33950400/pexels-photo-33950400.jpeg?auto=compress&cs=tinysrgb&w=1800', 'A flock of sheep and goats grazing on a green farm.'],
+    ['Livestock Farming', 'https://images.pexels.com/photos/8633332/pexels-photo-8633332.jpeg?auto=compress&cs=tinysrgb&w=1800', 'A close view of healthy Holstein cattle in a sunny pasture.'],
+    ['Cattle Barn', 'https://images.pexels.com/photos/5633473/pexels-photo-5633473.jpeg?auto=compress&cs=tinysrgb&w=1800', 'Healthy black-and-white dairy cows grazing in a lush meadow.'],
+    ['Countryside Farm', 'https://images.pexels.com/photos/8064073/pexels-photo-8064073.jpeg?auto=compress&cs=tinysrgb&w=1800', 'A group of Holstein cows outdoors in a rural field.']
+  ];
+  const update = db.prepare("UPDATE gallery_items SET image=?, description=? WHERE title=? AND image LIKE '%commons.wikimedia.org%'");
+  db.transaction(() => {
+    for (const [title, image, description] of photos) update.run(image, description, title);
+  })();
+}
+upgradeSeedGalleryPhotography();
 const allowedInquiryTypes = new Set(['Animal', 'Dairy Product', 'General Inquiry']);
 
 function seo(key, fallbackTitle, fallbackDescription) {
