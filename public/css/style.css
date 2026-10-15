@@ -4690,3 +4690,159 @@ html,body{overflow-x:hidden}.container{width:calc(100% - 24px)!important}.header
 .product-showcase-image {
   background-color: #f2f5f1;
 }
+
+
+/* FINAL PHOTO PRESENTATION FIX — preserve complete source frames.
+   Images scale inside their media areas; no zoom-on-hover and no object cropping. */
+:root {
+  --photo-mat: #edf1ec;
+}
+.hero {
+  display: block !important;
+  position: relative !important;
+  min-height: 0 !important;
+  height: auto !important;
+  overflow: hidden;
+  background: #203b2c !important;
+  isolation: isolate;
+}
+.hero::before { display: none !important; }
+.hero-image {
+  position: relative !important;
+  inset: auto !important;
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  max-width: 100% !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  transform: none !important;
+}
+.hero-overlay {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(5,20,12,.72) 0%, rgba(5,20,12,.34) 48%, rgba(5,20,12,.05) 100%) !important;
+}
+.hero-content {
+  position: absolute !important;
+  inset: 0 auto 0  max(16px, calc((100vw - var(--container))/2)) !important;
+  z-index: 2 !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: min(calc(100% - 32px), 800px) !important;
+  max-width: 800px !important;
+  margin: 0 !important;
+  padding: clamp(76px, 10vw, 140px) 0 clamp(48px, 7vw, 90px) !important;
+}
+.hero .scroll-cue { z-index: 3; }
+.hero h1 { text-wrap: balance; }
+
+.split-visual,
+.offer-media,
+.card-media,
+.gallery-tile,
+.detail-image,
+.detail-media,
+.livestock-type-media,
+.livestock-category-media,
+.livestock-card-image,
+.product-showcase-image,
+.public-animal-gallery,
+.about-image-strip {
+  background: var(--photo-mat) !important;
+}
+.split-visual img,
+.offer-media img,
+.card-media img,
+.gallery-tile img,
+.detail-image img,
+.detail-media img,
+.livestock-type-media img,
+.livestock-category-media img,
+.livestock-card-image img,
+.product-showcase-image img,
+.public-animal-gallery img,
+.about-image-strip img,
+.livestock-breed-detail .detail-media img {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  transform: none !important;
+  image-rendering: auto;
+}
+.split-visual,
+.offer-media,
+.card-media,
+.gallery-tile,
+.detail-image,
+.detail-media,
+.livestock-type-media,
+.livestock-category-media,
+.livestock-card-image,
+.product-showcase-image {
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  aspect-ratio: auto !important;
+  overflow: hidden;
+}
+.offer-card:hover .offer-media img,
+.card:hover .card-media img,
+.gallery-tile:hover img,
+.animal-card:hover .card-media img {
+  transform: none !important;
+}
+.gallery-tile span {
+  z-index: 2;
+}
+
+/* Improve initial rendering while allowing below-the-fold sections to render on demand. */
+.section,
+.cta-section,
+.dark-band {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 700px;
+}
+
+@media (max-width: 760px) {
+  .hero-content {
+    left: 12px !important;
+    width: calc(100% - 24px) !important;
+    padding: 70px 0 28px !important;
+  }
+  .hero h1 {
+    font-size: clamp(1.6rem, 6.4vw, 2.8rem) !important;
+  }
+  .hero-lead {
+    max-width: 58%;
+    font-size: clamp(.72rem, 2.5vw, .95rem) !important;
+  }
+  .hero .button-row { gap: 7px; }
+  .hero .btn {
+    min-height: 36px !important;
+    padding: 7px 10px !important;
+    font-size: .72rem !important;
+  }
+  .hero-eyebrow { font-size: .58rem; }
+  .split-visual img,
+  .offer-media img,
+  .card-media img,
+  .gallery-tile img,
+  .detail-image img,
+  .detail-media img,
+  .livestock-type-media img,
+  .livestock-category-media img,
+  .livestock-card-image img,
+  .product-showcase-image img {
+    height: auto !important;
+  }
+}
