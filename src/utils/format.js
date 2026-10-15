@@ -28,10 +28,14 @@ function resolveImagePath(image, fallback) {
     if (photo.includes('wisconsin_dairy_farm')) return '/animal-photos/cattle/friesian-holstein/friesian-holstein-03.jfif';
     // Do not substitute an unrelated livestock photo for an actual product photo.
     if (photo.includes('bottle_of_milk') || photo.includes('yogurt')) return '/images/placeholder.svg';
-    if (photo.includes('dairy_products_in_a_grocery')) return '/animal-photos/cattle/friesian-holstein/friesian-holstein-01.jfif';
+    if (photo.includes('dairy_products_in_a_grocery')) return '/images/placeholder.svg';
     return '/animal-photos/cattle/friesian-holstein/friesian-holstein-03.jfif';
   }
+  // Preserve explicitly configured external image URLs instead of treating them
+  // as local upload filenames (which made valid custom photos appear broken).
+  if (/^https?:\/\//i.test(value)) return value;
   if (value.startsWith('/')) return value;
+  if (value.startsWith('uploads/')) return `/${value}`;
   return `/uploads/${value}`;
 }
 
