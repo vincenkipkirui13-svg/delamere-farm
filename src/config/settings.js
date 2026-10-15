@@ -2,7 +2,12 @@ const path = require('node:path');
 require('dotenv').config({ path: path.resolve(process.cwd(), '.env') });
 
 const rootDir = path.resolve(__dirname, '../..');
-const storageDir = process.env.STORAGE_DIR ? path.resolve(process.env.STORAGE_DIR) : rootDir;
+const isVercel = Boolean(process.env.VERCEL);
+// Vercel's deployment filesystem is read-only except for /tmp. This fallback
+// allows the app to start there; data stored in /tmp is temporary and not durable.
+const storageDir = process.env.STORAGE_DIR
+  ? path.resolve(process.env.STORAGE_DIR)
+  : (isVercel ? path.join('/tmp', 'delamere-farm') : rootDir);
 const dataDir = process.env.DATA_DIR ? path.resolve(process.env.DATA_DIR) : path.join(storageDir, 'data');
 const uploadsDir = process.env.UPLOADS_DIR ? path.resolve(process.env.UPLOADS_DIR) : path.join(storageDir, 'uploads');
 const isProduction = process.env.NODE_ENV === 'production';
