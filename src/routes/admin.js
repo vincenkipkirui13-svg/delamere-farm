@@ -292,7 +292,10 @@ router.get('/breeds', livestockEditor, (_req, res) => {
 });
 
 function animalFormLocals(title, animal, error = null) {
-  return { title, animal, error, types: livestock.getTypes(), classifications: livestock.getAllClassifications(), breedOptions: livestock.getAllBreeds() };
+  const photos = animal?.id
+    ? db.prepare('SELECT * FROM animal_photos WHERE animal_id=? ORDER BY display_order,id').all(animal.id)
+    : [];
+  return { title, animal, error, photos, types: livestock.getTypes(), classifications: livestock.getAllClassifications(), breedOptions: livestock.getAllBreeds() };
 }
 
 router.get('/animals/new', livestockEditor, (_req, res) => res.render('admin/animal-form', animalFormLocals('Add Animal', null)));
