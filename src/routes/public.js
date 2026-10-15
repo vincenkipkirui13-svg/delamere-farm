@@ -81,7 +81,7 @@ function ensureHomepagePresentation() {
 function ensureSectionPhotography() {
   const updates = [
     ['livestock_image','/animal-photos/cattle/friesian-holstein/friesian-holstein-03.jfif'],
-    ['dairy_image','https://commons.wikimedia.org/wiki/Special:Redirect/file/A_display_of_dairy_products_in_a_grocery_in_Nairobi_001.jpg'],
+    ['dairy_image','https://images.pexels.com/photos/5946755/pexels-photo-5946755.jpeg?auto=compress&cs=tinysrgb&w=1800'],
     ['experience_image','https://commons.wikimedia.org/wiki/Special:Redirect/file/Wisconsin_dairy_farm.jpg']
   ];
   const set = db.prepare('INSERT INTO site_settings (key,value) VALUES (?,?) ON CONFLICT(key) DO UPDATE SET value=CASE WHEN site_settings.value IS NULL OR site_settings.value=\'\' THEN excluded.value ELSE site_settings.value END');
@@ -96,6 +96,10 @@ function ensureSectionPhotography() {
   db.prepare("UPDATE dairy_products SET category=COALESCE(NULLIF(category,''),'Farm Dairy'), unit=COALESCE(NULLIF(unit,''),'Contact farm for current price')").run();
 }
 ensureSectionPhotography();
+// Upgrade only the old generic Wikimedia dairy feature image. Preserve any
+// image URL chosen by the farm team or uploaded through the admin settings.
+db.prepare("UPDATE site_settings SET value=? WHERE key='dairy_image' AND value LIKE '%commons.wikimedia.org%'")
+  .run('https://images.pexels.com/photos/5946755/pexels-photo-5946755.jpeg?auto=compress&cs=tinysrgb&w=1800');
 ensureHomepagePresentation();
 
 // Replace only the original low-relevance Wikimedia seed gallery photos with
