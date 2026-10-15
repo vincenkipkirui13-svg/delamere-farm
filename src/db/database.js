@@ -319,13 +319,13 @@ Object.entries(defaults).forEach(([key, value]) => ensureDefault(key, value));
 // One-time deterministic admin bootstrap. This repairs packaged/local/Railway databases
 // whose existing administrator credentials are unknown, while preserving all other users.
 const bootstrapAdminUsername = 'admin';
-const bootstrapAdminPassword = settings.adminPassword;
+const bootstrapAdminPasswordHash = '$2b$12$X8judjhkv8jOf1fWFrK0cuDSCowgoWDeo5QkLuZ.FSWvheaGemfcW';
 const bootstrapKey = 'admin_bootstrap_v5';
 const bootstrapDone = db.prepare('SELECT value FROM site_settings WHERE key=?').get(bootstrapKey);
 if (!bootstrapDone) {
   const existingAdmin = db.prepare('SELECT id FROM admin_users WHERE username=? LIMIT 1').get(bootstrapAdminUsername);
   const firstAdmin = db.prepare('SELECT id FROM admin_users ORDER BY id LIMIT 1').get();
-  const bootstrapHash = bcrypt.hashSync(bootstrapAdminPassword, 12);
+  const bootstrapHash = bootstrapAdminPasswordHash;
 
   if (existingAdmin) {
     db.prepare('UPDATE admin_users SET password_hash=?, role=?, active=1 WHERE id=?')
